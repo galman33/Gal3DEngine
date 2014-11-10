@@ -58,9 +58,9 @@ namespace Gal3DEngine
         private static Color3 ColorLerp(Color3 a, Color3 b, float t)
         {
             Color3 result;
-            result.r = (byte)Lerp(a.r, b.r, t);
-            result.g = (byte)Lerp(a.g, b.g, t);
-            result.b = (byte)Lerp(a.b, b.b, t);
+            result.r = (byte)(a.r + (b.r - a.r) * t);
+            result.g = (byte)(a.g + (b.g - a.g) * t);
+            result.b = (byte)(a.b + (b.b - a.b) * t);
             return result;
         }
 
