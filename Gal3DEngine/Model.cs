@@ -47,7 +47,14 @@ namespace Gal3DEngine
 
         public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection)
         {
-            screen.DrawTrianglesOutline(world, view, projection, vertices, indices);
+            //screen.DrawTrianglesOutline(world, view, projection, vertices, indices);
+            Shader.projection = projection;
+            Shader.view = view;
+            Shader.world = world;
+
+            Shader.Color = new Color3(255, 128, 128);
+
+            Shader.Render(screen, vertices, indices);
         }
 
     }

@@ -38,6 +38,12 @@ namespace Gal3DEngine
                 colorBuffer[x + y * Width] = color;
         }
 
+        public void PutPixel(int x, int y, float z, Color3 color)
+        {
+            if (x < Width && x >= 0 && y < Height && y >= 0)
+                colorBuffer[x + y * Width] = color;
+        }
+
         public Color3 ReadPixel(int x, int y)
         {
             if (x < Width && x >= 0 && y < Height && y >= 0)
