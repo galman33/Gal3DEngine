@@ -37,14 +37,13 @@ namespace Gal3DEngine
 
             for (i = 0; i < indices.Count; i += 3)
             {
-                if( (i / 3) % 2 == 0)
-                {
+                
                     DrawTriangle(screen, transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], Color);
-                }
-                else
-                {
+                
+                
+                
                     //screen.DrawTriangleOutline( transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], Color);
-                }
+                
             }
             
 
@@ -85,7 +84,7 @@ namespace Gal3DEngine
                 c.g = (byte)(c.g * ((z - 1) * 2));
                 c.b = (byte)(c.b * ((z - 1) * 2));
 
-                screen.PutPixel(x, y, z, c);
+                screen.TryPutPixel(x, y, z, c);
             }
         }
 
