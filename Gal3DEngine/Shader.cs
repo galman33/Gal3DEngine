@@ -15,16 +15,16 @@ namespace Gal3DEngine
 
         public static Color3 Color;
 
-        public static void Render(Screen screen, List<VertexColor> vertices, List<int> indices)
+        public static void Render(Screen screen, VertexColor[] vertices, int[] indices)
         {
             Matrix4 transformation = view * world * projection;
 
-            VertexColor[] transformedVertices = new VertexColor[vertices.Count];
+            VertexColor[] transformedVertices = new VertexColor[vertices.Length];
 
             Vector4 v;
             int i;
 
-            for (i = 0; i < vertices.Count; i++)
+            for (i = 0; i < vertices.Length; i++)
             {
                 v = Vector4.Transform(vertices[i].Position, view * world * projection); // projection * view * world
 
@@ -36,7 +36,7 @@ namespace Gal3DEngine
                 transformedVertices[i].Color = vertices[i].Color;
             }
 
-            for (i = 0; i < indices.Count; i += 3)
+            for (i = 0; i < indices.Length; i += 3)
             {
                 
                     DrawTriangle(screen, transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], Color);

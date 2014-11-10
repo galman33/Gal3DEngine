@@ -9,8 +9,8 @@ namespace Gal3DEngine
     class Model
     {
 
-        List<VertexColor> vertices = new List<VertexColor>();
-        List<int> indices = new List<int>();
+        VertexColor[] vertices;
+        int[] indices;
 
         public Model(string file)
         {
@@ -22,6 +22,10 @@ namespace Gal3DEngine
 
         public void Load(string content)
         {
+            List<VertexColor> verticesLst = new List<VertexColor>();
+            List<int> indicesLst = new List<int>();
+
+
             string[] lines = content.Split(new char[]{'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
 
             int i ;
@@ -30,7 +34,7 @@ namespace Gal3DEngine
                 if (lines[i].StartsWith("v "))
                 {
                     string[] args = lines[i].Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
-                    vertices.Add(new VertexColor(new Vector4(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]), 1), new Color3(rand.Next(256), rand.Next(256), rand.Next(256))));
+                    verticesLst.Add(new VertexColor(new Vector4(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]), 1), new Color3(rand.Next(256), rand.Next(256), rand.Next(256))));
                 }
             }
 
@@ -40,11 +44,14 @@ namespace Gal3DEngine
                 {
                     string[] args = lines[i].Split(' ');
                         
-                    indices.Add(int.Parse(args[1].Split('/')[0]) - 1);
-                    indices.Add(int.Parse(args[2].Split('/')[0]) - 1);
-                    indices.Add(int.Parse(args[3].Split('/')[0]) - 1);
+                    indicesLst.Add(int.Parse(args[1].Split('/')[0]) - 1);
+                    indicesLst.Add(int.Parse(args[2].Split('/')[0]) - 1);
+                    indicesLst.Add(int.Parse(args[3].Split('/')[0]) - 1);
                 }
             }
+
+            vertices = verticesLst.ToArray();
+            indices = indicesLst.ToArray();
         }
 
         public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection)
