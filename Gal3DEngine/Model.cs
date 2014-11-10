@@ -9,7 +9,7 @@ namespace Gal3DEngine
     class Model
     {
 
-        List<Vector4> vertices = new List<Vector4>();
+        List<VertexColor> vertices = new List<VertexColor>();
         List<int> indices = new List<int>();
 
         public Model(string file)
@@ -17,6 +17,8 @@ namespace Gal3DEngine
             Load(TestModel.Cat);
             //Load(System.IO.File.ReadAllText(file));
         }
+
+        private Random rand = new Random();
 
         public void Load(string content)
         {
@@ -28,7 +30,7 @@ namespace Gal3DEngine
                 if (lines[i].StartsWith("v "))
                 {
                     string[] args = lines[i].Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
-                    vertices.Add(new Vector4(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]), 1));
+                    vertices.Add(new VertexColor(new Vector4(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]), 1), new Color3(rand.Next(256), rand.Next(256), rand.Next(256))));
                 }
             }
 
