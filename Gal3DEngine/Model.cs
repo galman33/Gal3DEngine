@@ -9,20 +9,24 @@ namespace Gal3DEngine
     class Model
     {
 
-        VertexColor[] vertices;
-        int[] indices;
+        RefType<Vector4>[] vertices;
+        RefType<Vector2>[] uvs;
+        Color3[,] texture;
 
-        public Model(string file)
+        public Model(string file, string textureFile)
         {
             Load(System.IO.File.ReadAllText(file));
+            texture = Texture.LoadTexture(textureFile);
         }
 
         private Random rand = new Random();
 
         public void Load(string content)
         {
-            List<VertexColor> verticesLst = new List<VertexColor>();
-            List<int> indicesLst = new List<int>();
+            List<Vector4> verticesLst = new List<Vector4>();
+            List<Vector2> uvLst = new List<Vector2>();
+            List<RefType<Vector4>> indicesLst = new List<RefType<Vector4>>();
+            List<RefType<Vector2>> indicesUVLst = new List<RefType<Vector2>>();
 
 
             string[] lines = content.Split(new char[]{'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
@@ -33,36 +37,52 @@ namespace Gal3DEngine
                 if (lines[i].StartsWith("v "))
                 {
                     string[] args = lines[i].Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
-                    verticesLst.Add(new VertexColor(new Vector4(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]), 1), new Color3(rand.Next(256), rand.Next(256), rand.Next(256))));
+                    verticesLst.Add(new Vector4(float.Parse(args[1]), float.Parse(args[2]), float.Parse(args[3]), 1));
                 }
-            }
 
-            for (i = 0; i < lines.Length; i++)
-            {
+                if (lines[i].StartsWith("vt "))
+                {
+                    string[] args = lines[i].Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+                    uvLst.Add(new Vector2(float.Parse(args[1]), float.Parse(args[2])));
+                }
+
                 if (lines[i].StartsWith("f "))
                 {
                     string[] args = lines[i].Split(' ');
                         
-                    indicesLst.Add(int.Parse(args[1].Split('/')[0]) - 1);
-                    indicesLst.Add(int.Parse(args[2].Split('/')[0]) - 1);
-                    indicesLst.Add(int.Parse(args[3].Split('/')[0]) - 1);
+                    indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[1].Split('/')[0]) - 1]));
+                    indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[2].Split('/')[0]) - 1]));
+                    indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[3].Split('/')[0]) - 1]));
+
+                    indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[1].Split('/')[1]) - 1]));
+                    indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[2].Split('/')[1]) - 1]));
+                    indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[3].Split('/')[1]) - 1]));
                 }
             }
 
-            vertices = verticesLst.ToArray();
-            indices = indicesLst.ToArray();
+            /*vertices = new VertexUV[verticesLst.Count];
+            for(i = 0; i < verticesLst.Count; i++)
+            {
+                vertices[i].Position = verticesLst[i];
+                vertices[i].UV = uvLst[i];
+            }*/
+
+            /*vertices = verticesLst.ToArray();
+            uvs = uvLst.ToArray();*/
+            vertices = indicesLst.ToArray();
+            uvs = indicesUVLst.ToArray();
         }
 
         public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection)
         {
             //screen.DrawTrianglesOutline(world, view, projection, vertices, indices);
-            Shader.projection = projection;
-            Shader.view = view;
-            Shader.world = world;
+            ShaderUV.projection = projection;
+            ShaderUV.view = view;
+            ShaderUV.world = world;
 
-            Shader.Color = new Color3(255, 128, 128);
+            ShaderUV.texture = texture;
 
-            Shader.Render(screen, vertices, indices);
+            ShaderUV.Render(screen, vertices, uvs);
         }
 
     }

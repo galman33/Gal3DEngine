@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Color3.cs" />
+    <Compile Include="RefType.cs" />
     <Compile Include="ShaderUV.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="VertexUV.cs" />
@@ -61,11 +62,20 @@
     <Compile Include="VertexColor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\cat.obj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Sasuke.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\body.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\cat.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\TesTexture.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -36,24 +36,24 @@ namespace Gal3DEngine
             screen.Init(Width, Height);
         }
 
-        VertexUV[] vertices;
-        int[] indices;
+        RefType<Vector4>[] vertices;
+        RefType<Vector2>[] uvs;
         Color3[,] texture;
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            //model = new Model("Resources/Sasuke.obj");
+            model = new Model("Resources/cat.obj", "Resources/cat.png");
 
-            vertices = new VertexUV[3];
-            vertices[0].Position = new Vector4(-0.5f, 0.5f, -1, 1);
-            vertices[0].UV = new Vector2(0, 0);
-            vertices[1].Position = new Vector4(0.5f, 0.5f, -1, 1);
-            vertices[1].UV = new Vector2(1, 0);
-            vertices[2].Position = new Vector4(-0.5f, -0.5f, -1, 1);
-            vertices[2].UV = new Vector2(0, 1);
+            vertices = new RefType<Vector4>[3];
+            uvs = new RefType<Vector2>[3];
 
-            indices = new int[] { 0, 1, 2 };
+            vertices[0] = new RefType<Vector4>(new Vector4(-0.5f, 0.5f, -1, 1));
+            uvs[0] = new RefType<Vector2>(new Vector2(0, 0));
+            vertices[1] = new RefType<Vector4>(new Vector4(0.5f, 0.5f, -1, 1));
+            uvs[1] = new RefType<Vector2>(new Vector2(1, 0));
+            vertices[2] = new RefType<Vector4>(new Vector4(-0.5f, -0.5f, -1, 1));
+            uvs[2] = new RefType<Vector2>(new Vector2(0, 1));
 
             texture = Texture.LoadTexture("Resources/TesTexture.png");
         }
@@ -84,15 +84,15 @@ namespace Gal3DEngine
             float rot = 0;
             Matrix4 view = (Matrix4.CreateTranslation(camX, camY, camZ)).Inverted();
 
-            Matrix4 world = Matrix4.CreateScale(0.005f) * Matrix4.CreateRotationY(f) * Matrix4.CreateRotationX(MathHelper.Pi) * Matrix4.CreateTranslation(0, 0.25f, 1);
+            Matrix4 world = Matrix4.CreateScale(0.5f) * Matrix4.CreateRotationY(f) * Matrix4.CreateRotationX(MathHelper.Pi) * Matrix4.CreateTranslation(0, 0.25f, 1);
 
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 100);
 
-            //model.Render(screen, world, view, projection);
+            model.Render(screen, world, view, projection);
 
-            ShaderUV.projection = ShaderUV.view = ShaderUV.world = Matrix4.Identity;
+            /*ShaderUV.projection = ShaderUV.view = ShaderUV.world = Matrix4.Identity;
             ShaderUV.texture = texture;
-            ShaderUV.Render(screen, vertices, indices);
+            ShaderUV.Render(screen, vertices, uvs);*/
 
             screen.Render();
 

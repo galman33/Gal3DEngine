@@ -15,7 +15,7 @@ namespace Gal3DEngine
 
         public static Color3[,] texture;
 
-        public static void Render(Screen screen, VertexUV[] vertices, int[] indices)
+        public static void Render(Screen screen, RefType<Vector4>[] vertices, RefType<Vector2>[] uvs)
         {
             Matrix4 transformation = view * world * projection;
 
@@ -26,19 +26,19 @@ namespace Gal3DEngine
 
             for (i = 0; i < vertices.Length; i++)
             {
-                v = Vector4.Transform(vertices[i].Position, view * world * projection); // projection * view * world
+                v = Vector4.Transform(vertices[i].Value, view * world * projection); // projection * view * world
 
                 v.X = v.X / v.W * 0.5f * screen.Width + screen.Width / 2;
                 v.Y = v.Y / v.W * 0.5f * screen.Height + screen.Height / 2;
                 v.Z = v.Z / v.W;
 
                 transformedVertices[i].Position = v;
-                transformedVertices[i].UV = vertices[i].UV;
+                transformedVertices[i].UV = uvs[i].Value;
             }
 
-            for (i = 0; i < indices.Length; i += 3)
+            for (i = 0; i < vertices.Length; i += 3)
             {
-                DrawTriangle(screen, transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]]);
+                DrawTriangle(screen, transformedVertices[i + 0], transformedVertices[i + 1], transformedVertices[i + 2]);
             }
             
 
@@ -95,7 +95,13 @@ namespace Gal3DEngine
                 var z = Lerp(z1, z2, gradient);
                 Vector2 uv = Lerp(uv1, uv2, gradient);
 
-                Color3 c = texture[(int) (texture.GetLength(0) * uv.X), (int)(texture.GetLength(1) * uv.Y)];
+                int tx = (int)(texture.GetLength(0) * uv.X);
+                if(tx >= texture.GetLength(0))
+                    tx = texture.GetLength(0) - 1;
+                int ty = (int)(texture.GetLength(1) * uv.Y);
+                if(ty >= texture.GetLength(1))
+                    ty = texture.GetLength(1) - 1;
+                Color3 c = texture[tx, ty];
 
                 screen.TryPutPixel(x, y, z, c);
             }
