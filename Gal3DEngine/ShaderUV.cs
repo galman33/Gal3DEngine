@@ -6,20 +6,20 @@ using OpenTK;
 
 namespace Gal3DEngine
 {
-    class Shader
+    class ShaderUV
     {
 
         public static Matrix4 world;
         public static Matrix4 view;
         public static Matrix4 projection;
 
-        public static Color3 Color;
+        public static Color3[,] texture;
 
-        public static void Render(Screen screen, VertexColor[] vertices, int[] indices)
+        public static void Render(Screen screen, VertexUV[] vertices, int[] indices)
         {
             Matrix4 transformation = view * world * projection;
 
-            VertexColor[] transformedVertices = new VertexColor[vertices.Length];
+            VertexUV[] transformedVertices = new VertexUV[vertices.Length];
 
             Vector4 v;
             int i;
@@ -33,12 +33,12 @@ namespace Gal3DEngine
                 v.Z = v.Z / v.W;
 
                 transformedVertices[i].Position = v;
-                transformedVertices[i].Color = vertices[i].Color;
+                transformedVertices[i].UV = vertices[i].UV;
             }
 
             for (i = 0; i < indices.Length; i += 3)
             {
-                DrawTriangle(screen, transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], Color);
+                DrawTriangle(screen, transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]]);
             }
             
 
@@ -47,6 +47,11 @@ namespace Gal3DEngine
         private static float Lerp(float a, float b, float t)
         {
             return a + (b - a) * t;
+        }
+
+        private static Vector2 Lerp(Vector2 a, Vector2 b, float t)
+        {
+            return new Vector2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
         }
 
         private static Color3 ColorLerp(Color3 a, Color3 b, float t)
@@ -61,7 +66,7 @@ namespace Gal3DEngine
         // drawing line between 2 points from left to right
         // papb -> pcpd
         // pa, pb, pc, pd must then be sorted before
-        private static void ProcessScanLine(Screen screen, int y, VertexColor pa, VertexColor pb, VertexColor pc, VertexColor pd, Color3 color)
+        private static void ProcessScanLine(Screen screen, int y, VertexUV pa, VertexUV pb, VertexUV pc, VertexUV pd)
         {
             // Thanks to current Y, we can compute the gradient to compute others values like
             // the starting X (sx) and ending X (ex) to draw between
@@ -77,8 +82,8 @@ namespace Gal3DEngine
             float z2 = Lerp(pc.Position.Z, pd.Position.Z, gradient2);
 
             // starting Z & ending Z
-            Color3 c1 = ColorLerp(pa.Color, pb.Color, gradient1);
-            Color3 c2 = ColorLerp(pc.Color, pd.Color, gradient2);
+            Vector2 uv1 = Lerp(pa.UV, pb.UV, gradient1);
+            Vector2 uv2 = Lerp(pc.UV, pd.UV, gradient2);
 
 
 
@@ -88,13 +93,15 @@ namespace Gal3DEngine
                 float gradient = (x - sx) / (float)(ex - sx);
 
                 var z = Lerp(z1, z2, gradient);
-                Color3 c = ColorLerp(c1, c2, gradient);
+                Vector2 uv = Lerp(uv1, uv2, gradient);
+
+                Color3 c = texture[(int) (texture.GetLength(0) * uv.X), (int)(texture.GetLength(1) * uv.Y)];
 
                 screen.TryPutPixel(x, y, z, c);
             }
         }
 
-        private static void DrawTriangle(Screen screen, VertexColor p1, VertexColor p2, VertexColor p3, Color3 color)
+        private static void DrawTriangle(Screen screen, VertexUV p1, VertexUV p2, VertexUV p3)
         {
             // Sorting the points in order to always have this order on screen p1, p2 & p3
             // with p1 always up (thus having the Y the lowest possible to be near the top screen)
@@ -152,11 +159,11 @@ namespace Gal3DEngine
                 {
                     if (y < p2.Position.Y)
                     {
-                        ProcessScanLine(screen, y, p1, p3, p1, p2, color);
+                        ProcessScanLine(screen, y, p1, p3, p1, p2);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p1, p3, p2, p3, color);
+                        ProcessScanLine(screen, y, p1, p3, p2, p3);
                     }
                 }
             }
@@ -177,11 +184,11 @@ namespace Gal3DEngine
                 {
                     if (y < p2.Position.Y)
                     {
-                        ProcessScanLine(screen, y, p1, p2, p1, p3, color);
+                        ProcessScanLine(screen, y, p1, p2, p1, p3);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p2, p3, p1, p3, color);
+                        ProcessScanLine(screen, y, p2, p3, p1, p3);
                     }
                 }
             }

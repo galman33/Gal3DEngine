@@ -25,6 +25,13 @@ namespace Gal3DEngine
             this.b = Convert.ToByte(b);
         }
 
+        public Color3(System.Drawing.Color color)
+        {
+            this.r = color.R;
+            this.g = color.G;
+            this.b = color.B;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null)

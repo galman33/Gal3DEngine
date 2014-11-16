@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Color3.cs" />
+    <Compile Include="ShaderUV.cs" />
+    <Compile Include="Texture.cs" />
+    <Compile Include="VertexUV.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Point2i.cs" />
@@ -60,6 +64,11 @@
     <None Include="Resources\Sasuke.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\TesTexture.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

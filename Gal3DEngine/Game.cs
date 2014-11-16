@@ -36,11 +36,26 @@ namespace Gal3DEngine
             screen.Init(Width, Height);
         }
 
+        VertexUV[] vertices;
+        int[] indices;
+        Color3[,] texture;
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            model = new Model("Resources/Sasuke.obj");
-            
+            //model = new Model("Resources/Sasuke.obj");
+
+            vertices = new VertexUV[3];
+            vertices[0].Position = new Vector4(-0.5f, 0.5f, -1, 1);
+            vertices[0].UV = new Vector2(0, 0);
+            vertices[1].Position = new Vector4(0.5f, 0.5f, -1, 1);
+            vertices[1].UV = new Vector2(1, 0);
+            vertices[2].Position = new Vector4(-0.5f, -0.5f, -1, 1);
+            vertices[2].UV = new Vector2(0, 1);
+
+            indices = new int[] { 0, 1, 2 };
+
+            texture = Texture.LoadTexture("Resources/TesTexture.png");
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -73,31 +88,11 @@ namespace Gal3DEngine
 
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 100);
 
-            /*List<Vector3> vertices3 = new List<Vector3>();
-            CreateCube(vertices3);*/
-            /*List<Vector3> vertices3 = modelVertices;
+            //model.Render(screen, world, view, projection);
 
-            List<Vector4> vertices = new List<Vector4>();
-            foreach(Vector3 vert in vertices3)
-                vertices.Add(new Vector4(vert, 1));*/
-            /*List<Vector4> vertices = new List<Vector4>(modelVertices);
-
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                vertices[i] = Vector4.Transform(vertices[i], view * world * projection); // projection * view * world
-
-                Vector4 v = vertices[i];
-                v.X = v.X / v.W * 0.5f * Width + Width / 2;
-                v.Y = v.Y / v.W * 0.5f * Height + Height / 2;
-                v.Z = v.Z / v.W;
-                vertices[i] = v;
-            }
-
-            for (int i = 0; i < vertices.Count; i+=3)
-            {
-                screen.DrawTriangleOutline(vertices[i + 0], vertices[i + 1], vertices[i + 2], new Color3(255, 255, 255));
-            }*/
-            model.Render(screen, world, view, projection);
+            ShaderUV.projection = ShaderUV.view = ShaderUV.world = Matrix4.Identity;
+            ShaderUV.texture = texture;
+            ShaderUV.Render(screen, vertices, indices);
 
             screen.Render();
 
