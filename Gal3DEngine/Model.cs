@@ -14,8 +14,7 @@ namespace Gal3DEngine
 
         public Model(string file)
         {
-            Load(TestModel.Cat);
-            //Load(System.IO.File.ReadAllText(file));
+            Load(System.IO.File.ReadAllText(file));
         }
 
         private Random rand = new Random();

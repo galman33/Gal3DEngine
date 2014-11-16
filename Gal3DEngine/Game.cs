@@ -39,7 +39,7 @@ namespace Gal3DEngine
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            model = new Model("");
+            model = new Model("Resources/Sasuke.obj");
             
         }
 
@@ -58,7 +58,6 @@ namespace Gal3DEngine
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-
             f += 0.04f;
 
             GL.ClearColor(1.0f, 0.0f, 1.0f, 1.0f);
@@ -70,9 +69,9 @@ namespace Gal3DEngine
             float rot = 0;
             Matrix4 view = (Matrix4.CreateTranslation(camX, camY, camZ)).Inverted();
 
-            Matrix4 world = Matrix4.CreateScale(0.5f) * Matrix4.CreateRotationY(f) * Matrix4.CreateRotationX(MathHelper.Pi) * Matrix4.CreateTranslation(0, 0.25f, 1);
+            Matrix4 world = Matrix4.CreateScale(0.005f) * Matrix4.CreateRotationY(f) * Matrix4.CreateRotationX(MathHelper.Pi) * Matrix4.CreateTranslation(0, 0.25f, 1);
 
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float) Height, 0.1f, 100);
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 100);
 
             /*List<Vector3> vertices3 = new List<Vector3>();
             CreateCube(vertices3);*/
