@@ -48,7 +48,10 @@ namespace Gal3DEngine
 
                 if (lines[i].StartsWith("f "))
                 {
-                    string[] args = lines[i].Split(' ');
+                    string[] args = lines[i].Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (args[1].Contains("//"))
+                        continue;
 
                     indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[1].Split('/')[0]) - 1]));
                     indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[2].Split('/')[0]) - 1]));
