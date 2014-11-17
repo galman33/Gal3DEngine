@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Gal3DEngine
 {
-    public struct VertexUV
+    public class VertexUV
     {
         public Vector4 Position;
         public Vector2 UV;

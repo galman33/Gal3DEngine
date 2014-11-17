@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Color3.cs" />
-    <Compile Include="RefType.cs" />
     <Compile Include="ShaderUV.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="VertexUV.cs" />
@@ -63,9 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\bear.obj">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\BED.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\cat.obj">
@@ -83,9 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\bear.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\BED.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\body.png">

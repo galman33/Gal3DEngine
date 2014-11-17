@@ -42,8 +42,8 @@ namespace Gal3DEngine
             screen.Init(Width, Height);
         }
 
-        RefType<Vector4>[] vertices;
-        RefType<Vector2>[] uvs;
+        /*RefType<Vector4>[] vertices;
+        RefType<Vector2>[] uvs;*/
         Color3[,] texture;
 
         protected override void OnLoad(EventArgs e)
@@ -51,7 +51,7 @@ namespace Gal3DEngine
             base.OnLoad(e);
             model = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
 
-            vertices = new RefType<Vector4>[3];
+            /*vertices = new RefType<Vector4>[3];
             uvs = new RefType<Vector2>[3];
 
             vertices[0] = new RefType<Vector4>(new Vector4(-0.5f, 0.5f, -1, 1));
@@ -61,7 +61,7 @@ namespace Gal3DEngine
             vertices[2] = new RefType<Vector4>(new Vector4(-0.5f, -0.5f, -1, 1));
             uvs[2] = new RefType<Vector2>(new Vector2(0, 1));
 
-            texture = Texture.LoadTexture("Resources/TesTexture.png");
+            texture = Texture.LoadTexture("Resources/TesTexture.png");*/
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)

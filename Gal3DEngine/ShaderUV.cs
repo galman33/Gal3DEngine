@@ -15,30 +15,53 @@ namespace Gal3DEngine
 
         public static Color3[,] texture;
 
-        public static void Render(Screen screen, RefType<Vector4>[] vertices, RefType<Vector2>[] uvs)
+        private static Vector4[] positions;
+        private static Vector2[] uvs;
+
+        public class IndexPositionUV
+        {
+            public int position;
+            public int uv;
+
+            public IndexPositionUV(int position, int uv)
+            {
+                this.position = position;
+                this.uv = uv;
+            }
+
+        }
+
+        public static void SetVerticesPositions(Vector4[] positions)
+        {
+            ShaderUV.positions = (Vector4[]) positions.Clone();
+        }
+
+        public static void SetVerticesUvs(Vector2[] uvs)
+        {
+            ShaderUV.uvs = uvs;
+        }
+
+        public static void Render(Screen screen, IndexPositionUV[] indices)
         {
             Matrix4 transformation = view * world * projection;
-
-            VertexUV[] transformedVertices = new VertexUV[vertices.Length];
 
             Vector4 v;
             int i;
 
-            for (i = 0; i < vertices.Length; i++)
+            for (i = 0; i < positions.Length; i++)
             {
-                v = Vector4.Transform(vertices[i].Value, view * world * projection); // projection * view * world
+                v = Vector4.Transform(positions[i], view * world * projection); // projection * view * world
 
                 v.X = v.X / v.W * 0.5f * screen.Width + screen.Width / 2;
                 v.Y = v.Y / v.W * 0.5f * screen.Height + screen.Height / 2;
                 v.Z = v.Z / v.W;
 
-                transformedVertices[i].Position = v;
-                transformedVertices[i].UV = uvs[i].Value;
+                positions[i] = v;
             }
 
-            for (i = 0; i < vertices.Length; i += 3)
+            for (i = 0; i < indices.Length; i += 3)
             {
-                DrawTriangle(screen, transformedVertices[i + 0], transformedVertices[i + 1], transformedVertices[i + 2]);
+                DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2]);
             }
             
 
@@ -66,24 +89,24 @@ namespace Gal3DEngine
         // drawing line between 2 points from left to right
         // papb -> pcpd
         // pa, pb, pc, pd must then be sorted before
-        private static void ProcessScanLine(Screen screen, int y, VertexUV pa, VertexUV pb, VertexUV pc, VertexUV pd)
+        private static void ProcessScanLine(Screen screen, int y, IndexPositionUV pa, IndexPositionUV pb, IndexPositionUV pc, IndexPositionUV pd)
         {
             // Thanks to current Y, we can compute the gradient to compute others values like
             // the starting X (sx) and ending X (ex) to draw between
             // if pa.Y == pb.Y or pc.Y == pd.Y, gradient is forced to 1
-            var gradient1 = pa.Position.Y != pb.Position.Y ? (y - pa.Position.Y) / (pb.Position.Y - pa.Position.Y) : 1;
-            var gradient2 = pc.Position.Y != pd.Position.Y ? (y - pc.Position.Y) / (pd.Position.Y - pc.Position.Y) : 1;
+            var gradient1 = positions[pa.position].Y != positions[pb.position].Y ? (y - positions[pa.position].Y) / (positions[pb.position].Y - positions[pa.position].Y) : 1;
+            var gradient2 = positions[pc.position].Y != positions[pd.position].Y ? (y - positions[pc.position].Y) / (positions[pd.position].Y - positions[pc.position].Y) : 1;
 
-            int sx = (int)Lerp(pa.Position.X, pb.Position.X, gradient1);
-            int ex = (int)Lerp(pc.Position.X, pd.Position.X, gradient2);
-
-            // starting Z & ending Z
-            float z1 = Lerp(pa.Position.Z, pb.Position.Z, gradient1);
-            float z2 = Lerp(pc.Position.Z, pd.Position.Z, gradient2);
+            int sx = (int)Lerp(positions[pa.position].X, positions[pb.position].X, gradient1);
+            int ex = (int)Lerp(positions[pc.position].X, positions[pd.position].X, gradient2);
 
             // starting Z & ending Z
-            Vector2 uv1 = Lerp(pa.UV, pb.UV, gradient1);
-            Vector2 uv2 = Lerp(pc.UV, pd.UV, gradient2);
+            float z1 = Lerp(positions[pa.position].Z, positions[pb.position].Z, gradient1);
+            float z2 = Lerp(positions[pc.position].Z, positions[pd.position].Z, gradient2);
+
+            // starting Z & ending Z
+            Vector2 uv1 = Lerp(uvs[pa.uv], uvs[pb.uv], gradient1);
+            Vector2 uv2 = Lerp(uvs[pc.uv], uvs[pd.uv], gradient2);
 
 
 
@@ -107,26 +130,26 @@ namespace Gal3DEngine
             }
         }
 
-        private static void DrawTriangle(Screen screen, VertexUV p1, VertexUV p2, VertexUV p3)
+        private static void DrawTriangle(Screen screen, IndexPositionUV p1, IndexPositionUV p2, IndexPositionUV p3)
         {
             // Sorting the points in order to always have this order on screen p1, p2 & p3
             // with p1 always up (thus having the Y the lowest possible to be near the top screen)
             // then p2 between p1 & p3
-            if (p1.Position.Y > p2.Position.Y)
+            if (positions[p1.position].Y > positions[p2.position].Y)
             {
                 var temp = p2;
                 p2 = p1;
                 p1 = temp;
             }
 
-            if (p2.Position.Y > p3.Position.Y)
+            if (positions[p2.position].Y > positions[p3.position].Y)
             {
                 var temp = p2;
                 p2 = p3;
                 p3 = temp;
             }
 
-            if (p1.Position.Y > p2.Position.Y)
+            if (positions[p1.position].Y > positions[p2.position].Y)
             {
                 var temp = p2;
                 p2 = p1;
@@ -138,13 +161,13 @@ namespace Gal3DEngine
 
             // http://en.wikipedia.org/wiki/Slope
             // Computing inverse slopes
-            if (p2.Position.Y - p1.Position.Y > 0)
-                dP1P2 = (p2.Position.X - p1.Position.X) / (p2.Position.Y - p1.Position.Y);
+            if (positions[p2.position].Y - positions[p1.position].Y > 0)
+                dP1P2 = (positions[p2.position].X - positions[p1.position].X) / (positions[p2.position].Y - positions[p1.position].Y);
             else
                 dP1P2 = 0;
 
-            if (p3.Position.Y - p1.Position.Y > 0)
-                dP1P3 = (p3.Position.X - p1.Position.X) / (p3.Position.Y - p1.Position.Y);
+            if (positions[p3.position].Y - positions[p1.position].Y > 0)
+                dP1P3 = (positions[p3.position].X - positions[p1.position].X) / (positions[p3.position].Y - positions[p1.position].Y);
             else
                 dP1P3 = 0;
 
@@ -161,9 +184,9 @@ namespace Gal3DEngine
             // P3
             if (dP1P2 > dP1P3)
             {
-                for (var y = (int)p1.Position.Y; y <= (int)p3.Position.Y; y++)
+                for (var y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
                 {
-                    if (y < p2.Position.Y)
+                    if (y < positions[p2.position].Y)
                     {
                         ProcessScanLine(screen, y, p1, p3, p1, p2);
                     }
@@ -186,9 +209,9 @@ namespace Gal3DEngine
             //       P3
             else
             {
-                for (var y = (int)p1.Position.Y; y <= (int)p3.Position.Y; y++)
+                for (var y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
                 {
-                    if (y < p2.Position.Y)
+                    if (y < positions[p2.position].Y)
                     {
                         ProcessScanLine(screen, y, p1, p2, p1, p3);
                     }
