@@ -49,7 +49,7 @@ namespace Gal3DEngine
                 if (lines[i].StartsWith("f "))
                 {
                     string[] args = lines[i].Split(' ');
-                        
+
                     indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[1].Split('/')[0]) - 1]));
                     indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[2].Split('/')[0]) - 1]));
                     indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[3].Split('/')[0]) - 1]));
@@ -57,6 +57,19 @@ namespace Gal3DEngine
                     indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[1].Split('/')[1]) - 1]));
                     indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[2].Split('/')[1]) - 1]));
                     indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[3].Split('/')[1]) - 1]));
+
+                    if (args.Length == 5) // 1 + 4
+                    {
+                        indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[3].Split('/')[0]) - 1]));
+                        indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[4].Split('/')[0]) - 1]));
+                        indicesLst.Add(new RefType<Vector4>(verticesLst[int.Parse(args[1].Split('/')[0]) - 1]));
+
+                        indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[3].Split('/')[1]) - 1]));
+                        indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[4].Split('/')[1]) - 1]));
+                        indicesUVLst.Add(new RefType<Vector2>(uvLst[int.Parse(args[1].Split('/')[1]) - 1]));
+                    }
+
+                    
                 }
             }
 
