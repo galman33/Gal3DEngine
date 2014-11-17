@@ -98,7 +98,7 @@ namespace Gal3DEngine
                 int tx = (int)(texture.GetLength(0) * uv.X);
                 if(tx >= texture.GetLength(0))
                     tx = texture.GetLength(0) - 1;
-                int ty = (int)(texture.GetLength(1) * uv.Y);
+                int ty = (int)(texture.GetLength(1) * (1 - uv.Y));
                 if(ty >= texture.GetLength(1))
                     ty = texture.GetLength(1) - 1;
                 Color3 c = texture[tx, ty];
