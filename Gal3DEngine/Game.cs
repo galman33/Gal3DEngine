@@ -18,9 +18,9 @@ namespace Gal3DEngine
 
         private Model model;
 
-        private float scale = 0.005f;
+        private float scale = 0.5f;
         private float rotY = 0;
-        private float rotX = 0;
+        private float rotX = MathHelper.Pi;
         private float transX = 0;
         private float transY = 0.25f;
 
@@ -49,7 +49,7 @@ namespace Gal3DEngine
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            model = new Model("Resources/Sasuke.obj", "Resources/body.png");
+            model = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
 
             vertices = new RefType<Vector4>[3];
             uvs = new RefType<Vector2>[3];
