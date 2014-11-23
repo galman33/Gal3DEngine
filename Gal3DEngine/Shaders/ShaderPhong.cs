@@ -67,10 +67,12 @@ namespace Gal3DEngine
                 v.Z = v.Z / v.W;
 
                 positions[i] = v;
-                Matrix4 test = world;
-                test.Transpose();
 
-                normals[i] = Vector3.Transform(normals[i], test.Inverted());
+                Matrix4 normalTransform = world.Inverted();
+                normalTransform.Transpose();
+                // Same as: 
+                // Matrix4 normalTransform = world.ClearScale().ClearProjection().ClearTranslation();
+                normals[i] = Vector3.Transform(normals[i], normalTransform);
             }
 
             for (i = 0; i < indices.Length; i += 3)
