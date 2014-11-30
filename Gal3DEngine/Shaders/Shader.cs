@@ -38,7 +38,8 @@ namespace Gal3DEngine
 
             for (i = 0; i < indices.Length; i += 3)
             {
-                DrawTriangle(screen, transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], Color);
+                if (!Shader.ShouldCull(transformedVertices[indices[i + 0]].Position, transformedVertices[indices[i + 1]].Position, transformedVertices[indices[i + 2]].Position))
+                    DrawTriangle(screen, transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], Color);
             }
             
 
@@ -185,6 +186,12 @@ namespace Gal3DEngine
                     }
                 }
             }
+        }
+
+        //Culling check
+        public static bool ShouldCull(Vector4 p1 , Vector4 p2 , Vector4 p3)
+        {
+            return ((p1.X - p2.X) * (p3.Y - p2.Y) - (p1.Y - p2.Y) * (p3.X - p2.X)) < 0;
         }
 
     }

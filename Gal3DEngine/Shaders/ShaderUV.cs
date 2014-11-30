@@ -61,7 +61,8 @@ namespace Gal3DEngine
 
             for (i = 0; i < indices.Length; i += 3)
             {
-                DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2]);
+                if (!Shader.ShouldCull(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position]))
+                    DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2]);
             }
             
 
