@@ -188,10 +188,17 @@ namespace Gal3DEngine
             }
         }
 
-        //Culling check
+        //back face Culling check
         public static bool ShouldCull(Vector4 p1 , Vector4 p2 , Vector4 p3)
         {
             return ((p1.X - p2.X) * (p3.Y - p2.Y) - (p1.Y - p2.Y) * (p3.X - p2.X)) < 0;
+        }
+
+        public static bool ShouldClip(Vector4 p1, Vector4 p2, Vector4 p3, int width, int height)
+        {
+            return  ((p1.X < 0 || p1.X > width) || (p1.Y < 0 || p1.Y > height) || p1.Z < 0) &&
+                    ((p2.X < 0 || p2.X > width) || (p2.Y < 0 || p2.Y > height) || p2.Z < 0) &&
+                    ((p3.X < 0 || p3.X > width) || (p3.Y < 0 || p3.Y > height) || p3.Z < 0);
         }
 
     }
