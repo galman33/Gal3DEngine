@@ -52,34 +52,35 @@ namespace Gal3DEngine
 
         public static void Render(Screen screen, IndexPositionUVNormal[] indices)
         {
-            Matrix4 transformation = view * world * projection;
+            Matrix4 transformation = view * world * projection; // projection * view * world
 
             Vector4 v;
-            Vector3 n;
-            int i;
 
-            for (i = 0; i < positions.Length; i++)
+            for (int i = 0; i < positions.Length; i++)
             {
-                v = Vector4.Transform(positions[i], view * world * projection); // projection * view * world
+                v = Vector4.Transform(positions[i], transformation);
 
-                v.X = v.X / v.W * 0.5f * screen.Width + screen.Width / 2;
-                v.Y = v.Y / v.W * 0.5f * screen.Height + screen.Height / 2;
+                // Returns points in Homogeneous ( -1 -> 1 ) and now tramsform them to (0 -> Width) and (0 -> Height)
+                v.X = v.X / v.W * 0.5f * screen.Width + screen.Width * 0.5f;
+                v.Y = v.Y / v.W * 0.5f * screen.Height + screen.Height * 0.5f;
                 v.Z = v.Z / v.W;
 
                 positions[i] = v;
+            }
 
-                Matrix4 normalTransform = world.Inverted();
-                normalTransform.Transpose();
-                // Same as: 
-                // Matrix4 normalTransform = world.ClearScale().ClearProjection().ClearTranslation();
+            Matrix4 normalTransform = world.Inverted(); // Same as: 
+            normalTransform.Transpose();                // Matrix4 normalTransform = world.ClearScale().ClearProjection().ClearTranslation();
+
+            for (int i = 0; i < normals.Length; i++)
+            {
                 normals[i] = Vector3.Transform(normals[i], normalTransform);
             }
 
-            for (i = 0; i < indices.Length; i += 3)
+            for (int i = 0; i < indices.Length; i += 3)
             {
                 DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2]);
             }
-            
+
 
         }
 
@@ -194,8 +195,9 @@ namespace Gal3DEngine
             else
                 dP1P3 = 0;
 
-            Vector3 normal = Vector3.Normalize((normals[p1.normal] + normals[p2.normal] + normals[p3.normal]) / 3.0f);
-            float brightness = Math.Max(0, Vector3.Dot(normal, lightDirection));
+            // Lightning computing
+            Vector3 normal = Vector3.Normalize((normals[p1.normal] + normals[p2.normal] + normals[p3.normal]) / 3.0f); // Compute face normal
+            float brightness = Math.Max(0, Vector3.Dot(normal, lightDirection)); // Compute face brightness
 
             // First case where triangles are like that:
             // P1
@@ -210,7 +212,7 @@ namespace Gal3DEngine
             // P3
             if (dP1P2 > dP1P3)
             {
-                for (var y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
+                for (int y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
                 {
                     if (y < positions[p2.position].Y)
                     {
@@ -235,7 +237,7 @@ namespace Gal3DEngine
             //       P3
             else
             {
-                for (var y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
+                for (int y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
                 {
                     if (y < positions[p2.position].Y)
                     {

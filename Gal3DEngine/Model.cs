@@ -9,18 +9,18 @@ namespace Gal3DEngine
     class Model
     {
 
-        Vector4[] vertices;
-        Vector2[] uvs;
-        Vector3[] normals;
+        private Vector4[] vertices;
+        private Vector2[] uvs;
+        private Vector3[] normals;
 
-        ShaderFlat.IndexPositionUVNormal[] indices;
+        private ShaderFlat.IndexPositionUVNormal[] indices;
 
-        Color3[,] texture;
+        private Color3[,] texture;
 
-        public Model(string file, string textureFile)
+        public Model(string objPath, string texturePath)
         {
-            Load(System.IO.File.ReadAllText(file));
-            texture = Texture.LoadTexture(textureFile);
+            Load(System.IO.File.ReadAllText(objPath));
+            texture = Texture.LoadTexture(texturePath);
         }
 
         private Random rand = new Random();

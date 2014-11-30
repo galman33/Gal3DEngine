@@ -42,26 +42,10 @@ namespace Gal3DEngine
             screen.Init(Width, Height);
         }
 
-        /*RefType<Vector4>[] vertices;
-        RefType<Vector2>[] uvs;*/
-        Color3[,] texture;
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             model = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
-
-            /*vertices = new RefType<Vector4>[3];
-            uvs = new RefType<Vector2>[3];
-
-            vertices[0] = new RefType<Vector4>(new Vector4(-0.5f, 0.5f, -1, 1));
-            uvs[0] = new RefType<Vector2>(new Vector2(0, 0));
-            vertices[1] = new RefType<Vector4>(new Vector4(0.5f, 0.5f, -1, 1));
-            uvs[1] = new RefType<Vector2>(new Vector2(1, 0));
-            vertices[2] = new RefType<Vector4>(new Vector4(-0.5f, -0.5f, -1, 1));
-            uvs[2] = new RefType<Vector2>(new Vector2(0, 1));
-
-            texture = Texture.LoadTexture("Resources/TesTexture.png");*/
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -99,16 +83,14 @@ namespace Gal3DEngine
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            base.OnRenderFrame(e);
-            f += 0.04f;
+            base.OnRenderFrame(e);           
 
             GL.ClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
             screen.Clear(new Color3());
 
-            int camX = 0, camY = 0, camZ = 0;
-            float rot = 0;
+            int camX = 0, camY = 0, camZ = 0;            
             Matrix4 view = (Matrix4.CreateTranslation(camX, camY, camZ)).Inverted();
 
             Matrix4 world = Matrix4.CreateScale(scale) * Matrix4.CreateRotationY(rotY) * Matrix4.CreateRotationX(/*MathHelper.Pi*/ rotX) * Matrix4.CreateTranslation(transX, transY, 1);
