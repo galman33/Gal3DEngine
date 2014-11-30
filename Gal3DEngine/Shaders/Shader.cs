@@ -17,7 +17,7 @@ namespace Gal3DEngine
 
         public static void Render(Screen screen, VertexColor[] vertices, int[] indices)
         {
-            Matrix4 transformation = view * world * projection;
+            Matrix4 transformation = world * view * projection;
 
             VertexColor[] transformedVertices = new VertexColor[vertices.Length];
 

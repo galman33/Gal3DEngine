@@ -43,7 +43,7 @@ namespace Gal3DEngine
 
         public static void Render(Screen screen, IndexPositionUV[] indices)
         {
-            Matrix4 transformation = view * world * projection;
+            Matrix4 transformation = world * view * projection;
 
             Vector4 v;
             int i;

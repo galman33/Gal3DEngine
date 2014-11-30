@@ -18,6 +18,8 @@ namespace Gal3DEngine
 
         Random rand = new Random();
 
+        private Camera cam;
+
         public TestGame() : base(640, 480)
         {
             
@@ -26,6 +28,8 @@ namespace Gal3DEngine
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            cam = new Camera();
+
             model = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
         }
 
@@ -45,22 +49,22 @@ namespace Gal3DEngine
             }
             if (e.Mouse.MiddleButton == OpenTK.Input.ButtonState.Pressed)
             {
-                transX += -e.XDelta * 0.01f;
-                transY += e.YDelta * 0.01f;
+                cam.Position.X += e.XDelta * 0.01f;
+                cam.Position.Y += -e.YDelta * 0.01f;
             }
         }
 
         protected override void Update()
         {
             base.Update();
+            cam.Rotation.X += 0.1f;
         }
 
         protected override void Render()
         {
             base.Render();
 
-            int camX = 0, camY = 0, camZ = 0;
-            Matrix4 view = (Matrix4.CreateTranslation(camX, camY, camZ)).Inverted();
+            Matrix4 view = cam.GetViewMatrix();
 
             Matrix4 world = Matrix4.CreateScale(scale) * Matrix4.CreateRotationY(rotY) * Matrix4.CreateRotationX(rotX) * Matrix4.CreateTranslation(transX, transY, 1);
 

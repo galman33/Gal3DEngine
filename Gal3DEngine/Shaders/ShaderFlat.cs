@@ -52,7 +52,7 @@ namespace Gal3DEngine
 
         public static void Render(Screen screen, IndexPositionUVNormal[] indices)
         {
-            Matrix4 transformation = view * world * projection; // projection * view * world
+            Matrix4 transformation = world * view * projection; // projection * view * world
 
             Vector4 v;
 
