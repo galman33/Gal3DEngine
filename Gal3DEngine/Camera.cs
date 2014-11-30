@@ -13,7 +13,7 @@ namespace Gal3DEngine
 
         public Matrix4 GetViewMatrix()
         {
-            return (Matrix4.CreateRotationX(Rotation.X) * Matrix4.CreateRotationY(Rotation.Y) * Matrix4.CreateRotationZ(Rotation.Z) *
+            return (Matrix4.CreateRotationY(MathHelper.DegreesToRadians(Rotation.Y)) * Matrix4.CreateRotationX(MathHelper.DegreesToRadians(Rotation.X)) * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(Rotation.Z)) *
                         Matrix4.CreateTranslation(Position.X, Position.Y, Position.Z)
                         ).Inverted();
         }

@@ -32,6 +32,8 @@ namespace Gal3DEngine
             WindowBorder = OpenTK.WindowBorder.Fixed;
             Screen = new Screen();
 
+            Time.Init();
+
             Run(60, 60);
         }
 
@@ -53,6 +55,7 @@ namespace Gal3DEngine
         {
             base.OnUpdateFrame(e);
 
+            Time.Update();
             Update();
 
             //FPS
