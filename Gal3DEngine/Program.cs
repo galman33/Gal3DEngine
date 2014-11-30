@@ -9,8 +9,7 @@ namespace Gal3DEngine
     {
         static void Main(string[] args)
         {
-            Game game = new Game();
-            game.Run(60, 60);
+            TestGame game = new TestGame();
         }
     }
 }
