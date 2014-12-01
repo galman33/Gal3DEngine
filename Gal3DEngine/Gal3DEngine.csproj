@@ -62,11 +62,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="Color3.cs" />
     <Compile Include="Shaders\ShaderFlat.cs" />
     <Compile Include="Shaders\ShaderPhong.cs" />
     <Compile Include="Shaders\ShaderUV.cs" />
+    <Compile Include="TestGame.cs" />
     <Compile Include="Texture.cs" />
+    <Compile Include="Time.cs" />
     <Compile Include="VertexUV.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Model.cs" />
