@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTK;
+using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
@@ -17,19 +18,6 @@ namespace Gal3DEngine
 
         private static Vector4[] positions;
         private static Vector2[] uvs;
-
-        public class IndexPositionUV
-        {
-            public int position;
-            public int uv;
-
-            public IndexPositionUV(int position, int uv)
-            {
-                this.position = position;
-                this.uv = uv;
-            }
-
-        }
 
         public static void SetVerticesPositions(Vector4[] positions)
         {
@@ -61,7 +49,7 @@ namespace Gal3DEngine
 
             for (i = 0; i < indices.Length; i += 3)
             {
-                if (!Shader.ShouldCull(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position]))
+                if (Shader.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height))
                     DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2]);
             }
             

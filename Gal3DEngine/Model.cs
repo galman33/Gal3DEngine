@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTK;
+using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
@@ -13,7 +14,7 @@ namespace Gal3DEngine
         private Vector2[] uvs;
         private Vector3[] normals;
 
-        private ShaderFlat.IndexPositionUVNormal[] indices;
+        private IndexPositionUVNormal[] indices;
 
         private Color3[,] texture;
 
@@ -31,7 +32,7 @@ namespace Gal3DEngine
             List<Vector2> uvLst = new List<Vector2>();
             List<Vector3> normalsLst = new List<Vector3>();
 
-            List<ShaderFlat.IndexPositionUVNormal> indicesLst = new List<ShaderFlat.IndexPositionUVNormal>();
+            List<IndexPositionUVNormal> indicesLst = new List<IndexPositionUVNormal>();
 
 
             string[] lines = content.Split(new char[]{'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
@@ -64,15 +65,15 @@ namespace Gal3DEngine
                     if (args[1].Contains("//"))
                         continue;
 
-                    indicesLst.Add(new ShaderFlat.IndexPositionUVNormal(int.Parse(args[1].Split('/')[0]) - 1, int.Parse(args[1].Split('/')[1]) - 1, int.Parse(args[1].Split('/')[2]) - 1));
-                    indicesLst.Add(new ShaderFlat.IndexPositionUVNormal(int.Parse(args[2].Split('/')[0]) - 1, int.Parse(args[2].Split('/')[1]) - 1, int.Parse(args[2].Split('/')[2]) - 1));
-                    indicesLst.Add(new ShaderFlat.IndexPositionUVNormal(int.Parse(args[3].Split('/')[0]) - 1, int.Parse(args[3].Split('/')[1]) - 1, int.Parse(args[3].Split('/')[2]) - 1));
+                    indicesLst.Add(new IndexPositionUVNormal(int.Parse(args[1].Split('/')[0]) - 1, int.Parse(args[1].Split('/')[1]) - 1, int.Parse(args[1].Split('/')[2]) - 1));
+                    indicesLst.Add(new IndexPositionUVNormal(int.Parse(args[2].Split('/')[0]) - 1, int.Parse(args[2].Split('/')[1]) - 1, int.Parse(args[2].Split('/')[2]) - 1));
+                    indicesLst.Add(new IndexPositionUVNormal(int.Parse(args[3].Split('/')[0]) - 1, int.Parse(args[3].Split('/')[1]) - 1, int.Parse(args[3].Split('/')[2]) - 1));
 
                     if (args.Length == 5) // 1 + 4
                     {
-                        indicesLst.Add(new ShaderFlat.IndexPositionUVNormal(int.Parse(args[3].Split('/')[0]) - 1, int.Parse(args[3].Split('/')[1]) - 1, int.Parse(args[3].Split('/')[2]) - 1));
-                        indicesLst.Add(new ShaderFlat.IndexPositionUVNormal(int.Parse(args[4].Split('/')[0]) - 1, int.Parse(args[4].Split('/')[1]) - 1, int.Parse(args[4].Split('/')[2]) - 1));
-                        indicesLst.Add(new ShaderFlat.IndexPositionUVNormal(int.Parse(args[1].Split('/')[0]) - 1, int.Parse(args[1].Split('/')[1]) - 1, int.Parse(args[1].Split('/')[2]) - 1));
+                        indicesLst.Add(new IndexPositionUVNormal(int.Parse(args[3].Split('/')[0]) - 1, int.Parse(args[3].Split('/')[1]) - 1, int.Parse(args[3].Split('/')[2]) - 1));
+                        indicesLst.Add(new IndexPositionUVNormal(int.Parse(args[4].Split('/')[0]) - 1, int.Parse(args[4].Split('/')[1]) - 1, int.Parse(args[4].Split('/')[2]) - 1));
+                        indicesLst.Add(new IndexPositionUVNormal(int.Parse(args[1].Split('/')[0]) - 1, int.Parse(args[1].Split('/')[1]) - 1, int.Parse(args[1].Split('/')[2]) - 1));
                     }
                 }
             }
@@ -86,17 +87,17 @@ namespace Gal3DEngine
 
         public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection)
         {
-            ShaderFlat.projection = projection;
-            ShaderFlat.view = view;
-            ShaderFlat.world = world;
-            ShaderFlat.lightDirection = Vector3.Normalize(new Vector3(1, 0, -1));
+            ShaderPhong.projection = projection;
+            ShaderPhong.view = view;
+            ShaderPhong.world = world;
+            ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(1, 0, -1));
 
-            ShaderFlat.texture = texture;
+            ShaderPhong.texture = texture;
 
-            ShaderFlat.SetVerticesPositions(vertices);
-            ShaderFlat.SetVerticesUvs(uvs);
-            ShaderFlat.SetVerticesNormals(normals);
-            ShaderFlat.Render(screen, indices);
+            ShaderPhong.SetVerticesPositions(vertices);
+            ShaderPhong.SetVerticesUvs(uvs);
+            ShaderPhong.SetVerticesNormals(normals);
+            ShaderPhong.Render(screen, indices);
         }
 
     }
