@@ -63,7 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Color3.cs" />
+    <Compile Include="IndicesTypes\IndexPosition.cs" />
     <Compile Include="IndicesTypes\IndexPositionUV.cs" />
     <Compile Include="IndicesTypes\IndexPositionUVNormal.cs" />
     <Compile Include="Shaders\ShaderFlat.cs" />

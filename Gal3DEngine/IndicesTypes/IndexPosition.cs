@@ -5,13 +5,13 @@ using System.Text;
 
 namespace Gal3DEngine.IndicesTypes
 {
-    public class IndexPositionUV : IndexPosition
+    public class IndexPosition
     {
-        public int uv;
+        public int position;
 
-        public IndexPositionUV(int position, int uv) : base(position)
+        public IndexPosition(int position)
         {
-            this.uv = uv;
+            this.position = position;
         }
 
     }

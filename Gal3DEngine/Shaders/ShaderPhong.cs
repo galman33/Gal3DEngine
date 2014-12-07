@@ -36,7 +36,7 @@ namespace Gal3DEngine
             ShaderPhong.normals = (Vector3[])normals.Clone();
         }
 
-        public static void Render(Screen screen, IndexPositionUVNormal[] indices)
+        /*public static void Render(Screen screen, IndexPositionUVNormal[] indices)
         {
             Matrix4 transformation = view * world * projection;
 
@@ -68,6 +68,111 @@ namespace Gal3DEngine
             }
             
 
+        }*/
+
+        public delegate void TransformMethod<InData, InTransformation>(ref InData data, InTransformation transformation, Screen screen);
+        public delegate OutLineData ProcessScanLineMethod<OutLineData, InIndex>(float gradient1, float gradient2, InIndex pa, InIndex pb, InIndex pc, InIndex pd);
+        public delegate void ProcessPixelMethod<InLineData>(int x, int y, float gradient, ref InLineData lineData, Screen screen);
+
+
+        public static void Render(Screen screen, IndexPositionUVNormal[] indices)
+        {
+            Matrix4 transformation = view * world * projection;
+            TransformData(TransformPosition, positions, transformation, screen);
+
+            Matrix4 normalTransformation = world.Inverted();
+            normalTransformation.Transpose();
+            TransformData(TransformNormal, normals, normalTransformation, screen);
+
+            DrawTriangles(indices, screen, MyProcessScanLine, ProcessPixel);
+        }
+
+        protected static void TransformData<InData, InTransformation>(TransformMethod<InData, InTransformation> transformMethod, InData[] data, InTransformation transformation, Screen screen)
+        {
+            for (int i = 0; i < data.Length; i++)
+            {
+                transformMethod(ref data[i], transformation, screen);
+            }
+        }
+
+        protected static void TransformPosition(ref Vector4 position, Matrix4 transformation, Screen screen)
+        {
+            //Vector4 position;
+            position = Vector4.Transform(position, transformation); // projection * view * world
+
+            position.X = position.X / position.W * 0.5f * screen.Width + screen.Width / 2;
+            position.Y = position.Y / position.W * 0.5f * screen.Height + screen.Height / 2;
+            position.Z = position.Z / position.W;
+
+            //positions[i] = position;
+        }
+
+        protected static void TransformNormal(ref Vector3 normal, Matrix4 transformation, Screen screen)
+        {
+            //Vector4 position;
+            normal = Vector3.Transform(normal, transformation);
+
+            //positions[i] = position;
+        }
+
+        protected static void DrawTriangles<InIndex, InLineData>(InIndex[] indices, Screen screen, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
+        {
+            for (int i = 0; i < indices.Length; i += 3)
+            {
+                if (Shader.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height))
+                {   
+                    DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2],
+                        processScanLine, processPixel);
+                }
+            }
+        }
+
+        private struct LineData
+        {
+            public float z1, z2;
+            public Vector2 uv1, uv2;
+            public Vector3 n1, n2;
+        }
+
+        private static LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd)
+        {
+            LineData result = new LineData();
+
+            // starting Z & ending Z
+            result.z1 = Lerp(positions[pa.position].Z, positions[pb.position].Z, gradient1);
+            result.z2 = Lerp(positions[pc.position].Z, positions[pd.position].Z, gradient2);
+
+            // starting uv & ending uv
+            result.uv1 = Lerp(uvs[pa.uv], uvs[pb.uv], gradient1);
+            result.uv2 = Lerp(uvs[pc.uv], uvs[pd.uv], gradient2);
+
+            result.n1 = Lerp(normals[pa.normal], normals[pb.normal], gradient1).Normalized();
+            result.n2 = Lerp(normals[pc.normal], normals[pd.normal], gradient2).Normalized();
+
+            return result;
+        }
+
+        private static void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
+        {
+            var z = Lerp(lineData.z1, lineData.z2, gradient);
+            Vector2 uv = Lerp(lineData.uv1, lineData.uv2, gradient);
+            Vector3 n = Lerp(lineData.n1, lineData.n2, gradient).Normalized();
+
+            float brightness = Math.Max(0, Vector3.Dot(n, lightDirection));
+
+            int tx = (int)(texture.GetLength(0) * uv.X);
+            if (tx >= texture.GetLength(0))
+                tx = texture.GetLength(0) - 1;
+            int ty = (int)(texture.GetLength(1) * (1 - uv.Y));
+            if (ty >= texture.GetLength(1))
+                ty = texture.GetLength(1) - 1;
+            Color3 c = texture[tx, ty];
+
+            c.r = Convert.ToByte(c.r * brightness);
+            c.g = Convert.ToByte(c.g * brightness);
+            c.b = Convert.ToByte(c.b * brightness);
+
+            screen.TryPutPixel(x, y, z, c);
         }
 
         private static float Lerp(float a, float b, float t)
@@ -97,8 +202,8 @@ namespace Gal3DEngine
         // drawing line between 2 points from left to right
         // papb -> pcpd
         // pa, pb, pc, pd must then be sorted before
-        private static void ProcessScanLine(Screen screen, int y, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd)
-        {
+        private static void ProcessScanLine<InIndex, InLineData>(Screen screen, int y, InIndex pa, InIndex pb, InIndex pc, InIndex pd, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
+        { 
             // Thanks to current Y, we can compute the gradient to compute others values like
             // the starting X (sx) and ending X (ex) to draw between
             // if pa.Y == pb.Y or pc.Y == pd.Y, gradient is forced to 1
@@ -108,7 +213,7 @@ namespace Gal3DEngine
             int sx = (int)Lerp(positions[pa.position].X, positions[pb.position].X, gradient1);
             int ex = (int)Lerp(positions[pc.position].X, positions[pd.position].X, gradient2);
 
-            // starting Z & ending Z
+            /*// starting Z & ending Z
             float z1 = Lerp(positions[pa.position].Z, positions[pb.position].Z, gradient1);
             float z2 = Lerp(positions[pc.position].Z, positions[pd.position].Z, gradient2);
 
@@ -117,14 +222,16 @@ namespace Gal3DEngine
             Vector2 uv2 = Lerp(uvs[pc.uv], uvs[pd.uv], gradient2);
 
             Vector3 n1 = Lerp(normals[pa.normal], normals[pb.normal], gradient1).Normalized();
-            Vector3 n2 = Lerp(normals[pc.normal], normals[pd.normal], gradient2).Normalized();
+            Vector3 n2 = Lerp(normals[pc.normal], normals[pd.normal], gradient2).Normalized();*/
+
+            InLineData lineData = processScanLine(gradient1, gradient2, pa, pb, pc, pd);
 
             // drawing a line from left (sx) to right (ex) 
             for (var x = sx; x < ex; x++)
             {
                 float gradient = (x - sx) / (float)(ex - sx);
 
-                var z = Lerp(z1, z2, gradient);
+                /*var z = Lerp(z1, z2, gradient);
                 Vector2 uv = Lerp(uv1, uv2, gradient);
                 Vector3 n = Lerp(n1, n2, gradient).Normalized();
 
@@ -142,11 +249,12 @@ namespace Gal3DEngine
                 c.g = Convert.ToByte(c.g * brightness);
                 c.b = Convert.ToByte(c.b * brightness);
 
-                screen.TryPutPixel(x, y, z, c);
+                screen.TryPutPixel(x, y, z, c);*/
+                processPixel(x, y, gradient, ref lineData, screen);
             }
         }
 
-        private static void DrawTriangle(Screen screen, IndexPositionUVNormal p1, IndexPositionUVNormal p2, IndexPositionUVNormal p3)
+        private static void DrawTriangle<InIndex, InLineData>(Screen screen, InIndex p1, InIndex p2, InIndex p3, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
         {
             // Sorting the points in order to always have this order on screen p1, p2 & p3
             // with p1 always up (thus having the Y the lowest possible to be near the top screen)
@@ -204,11 +312,11 @@ namespace Gal3DEngine
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(screen, y, p1, p3, p1, p2);
+                        ProcessScanLine(screen, y, p1, p3, p1, p2, processScanLine, processPixel);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p1, p3, p2, p3);
+                        ProcessScanLine(screen, y, p1, p3, p2, p3, processScanLine, processPixel);
                     }
                 }
             }
@@ -229,11 +337,11 @@ namespace Gal3DEngine
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(screen, y, p1, p2, p1, p3);
+                        ProcessScanLine(screen, y, p1, p2, p1, p3, processScanLine, processPixel);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p2, p3, p1, p3);
+                        ProcessScanLine(screen, y, p2, p3, p1, p3, processScanLine, processPixel);
                     }
                 }
             }
