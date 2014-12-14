@@ -44,7 +44,7 @@ namespace Gal3DEngine
         {
             if (x < Width && x >= 0 && y < Height && y >= 0)
             {
-                if (zBuffer[x + y * Width] > z)
+                if (zBuffer[x + y * Width] > z && z >= 0)
                 {
                     colorBuffer[x + y * Width] = color;
                     zBuffer[x + y * Width] = z;
