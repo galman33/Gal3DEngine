@@ -36,19 +36,15 @@ namespace Gal3DEngine
 
         public void PutPixel(int x, int y, Color3 color)
         {
-            x = Width - x - 1;
-            y = Height - y - 1;
             if(x < Width && x >= 0 && y < Height && y >=0)
                 colorBuffer[x + y * Width] = color;
         }
 
         public void TryPutPixel(int x, int y, float z, Color3 color)
         {
-            x = Width - x - 1;
-            y = Height - y - 1;
             if (x < Width && x >= 0 && y < Height && y >= 0)
             {
-                if (zBuffer[x + y * Width] < z)
+                if (zBuffer[x + y * Width] > z)
                 {
                     colorBuffer[x + y * Width] = color;
                     zBuffer[x + y * Width] = z;
@@ -58,8 +54,6 @@ namespace Gal3DEngine
 
         public Color3 ReadPixel(int x, int y)
         {
-            x = Width - x - 1;
-            y = Height - y - 1;
             if (x < Width && x >= 0 && y < Height && y >= 0)
                 return colorBuffer[x + y * Width];
             else
@@ -73,7 +67,7 @@ namespace Gal3DEngine
                 for (int y = 0; y < Height; y++)
                 {
                     PutPixel(x, y, clearColor);
-                    zBuffer[x + y * Width] = float.NegativeInfinity;
+                    zBuffer[x + y * Width] = float.PositiveInfinity;
                 }
             }
         }

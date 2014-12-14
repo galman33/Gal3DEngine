@@ -32,34 +32,28 @@ namespace Gal3DEngine
 
         public static void Render(Screen screen, IndexPositionUVNormal[] indices)
         {
-            Matrix4 transformation = view * world * projection;
+            Matrix4 transformation = world * view * projection;
             TransformData(TransformPosition, positions, transformation, screen);
 
             Matrix4 normalTransformation = world.Inverted();
             normalTransformation.Transpose();
             TransformData(TransformNormal, normals, normalTransformation, screen);
-
-            DrawTriangles(indices, screen, MyProcessScanLine, ProcessPixel);
+            
+            Shader.DrawTriangles(indices, screen, MyProcessScanLine, ProcessPixel);
         }
 
         protected static void TransformPosition(ref Vector4 position, Matrix4 transformation, Screen screen)
         {
-            //Vector4 position;
             position = Vector4.Transform(position, transformation); // projection * view * world
 
             position.X = position.X / position.W * 0.5f * screen.Width + screen.Width / 2;
             position.Y = position.Y / position.W * 0.5f * screen.Height + screen.Height / 2;
-            position.Z = position.Z / position.W;
-
-            //positions[i] = position;
+            position.Z = position.Z / position.W * 0.5f + 0.5f;
         }
 
         protected static void TransformNormal(ref Vector3 normal, Matrix4 transformation, Screen screen)
         {
-            //Vector4 position;
             normal = Vector3.Transform(normal, transformation);
-
-            //positions[i] = position;
         }
 
         private struct LineData
@@ -93,7 +87,7 @@ namespace Gal3DEngine
             Vector2 uv = Lerp(lineData.uv1, lineData.uv2, gradient);
             Vector3 n = Lerp(lineData.n1, lineData.n2, gradient).Normalized();
 
-            float brightness = Math.Max(0, Vector3.Dot(n, lightDirection));
+            float brightness = Math.Max(0, Vector3.Dot(n, -lightDirection));
 
             int tx = (int)(texture.GetLength(0) * uv.X);
             if (tx >= texture.GetLength(0))

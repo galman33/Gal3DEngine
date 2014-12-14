@@ -22,7 +22,7 @@ namespace Gal3DEngine
         public static void Update()
         {
             DateTime curTime = DateTime.Now;
-            DeltaTime = (prevTime - curTime).TotalSeconds;
+            DeltaTime = (curTime - prevTime).TotalSeconds;
             TotalTime += DeltaTime;
             prevTime = curTime;
         }
