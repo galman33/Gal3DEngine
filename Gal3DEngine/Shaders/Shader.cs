@@ -148,7 +148,8 @@ namespace Gal3DEngine
             int sx = (int)Lerp(positions[pa.position].X, positions[pb.position].X, gradient1);
             int ex = (int)Lerp(positions[pc.position].X, positions[pd.position].X, gradient2);
 
-            InLineData lineData = processScanLine(gradient1, gradient2, pa, pb, pc, pd);
+            InLineData lineData;
+            lineData = processScanLine(gradient1, gradient2, pa, pb, pc, pd);
 
             // drawing a line from left (sx) to right (ex) 
             for (var x = sx; x < ex; x++)
@@ -157,6 +158,15 @@ namespace Gal3DEngine
 
                 processPixel(x, y, gradient, ref lineData, screen);
             }
+        }
+
+        public static void TransformPosition(ref Vector4 position, Matrix4 transformation, Screen screen)
+        {
+            position = Vector4.Transform(position, transformation); // projection * view * world
+
+            position.X = position.X / position.W * 0.5f * screen.Width + screen.Width / 2;
+            position.Y = position.Y / position.W * 0.5f * screen.Height + screen.Height / 2;
+            position.Z = position.Z / position.W * 0.5f + 0.5f;
         }
 
         public static bool ShouldRender(Vector4 p1, Vector4 p2, Vector4 p3, int width, int height)

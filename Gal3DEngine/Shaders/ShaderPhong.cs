@@ -42,15 +42,6 @@ namespace Gal3DEngine
             Shader.DrawTriangles(indices, screen, MyProcessScanLine, ProcessPixel);
         }
 
-        protected static void TransformPosition(ref Vector4 position, Matrix4 transformation, Screen screen)
-        {
-            position = Vector4.Transform(position, transformation); // projection * view * world
-
-            position.X = position.X / position.W * 0.5f * screen.Width + screen.Width / 2;
-            position.Y = position.Y / position.W * 0.5f * screen.Height + screen.Height / 2;
-            position.Z = position.Z / position.W * 0.5f + 0.5f;
-        }
-
         protected static void TransformNormal(ref Vector3 normal, Matrix4 transformation, Screen screen)
         {
             normal = Vector3.Transform(normal, transformation);
