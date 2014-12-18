@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenTK;
+using Gal3DEngine.Gizmos;
 
 namespace Gal3DEngine
 {
@@ -74,7 +75,10 @@ namespace Gal3DEngine
                 Matrix4 world = Matrix4.CreateRotationY((float) Time.TotalTime * 3) * Matrix4.CreateTranslation(0, 0, -3);
 
                 models[i].Render(Screen, world, view, projection);
+                AxisGizmo.Render(Screen, world, view, projection);
             }
+
+            AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
         }
 
     }

@@ -90,7 +90,7 @@ namespace Gal3DEngine
             ShaderPhong.projection = projection;
             ShaderPhong.view = view;
             ShaderPhong.world = world;
-            ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(0, 1, 0));
+            ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1));
 
             ShaderPhong.texture = texture;
 
