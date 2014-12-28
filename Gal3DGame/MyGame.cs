@@ -33,6 +33,12 @@ namespace Gal3DGame
             aircraft = new Aircraft();
         }
 
+        protected override void Update()
+        {
+            base.Update();
+            aircraft.Update();
+        }
+
         protected override void Render()
         {
             base.Render();
