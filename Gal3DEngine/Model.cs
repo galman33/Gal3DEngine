@@ -10,13 +10,13 @@ namespace Gal3DEngine
     class Model
     {
 
-        private Vector4[] vertices;
-        private Vector2[] uvs;
-        private Vector3[] normals;
+        public Vector4[] Vertices { private set; get; }
+        public Vector2[] UVs { private set; get; }
+        public Vector3[] Normals { private set; get; }
 
-        private IndexPositionUVNormal[] indices;
+        public Color3[,] texture { private set; get; }
 
-        private Color3[,] texture;
+        public IndexPositionUVNormal[] indices { private set; get; }
 
         public Model(string objPath, string texturePath)
         {
@@ -78,26 +78,11 @@ namespace Gal3DEngine
                 }
             }
 
-            vertices = verticesLst.ToArray();
-            uvs = uvLst.ToArray();
-            normals = normalsLst.ToArray();
+            Vertices = verticesLst.ToArray();
+            UVs = uvLst.ToArray();
+            Normals = normalsLst.ToArray();
 
             indices = indicesLst.ToArray();
-        }
-
-        public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection)
-        {
-            ShaderPhong.projection = projection;
-            ShaderPhong.view = view;
-            ShaderPhong.world = world;
-            ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1));
-
-            ShaderPhong.texture = texture;
-
-            ShaderPhong.SetVerticesPositions(vertices);
-            ShaderPhong.SetVerticesUvs(uvs);
-            ShaderPhong.SetVerticesNormals(normals);
-            ShaderPhong.Render(screen, indices);
         }
 
     }

@@ -18,7 +18,12 @@ namespace Gal3DEngine
 
         public static void SetVerticesPositions(Vector4[] positions)
         {
-            ShaderPhong.positions = (Vector4[])positions.Clone();
+            Shader.positions = (Vector4[])positions.Clone();
+        }
+
+        public static void ExtractData(Model model)
+        {
+            Shader.SetVerticesPositions(model.Vertices);
         }
 
         protected static void TransformData<InData, InTransformation>(TransformMethod<InData, InTransformation> transformMethod, InData[] data, InTransformation transformation, Screen screen)

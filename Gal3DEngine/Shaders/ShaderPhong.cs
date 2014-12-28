@@ -19,6 +19,7 @@ namespace Gal3DEngine
 
         private static Vector2[] uvs;
         private static Vector3[] normals;
+        private static IndexPositionUVNormal[] indices;
 
         public static void SetVerticesUvs(Vector2[] uvs)
         {
@@ -30,7 +31,24 @@ namespace Gal3DEngine
             ShaderPhong.normals = (Vector3[])normals.Clone();
         }
 
-        public static void Render(Screen screen, IndexPositionUVNormal[] indices)
+        public static void SetIndices(IndexPositionUVNormal[] indices)
+        {
+            ShaderPhong.indices = indices;
+        }
+
+        public static void ExtractData(Model model)
+        {
+            Shader.ExtractData(model);
+
+            ShaderPhong.SetVerticesUvs(model.UVs);
+            ShaderPhong.SetVerticesNormals(model.Normals);
+
+            ShaderPhong.texture = model.texture;
+
+            ShaderPhong.SetIndices(model.indices);
+        }
+
+        public static void Render(Screen screen)
         {
             Matrix4 transformation = world * view * projection;
             TransformData(TransformPosition, positions, transformation, screen);

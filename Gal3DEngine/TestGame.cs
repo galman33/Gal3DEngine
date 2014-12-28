@@ -69,16 +69,27 @@ namespace Gal3DEngine
 
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 10.0f);
             Matrix4 view = cam.GetViewMatrix();
-            
-            for (int i = 0; i < 1; i++)
-            {
-                Matrix4 world = Matrix4.CreateRotationY((float) Time.TotalTime * 3) * Matrix4.CreateTranslation(0, 0, -3);
 
-                models[i].Render(Screen, world, view, projection);
-                AxisGizmo.Render(Screen, world, view, projection);
-            }
+            DrawModel(projection, view);
 
             AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
+        }
+
+        private void DrawModel(Matrix4 projection, Matrix4 view)
+        {
+            ShaderPhong.projection = projection;
+            ShaderPhong.view = view;
+
+            ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1));
+
+            for (int i = 0; i < 1; i++)
+            {
+                ShaderPhong.world = Matrix4.CreateRotationY((float)Time.TotalTime * 3) * Matrix4.CreateTranslation(0, 0, -3);
+                ShaderPhong.ExtractData(models[i]);
+                ShaderPhong.Render(Screen);
+
+                AxisGizmo.Render(Screen, ShaderPhong.world, view, projection);
+            }
         }
 
     }
