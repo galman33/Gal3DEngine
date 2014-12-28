@@ -14,6 +14,7 @@ namespace Gal3DEngine
         public static Matrix4 view;
         public static Matrix4 projection;
         public static Vector3 lightDirection;
+        public static float ambientLight;
 
         public static Color3[,] texture;
 
@@ -96,7 +97,9 @@ namespace Gal3DEngine
             Vector2 uv = Lerp(lineData.uv1, lineData.uv2, gradient);
             Vector3 n = Lerp(lineData.n1, lineData.n2, gradient).Normalized();
 
-            float brightness = Math.Max(0, Vector3.Dot(n, -lightDirection));
+            float brightness = Vector3.Dot(n, -lightDirection);
+            if(brightness < ambientLight) brightness = ambientLight;
+            if(brightness > 1) brightness = 1;
 
             int tx = (int)(texture.GetLength(0) * uv.X);
             if (tx >= texture.GetLength(0))
