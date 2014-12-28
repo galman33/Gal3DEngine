@@ -9,7 +9,7 @@ namespace Gal3DGame
     {
         static void Main(string[] args)
         {
-            
+            MyGame game = new MyGame();
         }
     }
 }
