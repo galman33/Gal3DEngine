@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace Gal3DEngine
 {
-    class Texture
+    public class Texture
     {
 
         public static Color3[,] LoadTexture(string path)

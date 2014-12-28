@@ -7,7 +7,7 @@ using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
-    class ShaderPhong : Shader
+    public class ShaderPhong : Shader
     {
 
         public static Matrix4 world;

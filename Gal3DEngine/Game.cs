@@ -8,7 +8,7 @@ using OpenTK.Graphics;
 
 namespace Gal3DEngine
 {
-    class Game : GameWindow
+    public class Game : GameWindow
     {
 
         public int GameWidth { get; set; }
