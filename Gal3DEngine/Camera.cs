@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Gal3DEngine
 {
-    class Camera
+    public class Camera
     {
         public Vector3 Position;
         public Vector3 Rotation;

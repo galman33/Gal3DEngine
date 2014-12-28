@@ -7,7 +7,7 @@ using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
-    class Model
+    public class Model
     {
 
         public Vector4[] Vertices { private set; get; }

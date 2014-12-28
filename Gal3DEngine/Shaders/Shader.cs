@@ -7,7 +7,7 @@ using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
-    class Shader
+    public class Shader
     {
 
         public delegate void TransformMethod<InData, InTransformation>(ref InData data, InTransformation transformation, Screen screen);

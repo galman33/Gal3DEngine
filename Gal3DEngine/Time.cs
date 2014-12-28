@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Gal3DEngine
 {
-    class Time
+    public class Time
     {
 
         public static double TotalTime { get; private set; }
