@@ -15,6 +15,8 @@ namespace Gal3DGame
         private Camera camera;
         private Matrix4 projection;
 
+        private Model bear;
+
         public MyGame() : base(640, 480)
         {
             
@@ -31,6 +33,8 @@ namespace Gal3DGame
             camera.Position.Z = 4;
 
             aircraft = new Aircraft();
+
+            bear = new Model("Resources/bear.obj", "Resources/bear.jpg");
         }
 
         protected override void Update()
@@ -63,6 +67,22 @@ namespace Gal3DGame
             AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
 
             aircraft.Render(Screen, projection, view);
+
+            RenderEnviroment(view);
+        }
+
+        private void RenderEnviroment(Matrix4 view)
+        {
+            ShaderPhong.world = Matrix4.Identity;
+            ShaderPhong.view = view;
+            ShaderPhong.projection = projection;
+
+            ShaderPhong.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
+            ShaderPhong.ambientLight = 0.3f;
+
+            ShaderPhong.ExtractData(bear);
+
+            ShaderPhong.Render(Screen);
         }
 
     }

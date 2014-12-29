@@ -67,6 +67,11 @@ namespace Gal3DGame
                 rotateX = 1;
             if (e.Key == OpenTK.Input.Key.Down)
                 rotateX = -1;
+
+            if (e.Key == OpenTK.Input.Key.Right)
+                rotateY = -1;
+            if (e.Key == OpenTK.Input.Key.Left)
+                rotateY = 1;
         }
 
         public void KeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -75,6 +80,11 @@ namespace Gal3DGame
                 rotateX = 0;
             if (e.Key == OpenTK.Input.Key.Down)
                 rotateX = 0;
+
+            if (e.Key == OpenTK.Input.Key.Right)
+                rotateY = 0;
+            if (e.Key == OpenTK.Input.Key.Left)
+                rotateY = 0;
         }
 
         public Vector3 Position
