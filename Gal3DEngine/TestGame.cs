@@ -25,6 +25,7 @@ namespace Gal3DEngine
         {
             base.OnLoad(e);
             cam = new Camera();
+            cam.Position.Y = 1;
             for (int i = 0; i < 2; i++)
             {
                 models.Add(new Model("Resources/Cat2.obj", "Resources/Cat2.png"));
@@ -73,6 +74,7 @@ namespace Gal3DEngine
             DrawModel(projection, view);
 
             AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
+            GridGizmo.Render(Screen, Matrix4.Identity, view , projection);
         }
 
         private void DrawModel(Matrix4 projection, Matrix4 view)
