@@ -26,12 +26,14 @@ namespace DanielFlappyGame
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            Program.world = this;
             gameCam = new Camera();
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 10.0f);
-            flappyflappy = new FlappyBird(Matrix4.CreateTranslation(new Vector3(0, 0, -2)), Matrix4.Identity, Matrix4.CreateScale(0.5f), new Model("Resources/Cat2.obj", "Resources/Cat2.png"), 0.1f, 0.01f);
+
+            flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.One, new Vector3(0.5f, 0.5f, 0.5f), new Model("Resources/Cat2.obj", "Resources/Cat2.png"), 0.05f, 0.001f);
            
-                Tunnels.Add( new Entity(Matrix4.CreateTranslation(new Vector3(0, 1, -5)) , Matrix4.Identity, Matrix4.CreateScale(0.5f), new Model("Resources/Cat2.obj", "Resources/Cat2.png")));
-                Tunnels.Add(new Entity(Matrix4.CreateTranslation(new Vector3(0, -1, -5)), Matrix4.Identity, Matrix4.CreateScale(0.5f), new Model("Resources/Cat2.obj", "Resources/Cat2.png")));
+            Tunnels.Add( new Entity(new Vector3(0, 1, -5f) , Vector3.One , new Vector3(0.5f , 0.5f , 0.5f), new Model("Resources/Cat2.obj", "Resources/Cat2.png")));
+            Tunnels.Add(new Entity(new Vector3(0, -1f, -5f), Vector3.One, new Vector3(0.5f, 0.5f, 0.5f), new Model("Resources/Cat2.obj", "Resources/Cat2.png")));
 
             ShaderPhong.projection = projection;
            
@@ -45,17 +47,19 @@ namespace DanielFlappyGame
             }
         }
 
-        private float vel =0 ;
+        
 
         protected override void Update()
         {
             base.Update();
-           
+            
+            //entities update
             flappyflappy.Update();
             foreach (Entity entity in Tunnels)
             {
                 entity.Update();
             }
+
             UpdateCamera();
         }
 
@@ -67,11 +71,11 @@ namespace DanielFlappyGame
         }
         protected override void Render()
         {
-            base.Render();
-            //DrawModel(projection, view);
+            base.Render();            
             Matrix4 view = gameCam.GetViewMatrix();
             ShaderPhong.view = view;
-            ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1));
+            ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1)); // basic light
+            //renders
             AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
             flappyflappy.Render(Screen);
             foreach (Entity entity in Tunnels)
@@ -96,6 +100,11 @@ namespace DanielFlappyGame
                 AxisGizmo.Render(Screen, ShaderPhong.world, view, projection);
             }
         }*/
+
+        public List<Entity> GetEntities()
+        {
+            return this.Tunnels;
+        }
 
         public static Key pressed;
     }
