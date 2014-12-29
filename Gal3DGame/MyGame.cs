@@ -37,6 +37,21 @@ namespace Gal3DGame
         {
             base.Update();
             aircraft.Update();
+
+            camera.Rotation = Quaternion.Slerp(camera.Rotation, aircraft.Rotation, (float)Time.DeltaTime * 3.0f);
+            camera.Position = aircraft.Position - Vector3.Transform(-Vector3.UnitZ, camera.Rotation).Normalized() * 2;
+        }
+
+        protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            aircraft.KeyDown(e);
+        }
+
+        protected override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            aircraft.KeyUp(e);
         }
 
         protected override void Render()
