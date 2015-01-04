@@ -16,6 +16,7 @@ namespace Gal3DGame
         private Matrix4 projection;
 
         private Model bear;
+        private Enviroment enviroment;
 
         public MyGame() : base(640, 480)
         {
@@ -26,6 +27,7 @@ namespace Gal3DGame
         {
             base.OnLoad(e);
             Aircraft.LoadContent();
+            Enviroment.LoadContent();
 
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 10.0f);
 
@@ -35,6 +37,8 @@ namespace Gal3DGame
             aircraft = new Aircraft();
 
             bear = new Model("Resources/bear.obj", "Resources/bear.jpg");
+
+            enviroment = new Enviroment();
         }
 
         protected override void Update()
@@ -66,14 +70,16 @@ namespace Gal3DGame
 
             AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
 
-            aircraft.Render(Screen, projection, view);
-
             RenderEnviroment(view);
+
+            aircraft.Render(Screen, projection, view);
         }
 
         private void RenderEnviroment(Matrix4 view)
         {
-            ShaderPhong.world = Matrix4.Identity;
+            enviroment.Render(Screen, view, projection);
+
+            /*ShaderPhong.world = Matrix4.Identity;
             ShaderPhong.view = view;
             ShaderPhong.projection = projection;
 
@@ -82,7 +88,7 @@ namespace Gal3DGame
 
             ShaderPhong.ExtractData(bear);
 
-            ShaderPhong.Render(Screen);
+            ShaderPhong.Render(Screen);*/
         }
 
     }
