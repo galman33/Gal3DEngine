@@ -11,6 +11,7 @@ namespace Gal3DEngine
     {
 
         public delegate void TransformMethod<InData, InTransformation>(ref InData data, InTransformation transformation, Screen screen);
+        public delegate OutTriangleData ProcessTriangleMethod<InIndex, OutTriangleData>(InIndex p1, InIndex p2, InIndex p3);
         public delegate OutLineData ProcessScanLineMethod<OutLineData, InIndex>(float gradient1, float gradient2, InIndex pa, InIndex pb, InIndex pc, InIndex pd);
         public delegate void ProcessPixelMethod<InLineData>(int x, int y, float gradient, ref InLineData lineData, Screen screen);
 
@@ -34,19 +35,19 @@ namespace Gal3DEngine
             }
         }
 
-        protected static void DrawTriangles<InIndex, InLineData>(InIndex[] indices, Screen screen, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
+        protected static void DrawTriangles<InIndex, InLineData, OutTriangleData>(InIndex[] indices, Screen screen, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel, ProcessTriangleMethod<InIndex, OutTriangleData> processTriangle = DefaultProcessTriangle) where InIndex : IndexPosition
         {
             for (int i = 0; i < indices.Length; i += 3)
             {
                 if (Shader.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height))
                 {
                     DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2],
-                        processScanLine, processPixel);
+                        processScanLine, processPixel, processTriangle);
                 }
             }
         }
 
-        private static void DrawTriangle<InIndex, InLineData>(Screen screen, InIndex p1, InIndex p2, InIndex p3, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
+        private static void DrawTriangle<InIndex, InLineData, OutTriangleData>(Screen screen, InIndex p1, InIndex p2, InIndex p3, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel, ProcessTriangleMethod<InIndex, OutTriangleData> processTriangle) where InIndex : IndexPosition
         {
             // Sorting the points in order to always have this order on screen p1, p2 & p3
             // with p1 always up (thus having the Y the lowest possible to be near the top screen)
@@ -87,6 +88,10 @@ namespace Gal3DEngine
             else
                 dP1P3 = 0;
 
+            OutTriangleData triData = default(OutTriangleData);
+            if(processTriangle != null)
+                triData = processTriangle(p1, p2, p3);
+
             // First case where triangles are like that:
             // P1
             // -
@@ -104,11 +109,11 @@ namespace Gal3DEngine
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(screen, y, p1, p3, p1, p2, processScanLine, processPixel);
+                        ProcessScanLine(screen, y, p1, p3, p1, p2, processScanLine, processPixel, triData);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p1, p3, p2, p3, processScanLine, processPixel);
+                        ProcessScanLine(screen, y, p1, p3, p2, p3, processScanLine, processPixel, triData);
                     }
                 }
             }
@@ -129,11 +134,11 @@ namespace Gal3DEngine
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(screen, y, p1, p2, p1, p3, processScanLine, processPixel);
+                        ProcessScanLine(screen, y, p1, p2, p1, p3, processScanLine, processPixel, triData);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p2, p3, p1, p3, processScanLine, processPixel);
+                        ProcessScanLine(screen, y, p2, p3, p1, p3, processScanLine, processPixel, triData);
                     }
                 }
             }
@@ -142,7 +147,7 @@ namespace Gal3DEngine
         // drawing line between 2 points from left to right
         // papb -> pcpd
         // pa, pb, pc, pd must then be sorted before
-        private static void ProcessScanLine<InIndex, InLineData>(Screen screen, int y, InIndex pa, InIndex pb, InIndex pc, InIndex pd, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
+        private static void ProcessScanLine<InIndex, InLineData, TriangleData>(Screen screen, int y, InIndex pa, InIndex pb, InIndex pc, InIndex pd, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel, TriangleData triData) where InIndex : IndexPosition
         {
             // Thanks to current Y, we can compute the gradient to compute others values like
             // the starting X (sx) and ending X (ex) to draw between
@@ -216,6 +221,17 @@ namespace Gal3DEngine
             result.b = (byte)(a.b + (b.b - a.b) * t);
             return result;
         }
+
+        public struct DefaultTriangleData
+        {
+
+        }
+
+        /*public static DefaultTriangleData DefaultProcessTriangle(IndexPosition p1, IndexPosition p2, IndexPosition p3)
+        {
+            return default(DefaultTriangleData);
+        }*/
+        private static const ProcessTriangleMethod<IndexPosition, DefaultTriangleData> DefaultProcessTriangle = (p1, p2, p3) => default(DefaultTriangleData);
 
     }
 }
