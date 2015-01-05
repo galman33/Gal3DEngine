@@ -23,6 +23,8 @@ namespace Gal3DGame
 
         private bool[,] buildingsArray;
 
+        private ShaderFlat shader = AvailableShaders.ShaderFlat;
+
         public static void LoadContent()
         {
             groundTexture = Texture.LoadTexture("Resources/City.png");
@@ -163,20 +165,20 @@ namespace Gal3DGame
 
         public void Render(Screen screen, Matrix4 view, Matrix4 projection)
         {
-            ShaderPhong.world = Matrix4.Identity;
-            ShaderPhong.view = view;
-            ShaderPhong.projection = projection;
-            ShaderPhong.texture = groundTexture;
-            ShaderPhong.ambientLight = 1.0f;
-            ShaderPhong.lightDirection = new Vector3(0, -1, 0);
+            shader.world = Matrix4.Identity;
+            shader.view = view;
+            shader.projection = projection;
+            shader.texture = groundTexture;
+            shader.ambientLight = 1.0f;
+            shader.lightDirection = new Vector3(0, -1, 0);
 
-            ShaderPhong.SetVerticesPositions(positions);
-            ShaderPhong.SetVerticesUvs(uvs);
-            ShaderPhong.SetVerticesNormals(normals);
+            shader.SetVerticesPositions(positions);
+            shader.SetVerticesUvs(uvs);
+            shader.SetVerticesNormals(normals);
 
-            ShaderPhong.SetIndices(indices);
+            shader.SetIndices(indices);
 
-            ShaderPhong.Render(screen);
+            shader.Render(screen);
         }
 
     }

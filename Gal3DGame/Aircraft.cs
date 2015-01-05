@@ -17,6 +17,8 @@ namespace Gal3DGame
         private float rotateX;
         private float rotateY;
 
+        private ShaderPhong shader = AvailableShaders.ShaderPhong;
+
         public Aircraft()
         {
             rotation = Quaternion.Identity;
@@ -42,20 +44,20 @@ namespace Gal3DGame
 
         public void Render(Screen screen, Matrix4 projection, Matrix4 view)
         {
-            ShaderPhong.world = Matrix4.CreateScale(0.001f) *
+            shader.world = Matrix4.CreateScale(0.001f) *
                 Matrix4.CreateTranslation(0, -0.1f, 0) *
                 Matrix4.CreateRotationY(-MathHelper.PiOver2) *
                 Matrix4.CreateFromQuaternion(rotation) * 
                 Matrix4.CreateTranslation(position);
-            ShaderPhong.view = view;
-            ShaderPhong.projection = projection;
+            shader.view = view;
+            shader.projection = projection;
 
-            ShaderPhong.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
-            ShaderPhong.ambientLight = 0.3f;
+            shader.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
+            shader.ambientLight = 0.3f;
 
-            ShaderPhong.ExtractData(aircrafModel);
+            shader.ExtractData(aircrafModel);
 
-            ShaderPhong.Render(screen);
+            shader.Render(screen);
 
             Gal3DEngine.Gizmos.AxisGizmo.Render(screen, Matrix4.CreateFromQuaternion(rotation) *
                 Matrix4.CreateTranslation(position), view, projection);
