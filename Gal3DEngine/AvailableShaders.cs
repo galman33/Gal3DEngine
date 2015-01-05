@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Gal3DEngine
 {
-    class AvailableShaders
+    public class AvailableShaders
     {
 
         public static readonly ShaderPhong ShaderPhong = new ShaderPhong();
