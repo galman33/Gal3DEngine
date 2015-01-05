@@ -77,18 +77,18 @@ namespace Gal3DEngine
 
         private void DrawModel(Matrix4 projection, Matrix4 view)
         {
-            ShaderPhong.projection = projection;
-            ShaderPhong.view = view;
+            AvailableShaders.ShaderFlat.projection = projection;
+            AvailableShaders.ShaderFlat.view = view;
 
-            ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1));
+            AvailableShaders.ShaderFlat.lightDirection = Vector3.Normalize(new Vector3(0, 0, 1));
 
             for (int i = 0; i < 1; i++)
             {
-                ShaderPhong.world = Matrix4.CreateRotationY((float)Time.TotalTime * 3) * Matrix4.CreateTranslation(0, 0, -3);
-                ShaderPhong.ExtractData(models[i]);
-                ShaderPhong.Render(Screen);
+                AvailableShaders.ShaderFlat.world = Matrix4.CreateRotationY((float)Time.TotalTime * 3) * Matrix4.CreateTranslation(0, 0, -3);
+                AvailableShaders.ShaderFlat.ExtractData(models[i]);
+                AvailableShaders.ShaderFlat.Render(Screen);
 
-                AxisGizmo.Render(Screen, ShaderPhong.world, view, projection);
+                AxisGizmo.Render(Screen, AvailableShaders.ShaderFlat.world, view, projection);
             }
         }
 
