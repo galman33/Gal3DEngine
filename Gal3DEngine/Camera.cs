@@ -9,7 +9,7 @@ namespace Gal3DEngine
     public class Camera
     {
         public Vector3 Position;
-        public Quaternion Rotation;
+        public Quaternion Rotation = Quaternion.Identity;
 
         public Matrix4 GetViewMatrix()
         {
