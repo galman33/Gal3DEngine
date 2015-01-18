@@ -25,11 +25,32 @@ namespace DanielFlappyGame
         {
             base.Update();
             UpdatePosition();
-            if (collide((Program.world as FlapGame).GetEntities()))
+            if (collide((Program.world as FlapGame).GetTunnles()))
             {
-                int a=  5;
+                (Program.world as FlapGame).GameOver();
+            }
+
+            var tunnles = CheckForPassedTunnels((Program.world as FlapGame).GetTunnles());
+            if(tunnles!= null)
+            {
+                (Program.world as FlapGame).PassedTunnles(tunnles);
+                (Program.world as FlapGame).AddPoints();
             }
         }
+
+        private Entity[] CheckForPassedTunnels(List<Entity> entities)
+        {            
+            for (int i = 0; i < entities.Count; i += 2) // the list contains tuple of to tunnles
+            {
+                if (GetCollisionHitBox(entities[i].GetModel())[0].Z > this.Position.Z)//meaning its close to the camera
+                {
+                    return new []{entities[i] , entities[i+1]};
+                }
+            }
+            return null;
+        }
+
+
 
         public void UpdatePosition()
         {
@@ -109,23 +130,6 @@ namespace DanielFlappyGame
             return hitBox;
         }
 
-        private class Cube
-        {
-            private Vector3 min;
-            private Vector3 max;
-
-            public Cube(Vector3 min, Vector3 max)
-            {
-                this.min = min;
-                this.max = max;
-            }
-
-            public static bool Collide(Cube a , Cube b)
-            {
-                 return (a.max.X >= b.min.X && a.min.X  <= b.max.X)
-                 && (a.max.Y  >= b.min.Y && a.min.Y  <= b.max.Y)
-                 && (a.max.Z  >= b.min.Z && a.min.Z  <= b.max.Z);
-            }
-        }
+      
     }
 }
