@@ -13,6 +13,7 @@ namespace Gal3DEngine
 
         public struct LineData
         {
+            public float w1, w2;
             public float z1, z2;
             public Vector2 uv1, uv2;
             public Vector3 n1, n2;
@@ -73,25 +74,30 @@ namespace Gal3DEngine
         {
             LineData result = new LineData();
 
+            // perspective
+            result.w1 = 1 / ShaderHelper.Lerp(positions[pa.position].W, positions[pb.position].W, gradient1);
+            result.w2 = 1 / ShaderHelper.Lerp(positions[pc.position].W, positions[pd.position].W, gradient2);
+
             // starting Z & ending Z
-            result.z1 = ShaderHelper.Lerp(positions[pa.position].Z, positions[pb.position].Z, gradient1);
-            result.z2 = ShaderHelper.Lerp(positions[pc.position].Z, positions[pd.position].Z, gradient2);
+            result.z1 = ShaderHelper.Lerp(positions[pa.position].Z / positions[pa.position].W, positions[pb.position].Z / positions[pb.position].W, gradient1);
+            result.z2 = ShaderHelper.Lerp(positions[pc.position].Z / positions[pc.position].W, positions[pd.position].Z / positions[pd.position].W, gradient2);
 
             // starting uv & ending uv
-            result.uv1 = ShaderHelper.Lerp(uvs[pa.uv], uvs[pb.uv], gradient1);
-            result.uv2 = ShaderHelper.Lerp(uvs[pc.uv], uvs[pd.uv], gradient2);
+            result.uv1 = ShaderHelper.Lerp(uvs[pa.uv] / positions[pa.position].W, uvs[pb.uv] / positions[pb.position].W, gradient1);
+            result.uv2 = ShaderHelper.Lerp(uvs[pc.uv] / positions[pc.position].W, uvs[pd.uv] / positions[pd.position].W, gradient2);
 
-            result.n1 = ShaderHelper.Lerp(normals[pa.normal], normals[pb.normal], gradient1).Normalized();
-            result.n2 = ShaderHelper.Lerp(normals[pc.normal], normals[pd.normal], gradient2).Normalized();
+            result.n1 = ShaderHelper.Lerp(normals[pa.normal] / positions[pa.position].W, normals[pb.normal] / positions[pb.position].W, gradient1).Normalized();
+            result.n2 = ShaderHelper.Lerp(normals[pc.normal] / positions[pc.position].W, normals[pd.normal] / positions[pd.position].W, gradient2).Normalized();
 
             return result;
         }
 
         protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
         {
-            var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient);
-            Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient);
-            Vector3 n = ShaderHelper.Lerp(lineData.n1, lineData.n2, gradient).Normalized();
+            var w = ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
+            var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) / w;
+            Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient) / w;
+            Vector3 n = ShaderHelper.Lerp(lineData.n1, lineData.n2, gradient).Normalized() / w;
 
             float brightness = Vector3.Dot(n, -lightDirection);
             if(brightness < ambientLight) brightness = ambientLight;
