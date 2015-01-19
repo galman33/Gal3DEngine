@@ -90,6 +90,9 @@ namespace Gal3DEngine
 
             TriangleData triData = ProcessTriangle(p1, p2, p3);
 
+
+            int maxY = Math.Min(screen.Height, (int) positions[p3.position].Y);
+
             // First case where triangles are like that:
             // P1
             // -
@@ -103,7 +106,7 @@ namespace Gal3DEngine
             // P3
             if (dP1P2 > dP1P3)
             {
-                for (var y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
+                for (var y = Math.Max((int)positions[p1.position].Y, 0); y <= maxY; y++)
                 {
                     if (y < positions[p2.position].Y)
                     {
@@ -128,7 +131,7 @@ namespace Gal3DEngine
             //       P3
             else
             {
-                for (var y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
+                for (var y = Math.Max((int)positions[p1.position].Y, 0); y <= maxY; y++)
                 {
                     if (y < positions[p2.position].Y)
                     {
@@ -155,6 +158,9 @@ namespace Gal3DEngine
 
             int sx = (int)ShaderHelper.Lerp(positions[pa.position].X, positions[pb.position].X, gradient1);
             int ex = (int)ShaderHelper.Lerp(positions[pc.position].X, positions[pd.position].X, gradient2);
+
+            sx = Math.Max(sx, 0);
+            ex = Math.Min(ex, screen.Width);
 
             LineData lineData = MyProcessScanLine(gradient1, gradient2, pa, pb, pc, pd, triData);
 
