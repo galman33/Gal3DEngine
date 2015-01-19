@@ -19,6 +19,7 @@ namespace Gal3DEngine
 
         public struct LineData
         {
+            public float w1, w2;
             public float z1, z2;
             public Vector2 uv1, uv2;
             public float brightness;
@@ -93,13 +94,17 @@ namespace Gal3DEngine
         {
             LineData result = new LineData();
 
+            // perspective
+            result.w1 = 1 / ShaderHelper.Lerp(positions[pa.position].W, positions[pb.position].W, gradient1);
+            result.w2 = 1 / ShaderHelper.Lerp(positions[pc.position].W, positions[pd.position].W, gradient2);
+
             // starting Z & ending Z
-            result.z1 = ShaderHelper.Lerp(positions[pa.position].Z, positions[pb.position].Z, gradient1);
-            result.z2 = ShaderHelper.Lerp(positions[pc.position].Z, positions[pd.position].Z, gradient2);
+            result.z1 = ShaderHelper.Lerp(positions[pa.position].Z / positions[pa.position].W, positions[pb.position].Z / positions[pb.position].W, gradient1);
+            result.z2 = ShaderHelper.Lerp(positions[pc.position].Z / positions[pc.position].W, positions[pd.position].Z / positions[pd.position].W, gradient2);
 
             // starting uv & ending uv
-            result.uv1 = ShaderHelper.Lerp(uvs[pa.uv], uvs[pb.uv], gradient1);
-            result.uv2 = ShaderHelper.Lerp(uvs[pc.uv], uvs[pd.uv], gradient2);
+            result.uv1 = ShaderHelper.Lerp(uvs[pa.uv] / positions[pa.position].W, uvs[pb.uv] / positions[pb.position].W, gradient1);
+            result.uv2 = ShaderHelper.Lerp(uvs[pc.uv] / positions[pc.position].W, uvs[pd.uv] / positions[pd.position].W, gradient2);
 
             result.brightness = triData.brightness;
 
@@ -108,8 +113,9 @@ namespace Gal3DEngine
 
         protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
         {
-            var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient);
-            Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient);
+            var w = ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
+            var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) / w;
+            Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient) / w;
 
             int tx = (int)(texture.GetLength(0) * uv.X);
             if (tx >= texture.GetLength(0))
@@ -117,6 +123,9 @@ namespace Gal3DEngine
             int ty = (int)(texture.GetLength(1) * (1 - uv.Y));
             if (ty >= texture.GetLength(1))
                 ty = texture.GetLength(1) - 1;
+
+            if (tx < 0) tx = 0;
+            if (ty < 0) ty = 0;
             Color3 c = texture[tx, ty];
 
             c.r = Convert.ToByte(c.r * lineData.brightness);
