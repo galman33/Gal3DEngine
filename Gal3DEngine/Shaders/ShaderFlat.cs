@@ -80,7 +80,7 @@ namespace Gal3DEngine
             TriangleData result = new TriangleData();
 
             Vector3 normal = Vector3.Normalize((normals[p1.normal] + normals[p2.normal] + normals[p3.normal]) / 3.0f); // Compute face normal
-            result.brightness = Math.Max(0, Vector3.Dot(normal, lightDirection)); // Compute face brightness
+            result.brightness = Math.Max(0, Vector3.Dot(normal, -lightDirection)); // Compute face brightness
             if (result.brightness > 1)
                 result.brightness = 1;
             if (result.brightness < ambientLight)
