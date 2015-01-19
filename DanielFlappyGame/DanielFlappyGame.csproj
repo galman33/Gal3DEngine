@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cube.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="FlapGame.cs" />
     <Compile Include="FlappyBird.cs" />

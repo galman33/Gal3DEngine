@@ -42,7 +42,7 @@ namespace DanielFlappyGame
         {            
             for (int i = 0; i < entities.Count; i += 2) // the list contains tuple of to tunnles
             {
-                if (GetCollisionHitBox(entities[i].GetModel())[0].Z > this.Position.Z)//meaning its close to the camera
+                if (entities[i].Position.Z > this.Position.Z)//meaning its close to the camera
                 {
                     return new []{entities[i] , entities[i+1]};
                 }
@@ -76,60 +76,13 @@ namespace DanielFlappyGame
         public bool IsCollide(Entity collideWith)
         {            
             Model modelEntity = collideWith.GetModel();
-            Vector3[] CollideVectices = GetCollisionHitBox(modelEntity);
-            Vector3[] thisModelVectices = GetCollisionHitBox(this.model);
-            Cube thisHitbox = new Cube(thisModelVectices[0], thisModelVectices[1]);
-            Cube collideHitbox = new Cube(CollideVectices[0], CollideVectices[1]);
+            //Vector3[] CollideVectices = GetCollisionHitBox(modelEntity);
+            //Vector3[] thisModelVectices = GetCollisionHitBox(this.model);
+            Cube thisHitbox = new Cube(0.06f, 0.06f, 0.06f, new Vector3(this.Position.X, this.Position.Y + 0.15f / 2, this.Position.Z));
+            Cube collideHitbox = new Cube(0.15f, 0.15f, 0.15f, new Vector3(collideWith.Position.X , collideWith.Position.Y+ 0.15f/2 , collideWith.Position.Z));
 
-            return Cube.Collide(thisHitbox , collideHitbox);
-        }
-
-        private Vector3[] GetCollisionHitBox(Model model)
-        {
-            float minX = float.PositiveInfinity;
-            float minY = float.PositiveInfinity;
-            float minZ = float.PositiveInfinity;
-            foreach (Vector4 vector in model.Vertices)
-            {
-                if (minX >= vector.X)
-                {
-                    minX = vector.X;
-                    if (minY >= vector.Y)
-                    {
-                        minY = vector.Y;
-                        if (minZ >= vector.Z)
-                        {
-                            minZ = vector.Z;
-                        }
-                    }
-                }
-            }
-
-            float maxX = float.NegativeInfinity;
-            float maxY = float.NegativeInfinity;
-            float maxZ = float.NegativeInfinity;
-            foreach (Vector4 vector in model.Vertices)
-            {
-                if (maxX <= vector.X)
-                {
-                    maxX = vector.X;
-                    if (maxY <= vector.Y)
-                    {
-                        maxY = vector.Y;
-                        if (maxZ <= vector.Z)
-                        {
-                            maxZ = vector.Z;
-                        }
-                    }
-                }
-            }
-
-            Vector3[] hitBox = new Vector3[2];
-            hitBox[0] = new Vector3(minZ, minY, minZ);
-            hitBox[1] = new Vector3(maxX, maxY, maxZ);
-            return hitBox;
-        }
-
-      
+            bool collide =  Cube.Collide(thisHitbox , collideHitbox);
+            return collide;
+        }     
     }
 }
