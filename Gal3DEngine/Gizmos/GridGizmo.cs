@@ -22,8 +22,8 @@ namespace Gal3DEngine.Gizmos
                 {
                     Vector4 top =new Vector4(x*20 ,  0 , 0, 1);
                     Vector4 buttom =  new Vector4(x*20 , screen.Height , 0 , 1);
-                    Shader.TransformPosition(ref top, world * view * projection, screen);
-                    Shader.TransformPosition(ref buttom, world * view * projection, screen);
+                    ShaderHelper.TransformPosition(ref top, world * view * projection, screen);
+                    ShaderHelper.TransformPosition(ref buttom, world * view * projection, screen);
                     //grid[x,y] = new Tuple<Vector4,Vector4>(top , buttom);
                     screen.DrawLine(top, buttom, new Color3(255, 0, 0));
                 }
