@@ -69,9 +69,11 @@
     <Compile Include="IndicesTypes\IndexPosition.cs" />
     <Compile Include="IndicesTypes\IndexPositionUV.cs" />
     <Compile Include="IndicesTypes\IndexPositionUVNormal.cs" />
+    <Compile Include="Shaders\ShaderHelper.cs" />
     <Compile Include="Shaders\Shader.cs" />
     <Compile Include="Shaders\ShaderFlat.cs" />
     <Compile Include="Shaders\ShaderPhong.cs" />
+    <Compile Include="AvailableShaders.cs" />
     <Compile Include="Shaders\ShaderUV.cs" />
     <Compile Include="TestGame.cs" />
     <Compile Include="Texture.cs" />
