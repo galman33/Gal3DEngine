@@ -30,10 +30,6 @@ namespace Gal3DEngine
             cam = new Camera();
             cam.Position.Z = 3;
             tex = Texture.LoadTexture("Resources/Cat2.png");
-            /*for (int i = 0; i < 2; i++)
-            {
-                models.Add(new Model("Resources/Cat2.obj", "Resources/Cat2.png"));
-            }*/
             SetUp();
         }
 

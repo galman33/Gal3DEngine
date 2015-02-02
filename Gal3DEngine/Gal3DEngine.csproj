@@ -65,6 +65,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Color3.cs" />
     <Compile Include="Gizmos\AxisGizmo.cs" />
+    <Compile Include="Gizmos\GridGizmo.cs" />
     <Compile Include="IndicesTypes\IndexPosition.cs" />
     <Compile Include="IndicesTypes\IndexPositionUV.cs" />
     <Compile Include="IndicesTypes\IndexPositionUVNormal.cs" />
