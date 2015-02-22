@@ -18,10 +18,10 @@ namespace Gal3DEngine.Gizmos
             Vector4 unitY = new Vector4(0, 1, 0, 1);
             Vector4 unitZ = new Vector4(0, 0, 1, 1);
            
-            Shader.TransformPosition(ref unitX , world* view * projection , screen);
-            Shader.TransformPosition(ref unitY , world* view * projection , screen);
-            Shader.TransformPosition(ref unitZ , world* view * projection , screen);
-            Shader.TransformPosition(ref origin , world* view * projection , screen);
+            ShaderHelper.TransformPosition(ref unitX , world* view * projection , screen);
+            ShaderHelper.TransformPosition(ref unitY, world * view * projection, screen);
+            ShaderHelper.TransformPosition(ref unitZ, world * view * projection, screen);
+            ShaderHelper.TransformPosition(ref origin, world * view * projection, screen);
 
             if (ShouldRender(origin, screen))
             {

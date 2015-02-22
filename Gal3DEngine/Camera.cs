@@ -9,11 +9,11 @@ namespace Gal3DEngine
     public class Camera
     {
         public Vector3 Position;
-        public Vector3 Rotation;
+        public Quaternion Rotation = Quaternion.Identity;
 
         public Matrix4 GetViewMatrix()
         {
-            return (Matrix4.CreateRotationY(MathHelper.DegreesToRadians(Rotation.Y)) * Matrix4.CreateRotationX(MathHelper.DegreesToRadians(Rotation.X)) * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(Rotation.Z)) *
+            return (Matrix4.CreateFromQuaternion(Rotation) *
                         Matrix4.CreateTranslation(Position.X, Position.Y, Position.Z)
                         ).Inverted();
         }

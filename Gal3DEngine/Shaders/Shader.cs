@@ -7,25 +7,22 @@ using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
-    public class Shader
+    public class Shader<IndexData, TriangleData, LineData> where IndexData : IndexPosition
     {
 
+        protected Vector4[] positions;
+
+        public void SetVerticesPositions(Vector4[] positions)
+        {
+            this.positions = (Vector4[])positions.Clone();
+        }
+
+        public virtual void ExtractData(Model model)
+        {
+            SetVerticesPositions(model.Vertices);
+        }
+
         public delegate void TransformMethod<InData, InTransformation>(ref InData data, InTransformation transformation, Screen screen);
-        public delegate OutLineData ProcessScanLineMethod<OutLineData, InIndex>(float gradient1, float gradient2, InIndex pa, InIndex pb, InIndex pc, InIndex pd);
-        public delegate void ProcessPixelMethod<InLineData>(int x, int y, float gradient, ref InLineData lineData, Screen screen);
-
-        protected static Vector4[] positions;
-
-        public static void SetVerticesPositions(Vector4[] positions)
-        {
-            Shader.positions = (Vector4[])positions.Clone();
-        }
-
-        public static void ExtractData(Model model)
-        {
-            Shader.SetVerticesPositions(model.Vertices);
-        }
-
         protected static void TransformData<InData, InTransformation>(TransformMethod<InData, InTransformation> transformMethod, InData[] data, InTransformation transformation, Screen screen)
         {
             for (int i = 0; i < data.Length; i++)
@@ -34,19 +31,23 @@ namespace Gal3DEngine
             }
         }
 
-        protected static void DrawTriangles<InIndex, InLineData>(InIndex[] indices, Screen screen, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
+        public virtual void Render(Screen screen)
+        {
+
+        }
+
+        protected virtual void DrawTriangles(IndexData[] indices, Screen screen)
         {
             for (int i = 0; i < indices.Length; i += 3)
             {
-                if (Shader.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height))
+                if (ShaderHelper.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height))
                 {
-                    DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2],
-                        processScanLine, processPixel);
+                    DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2]);
                 }
             }
         }
 
-        private static void DrawTriangle<InIndex, InLineData>(Screen screen, InIndex p1, InIndex p2, InIndex p3, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
+        private void DrawTriangle(Screen screen, IndexData p1, IndexData p2, IndexData p3)
         {
             // Sorting the points in order to always have this order on screen p1, p2 & p3
             // with p1 always up (thus having the Y the lowest possible to be near the top screen)
@@ -87,6 +88,11 @@ namespace Gal3DEngine
             else
                 dP1P3 = 0;
 
+            TriangleData triData = ProcessTriangle(p1, p2, p3);
+
+
+            int maxY = Math.Min(screen.Width, (int) positions[p3.position].Y);
+
             // First case where triangles are like that:
             // P1
             // -
@@ -100,15 +106,15 @@ namespace Gal3DEngine
             // P3
             if (dP1P2 > dP1P3)
             {
-                for (var y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
+                for (var y = Math.Max((int)positions[p1.position].Y, 0); y <= maxY; y++)
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(screen, y, p1, p3, p1, p2, processScanLine, processPixel);
+                        ProcessScanLine(screen, y, p1, p3, p1, p2, triData);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p1, p3, p2, p3, processScanLine, processPixel);
+                        ProcessScanLine(screen, y, p1, p3, p2, p3, triData);
                     }
                 }
             }
@@ -125,15 +131,15 @@ namespace Gal3DEngine
             //       P3
             else
             {
-                for (var y = (int)positions[p1.position].Y; y <= (int)positions[p3.position].Y; y++)
+                for (var y = Math.Max((int)positions[p1.position].Y, 0); y <= maxY; y++)
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(screen, y, p1, p2, p1, p3, processScanLine, processPixel);
+                        ProcessScanLine(screen, y, p1, p2, p1, p3, triData);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p2, p3, p1, p3, processScanLine, processPixel);
+                        ProcessScanLine(screen, y, p2, p3, p1, p3, triData);
                     }
                 }
             }
@@ -142,7 +148,7 @@ namespace Gal3DEngine
         // drawing line between 2 points from left to right
         // papb -> pcpd
         // pa, pb, pc, pd must then be sorted before
-        private static void ProcessScanLine<InIndex, InLineData>(Screen screen, int y, InIndex pa, InIndex pb, InIndex pc, InIndex pd, ProcessScanLineMethod<InLineData, InIndex> processScanLine, ProcessPixelMethod<InLineData> processPixel) where InIndex : IndexPosition
+        private void ProcessScanLine(Screen screen, int y, IndexData pa, IndexData pb, IndexData pc, IndexData pd, TriangleData triData)
         {
             // Thanks to current Y, we can compute the gradient to compute others values like
             // the starting X (sx) and ending X (ex) to draw between
@@ -150,71 +156,38 @@ namespace Gal3DEngine
             var gradient1 = positions[pa.position].Y != positions[pb.position].Y ? (y - positions[pa.position].Y) / (positions[pb.position].Y - positions[pa.position].Y) : 1;
             var gradient2 = positions[pc.position].Y != positions[pd.position].Y ? (y - positions[pc.position].Y) / (positions[pd.position].Y - positions[pc.position].Y) : 1;
 
-            int sx = (int)Lerp(positions[pa.position].X, positions[pb.position].X, gradient1);
-            int ex = (int)Lerp(positions[pc.position].X, positions[pd.position].X, gradient2);
+            int sx = (int)ShaderHelper.Lerp(positions[pa.position].X, positions[pb.position].X, gradient1);
+            int ex = (int)ShaderHelper.Lerp(positions[pc.position].X, positions[pd.position].X, gradient2);
 
-            InLineData lineData;
-            lineData = processScanLine(gradient1, gradient2, pa, pb, pc, pd);
+            /*sx = Math.Max(sx, 0);
+            ex = Math.Min(ex, screen.Width);*/
+
+            int endX = Math.Min(ex, screen.Width);
+
+            LineData lineData = MyProcessScanLine(gradient1, gradient2, pa, pb, pc, pd, triData);
 
             // drawing a line from left (sx) to right (ex) 
-            for (var x = sx; x < ex; x++)
+            for (var x = Math.Max(sx, 0); x < endX; x++)
             {
                 float gradient = (x - sx) / (float)(ex - sx);
 
-                processPixel(x, y, gradient, ref lineData, screen);
+                ProcessPixel(x, y, gradient, ref lineData, screen);
             }
         }
 
-        public static void TransformPosition(ref Vector4 position, Matrix4 transformation, Screen screen)
+        protected virtual TriangleData ProcessTriangle(IndexData p1, IndexData p2, IndexData p3)
         {
-            position = Vector4.Transform(position, transformation); // projection * view * world
-
-            position.X = position.X / position.W * 0.5f * screen.Width + screen.Width / 2;
-            position.Y = position.Y / position.W * 0.5f * screen.Height + screen.Height / 2;
-            position.Z = position.Z / position.W * 0.5f + 0.5f;
+            return default(TriangleData);
         }
 
-        public static bool ShouldRender(Vector4 p1, Vector4 p2, Vector4 p3, int width, int height)
+        protected virtual LineData MyProcessScanLine(float gradient1, float gradient2, IndexData pa, IndexData pb, IndexData pc, IndexData pd, TriangleData triangleData)
         {
-            return !(ShouldClip(p1, p2, p3, width, height) || ShouldCull(p1, p2, p3));
+            return default(LineData);
         }
 
-        // back face Culling check
-        private static bool ShouldCull(Vector4 p1 , Vector4 p2 , Vector4 p3)
+        protected virtual void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
         {
-            return ((p1.X - p2.X) * (p3.Y - p2.Y) - (p1.Y - p2.Y) * (p3.X - p2.X)) > 0;
-        }
 
-        // Clipping check
-        private static bool ShouldClip(Vector4 p1, Vector4 p2, Vector4 p3, int width, int height)
-        {
-            return  ((p1.X < 0 || p1.X > width) || (p1.Y < 0 || p1.Y > height) || p1.Z < 0 || p1.Z > 1) &&
-                    ((p2.X < 0 || p2.X > width) || (p2.Y < 0 || p2.Y > height) || p2.Z < 0 || p2.Z > 1) &&
-                    ((p3.X < 0 || p3.X > width) || (p3.Y < 0 || p3.Y > height) || p3.Z < 0 || p3.Z > 1);
-        }
-
-        protected static float Lerp(float a, float b, float t)
-        {
-            return a + (b - a) * t;
-        }
-
-        protected static Vector2 Lerp(Vector2 a, Vector2 b, float t)
-        {
-            return new Vector2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
-        }
-
-        protected static Vector3 Lerp(Vector3 a, Vector3 b, float t)
-        {
-            return new Vector3(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t, a.Z + (b.Z - a.Z) * t);
-        }
-
-        protected static Color3 ColorLerp(Color3 a, Color3 b, float t)
-        {
-            Color3 result;
-            result.r = (byte)(a.r + (b.r - a.r) * t);
-            result.g = (byte)(a.g + (b.g - a.g) * t);
-            result.b = (byte)(a.b + (b.b - a.b) * t);
-            return result;
         }
 
     }
