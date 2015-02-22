@@ -29,7 +29,7 @@ namespace DanielFlappyGame
             {
                 (Program.world as FlapGame).GameOver();
             }
-
+            
             var tunnles = CheckForPassedTunnels((Program.world as FlapGame).GetTunnles());
             if(tunnles!= null)
             {
@@ -76,8 +76,7 @@ namespace DanielFlappyGame
         public bool IsCollide(Entity collideWith)
         {            
             Model modelEntity = collideWith.GetModel();
-            //Vector3[] CollideVectices = GetCollisionHitBox(modelEntity);
-            //Vector3[] thisModelVectices = GetCollisionHitBox(this.model);
+            
             Cube thisHitbox = new Cube(0.06f, 0.06f, 0.06f, new Vector3(this.Position.X, this.Position.Y + 0.15f / 2, this.Position.Z));
             Cube collideHitbox = new Cube(0.15f, 0.15f, 0.15f, new Vector3(collideWith.Position.X , collideWith.Position.Y+ 0.15f/2 , collideWith.Position.Z));
 
