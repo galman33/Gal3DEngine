@@ -30,10 +30,6 @@ namespace Gal3DEngine
             cam = new Camera();
             cam.Position.Z = 3;
             tex = Texture.LoadTexture("Resources/Cat2.png");
-            /*for (int i = 0; i < 2; i++)
-            {
-                models.Add(new Model("Resources/Cat2.obj", "Resources/Cat2.png"));
-            }*/
             SetUp();
         }
 
@@ -79,8 +75,9 @@ namespace Gal3DEngine
             base.OnMouseMove(e);
             if (e.Mouse.MiddleButton == OpenTK.Input.ButtonState.Pressed)
             {
-                cam.Position.X += e.XDelta * 0.01f;
-                cam.Position.Y += -e.YDelta * 0.01f;
+                //cam.Position.X += e.XDelta * 0.01f;
+                cam.Rotation *= Quaternion.FromAxisAngle(Vector3.UnitY, e.XDelta * 0.01f);
+                //cam.Position.Y += -e.YDelta * 0.01f;
             }
         }
 
@@ -89,7 +86,7 @@ namespace Gal3DEngine
             base.OnKeyDown(e);
             if (e.Key == OpenTK.Input.Key.Space)
             {
-                vel = 0.05f;
+                cam.Rotation *= Quaternion.FromAxisAngle(Vector3.UnitY, (float) Time.DeltaTime);
             }
         }
 
@@ -98,6 +95,8 @@ namespace Gal3DEngine
         protected override void Update()
         {
             base.Update();
+
+            //cam.Position.Z = (float) Math.Sin(Time.TotalTime) * 3.0f;
         }
 
         protected override void Render()

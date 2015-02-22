@@ -14,9 +14,9 @@ namespace Gal3DEngine
         {
             position = Vector4.Transform(position, transformation); // projection * view * world
 
-            position.X = position.X / position.W * 0.5f * screen.Width + screen.Width / 2;
-            position.Y = position.Y / position.W * 0.5f * screen.Height + screen.Height / 2;
-            position.Z = position.Z / position.W * 0.5f + 0.5f;
+            position.X = position.X / position.W * 0.5f * screen.Width;
+            position.Y = position.Y / position.W * 0.5f * screen.Height;
+            position.Z = position.Z / position.W * 0.5f;
         }
 
         public static void TransformNormal(ref Vector3 normal, Matrix4 transformation, Screen screen)
