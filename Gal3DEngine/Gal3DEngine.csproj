@@ -78,6 +78,9 @@
     <Compile Include="TestGame.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
+    <Compile Include="Utils\Animation.cs" />
+    <Compile Include="Utils\Cube.cs" />
+    <Compile Include="Utils\TextRender.cs" />
     <Compile Include="VertexUV.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Model.cs" />

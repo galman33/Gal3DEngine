@@ -61,7 +61,7 @@ namespace Gal3DEngine.UTILS
             {
                 Vector4 tmp = new Vector4(wireFrames[i]);
                 tmp.W = 1;
-                Shader.TransformPosition(ref tmp, world * view * projection, screen);
+                ShaderHelper.TransformPosition(ref tmp, world * view * projection, screen);
                 wireFrames[i] = new Vector3(tmp);
             }
             //1-3
