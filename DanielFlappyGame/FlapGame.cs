@@ -148,7 +148,7 @@ namespace DanielFlappyGame
             Matrix4 view = gameCam.GetViewMatrix();
             curShader.view = view;
             curShader.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1)); // basic light
-            TextRender.BasicDrawText(Screen, "Points: " + points, Fonts.ARIAL, Fonts.ARIALFONTDATA, new Vector2(10, 10));
+            TextRender.BasicDrawText(Screen, "Points: " + points, Fonts.ARIAL, Fonts.ARIALFONTDATA, new Vector2(30, 30));
             //AxisGizmo.Render(Screen, Matrix4.CreateTranslation(viewTrans.X, viewTrans.Y - 0.5f, viewTrans.Z-3), view, projection);
             DrawEntities();            
         }
