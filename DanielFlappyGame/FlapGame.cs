@@ -28,6 +28,8 @@ namespace DanielFlappyGame
         Model flapModel;
         Model floor;
 
+        public ShaderFlat curShader;
+
         public FlapGame() : base(640, 480)
         {
 
@@ -38,9 +40,10 @@ namespace DanielFlappyGame
             base.OnLoad(e);
             Program.world = this;
             rand = new Random();
+            curShader = AvailableShaders.ShaderFlat;
             catModel = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
             flapModel = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
-            floor = new Model("Resources/CobbleStones2.obj", "Resources/BrickRound0108_5_S.jpg");
+            floor = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
             Init();
         }
 
@@ -58,13 +61,13 @@ namespace DanielFlappyGame
             Tunnels.Clear();
             passedTunnles.Clear();
 
-            Vector3[] positions = GetRandomPoint(-5f + flappyflappy.Position.Z);
+            Vector3[] positions = GetRandomPoint(-3f + flappyflappy.Position.Z);
             Tunnels.Add(new Entity(positions[0], Vector3.Zero, new Vector3(0.5f, 0.5f, 0.5f), catModel));
             Tunnels.Add(new Entity(positions[1], Vector3.Zero, new Vector3(0.5f, 0.5f, 0.5f), catModel));
             Tunnels[Tunnels.Count - 1].DestroyEntity += EntityDestroyed;
             Tunnels[Tunnels.Count - 2].DestroyEntity += EntityDestroyed;
 
-            AvailableShaders.ShaderPhong.projection = projection;
+            curShader.projection = projection;
         }
         protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
         {
@@ -104,7 +107,7 @@ namespace DanielFlappyGame
             {
                 curDelta = TimeSpan.Zero;
 
-                Vector3[] positions = GetRandomPoint(-5f + flappyflappy.Position.Z);
+                Vector3[] positions = GetRandomPoint(-3f + flappyflappy.Position.Z);
                 if (recycleTunnels.Count ==0)
                 {
                     Tunnels.Add(new Entity(positions[0], Vector3.Zero, new Vector3(0.5f, 0.5f, 0.5f), catModel));
@@ -143,9 +146,9 @@ namespace DanielFlappyGame
             base.Render();
 
             Matrix4 view = gameCam.GetViewMatrix();
-            AvailableShaders.ShaderPhong.view = view;
-            AvailableShaders.ShaderPhong.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1)); // basic light
-            
+            curShader.view = view;
+            curShader.lightDirection = Vector3.Normalize(new Vector3(1, -0.25f, -1)); // basic light
+            TextRender.BasicDrawText(Screen, "Points: " + points, Fonts.ARIAL, Fonts.ARIALFONTDATA, new Vector2(10, 10));
             //AxisGizmo.Render(Screen, Matrix4.CreateTranslation(viewTrans.X, viewTrans.Y - 0.5f, viewTrans.Z-3), view, projection);
             DrawEntities();            
         }
