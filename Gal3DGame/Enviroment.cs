@@ -12,7 +12,7 @@ namespace Gal3DGame
     {
 
         private float BlockSize = 1.0f;
-        private int CityLength = 6;
+        private int CityLength = 15;
 
         private static Color3[,] groundTexture;
 
@@ -49,11 +49,25 @@ namespace Gal3DGame
 
         private void GenerateBuildings()
         {
+            Random r = new Random();
+
             buildingsArray = new bool[CityLength, CityLength];
 
             for (int x = 0; x < buildingsArray.GetLength(0); x++)
+            {
                 for (int y = 0; y < buildingsArray.GetLength(1); y++)
-                    buildingsArray[x, y] = (x + y) % 3 == 0;
+                {
+                    if (IsOutlineBuilding(x, y))
+                    {
+                        buildingsArray[x, y] = true;
+                    }
+                    else
+                    {
+                        //buildingsArray[x, y] = (x + y) % 3 == 0;
+                        buildingsArray[x, y] = r.Next(15) == 0; ;
+                    }
+                }
+            }
         }
 
         private void Setup(List<Vector4> positionsLst)
@@ -105,6 +119,7 @@ namespace Gal3DGame
 
         private void SetupBuildings(List<Vector4> positionsLst, List<IndexPositionUVNormal> indicesLst)
         {
+            Random r = new Random();
             for (int y = 0; y < CityLength; y++)
             {
                 for (int x = 0; x < CityLength; x++)
@@ -116,7 +131,12 @@ namespace Gal3DGame
                         int c = GetGroundPositionIndex(x + 1, y + 1); // +x -y +z
                         int d = GetGroundPositionIndex(x, y + 1); // -x -y +z
 
-                        float buildingHeight = 2.0f;
+                        int floors = r.Next(1, 3); // 1 or 2
+
+                        if(IsOutlineBuilding(x, y))
+                            floors = 2;
+
+                        float buildingHeight = 2.0f * floors;
 
                         int e = positionsLst.Count; // -x +y -z
                         positionsLst.Add(new Vector4(x * BlockSize, buildingHeight, y * BlockSize, 1));
@@ -131,10 +151,12 @@ namespace Gal3DGame
                         AddRect(e, f, g, h, 4, 5, 6, 7, indicesLst);
 
                         //Wall -X
-                        AddRect(e, h, d, a, 8, 9, 10, 11, indicesLst);
+                        AddRect(e, h, d, a, 11, 10, 9, 8, indicesLst);
+                        //AddRect(e, h, d, a, 8, 9, 10, 11, indicesLst);
 
                         //Wall +X
-                        AddRect(g, f, b, c, 8, 9, 10, 11, indicesLst);
+                        AddRect(g, f, b, c, 11, 10, 9, 8, indicesLst);
+                        //AddRect(g, f, b, c, 8, 9, 10, 11, indicesLst);
 
                         //Wall -Z
                         AddRect(a, b, f, e, 8, 9, 10, 11, indicesLst);
@@ -179,6 +201,11 @@ namespace Gal3DGame
             shader.SetIndices(indices);
 
             shader.Render(screen);
+        }
+
+        private bool IsOutlineBuilding(int x, int y)
+        {
+            return x == 0 || y == 0 || x == buildingsArray.GetLength(0) - 1 || y == buildingsArray.GetLength(1) - 1;
         }
 
     }

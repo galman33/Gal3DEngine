@@ -29,7 +29,7 @@ namespace Gal3DGame
             Aircraft.LoadContent();
             Enviroment.LoadContent();
 
-            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 10.0f);
+            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 20.0f);
 
             camera = new Camera();
             camera.Position.Z = 4;
