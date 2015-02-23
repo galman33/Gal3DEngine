@@ -63,7 +63,6 @@ namespace Gal3DGame
                     }
                     else
                     {
-                        //buildingsArray[x, y] = (x + y) % 3 == 0;
                         buildingsArray[x, y] = r.Next(15) == 0; ;
                     }
                 }
@@ -88,8 +87,12 @@ namespace Gal3DGame
             uvs[10] = new Vector2(0.5f, 1.0f);
             uvs[11] = new Vector2(0, 1.0f);
 
-            normals = new Vector3[1];
+            normals = new Vector3[5];
             normals[0] = new Vector3(0, 1, 0);
+            normals[1] = new Vector3(-1, 0, 0);
+            normals[2] = new Vector3(1, 0, 0) ;
+            normals[3] = new Vector3(0, 0, -1);
+            normals[4] = new Vector3(0, 0, 1);
 
             positions = new Vector4[(buildingsArray.GetLength(0) + 1) * (buildingsArray.GetLength(1) + 1)];
             for (int y = 0; y < CityLength + 1; y++)
@@ -148,36 +151,35 @@ namespace Gal3DGame
                         positionsLst.Add(new Vector4(x * BlockSize, buildingHeight, (y + 1) * BlockSize, 1));
 
                         //ROOF
-                        AddRect(e, f, g, h, 4, 5, 6, 7, indicesLst);
+                        AddRect(e, f, g, h, 4, 5, 6, 7, 4, indicesLst);
 
                         //Wall -X
-                        AddRect(e, h, d, a, 11, 10, 9, 8, indicesLst);
-                        //AddRect(e, h, d, a, 8, 9, 10, 11, indicesLst);
+                        AddRect(e, h, d, a, 11, 10, 9, 8, 1, indicesLst);
 
                         //Wall +X
-                        AddRect(g, f, b, c, 11, 10, 9, 8, indicesLst);
-                        //AddRect(g, f, b, c, 8, 9, 10, 11, indicesLst);
+                        AddRect(g, f, b, c, 11, 10, 9, 8, 2, indicesLst);
 
                         //Wall -Z
-                        AddRect(a, b, f, e, 8, 9, 10, 11, indicesLst);
+                        AddRect(a, b, f, e, 8, 9, 10, 11, 3, indicesLst);
 
                         //Wall +Z
-                        AddRect(c, d, h, g, 8, 9, 10, 11, indicesLst);
+                        AddRect(c, d, h, g, 8, 9, 10, 11, 4, indicesLst);
                     }
                 }
             }
         }
 
         private void AddRect(int pa, int pb, int pc, int pd,
-                                int ta, int tb, int tc, int td, List<IndexPositionUVNormal> indicesLst)
+                                int ta, int tb, int tc, int td,
+                                int n, List<IndexPositionUVNormal> indicesLst)
         {
-            indicesLst.Add(new IndexPositionUVNormal(pb, tb, 0));
-            indicesLst.Add(new IndexPositionUVNormal(pa, ta, 0));
-            indicesLst.Add(new IndexPositionUVNormal(pd, td, 0));
+            indicesLst.Add(new IndexPositionUVNormal(pb, tb, n));
+            indicesLst.Add(new IndexPositionUVNormal(pa, ta, n));
+            indicesLst.Add(new IndexPositionUVNormal(pd, td, n));
 
-            indicesLst.Add(new IndexPositionUVNormal(pd, td, 0));
-            indicesLst.Add(new IndexPositionUVNormal(pc, tc, 0));
-            indicesLst.Add(new IndexPositionUVNormal(pb, tb, 0));
+            indicesLst.Add(new IndexPositionUVNormal(pd, td, n));
+            indicesLst.Add(new IndexPositionUVNormal(pc, tc, n));
+            indicesLst.Add(new IndexPositionUVNormal(pb, tb, n));
         }
 
         private int GetGroundPositionIndex(int x, int y)
@@ -191,8 +193,8 @@ namespace Gal3DGame
             shader.view = view;
             shader.projection = projection;
             shader.texture = groundTexture;
-            shader.ambientLight = 1.0f;
-            shader.lightDirection = new Vector3(0, -1, 0);
+            shader.ambientLight = 0.3f;
+            shader.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
 
             shader.SetVerticesPositions(positions);
             shader.SetVerticesUvs(uvs);
