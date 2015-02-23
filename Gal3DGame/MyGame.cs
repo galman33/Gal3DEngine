@@ -39,6 +39,8 @@ namespace Gal3DGame
             bear = new Model("Resources/bear.obj", "Resources/bear.jpg");
 
             enviroment = new Enviroment();
+
+            BackgroundColor = new Color3(128, 255, 255);
         }
 
         protected override void Update()
