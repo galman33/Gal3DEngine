@@ -18,7 +18,7 @@ namespace Gal3DGame
         private Model bear;
         private Enviroment enviroment;
 
-        public MyGame() : base(640, 480)
+        public MyGame() : base(500, 400)
         {
             
         }
