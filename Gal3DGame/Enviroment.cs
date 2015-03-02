@@ -25,9 +25,13 @@ namespace Gal3DGame
 
         private ShaderFlat shader = AvailableShaders.ShaderFlat;
 
+        private static Model sunModel;
+
         public static void LoadContent()
         {
             groundTexture = Texture.LoadTexture("Resources/City.png");
+
+            sunModel = new Model("Resources/sphere.obj", "Resources/Sun.png");
         }
 
         public Enviroment()
@@ -189,6 +193,8 @@ namespace Gal3DGame
 
         public void Render(Screen screen, Matrix4 view, Matrix4 projection)
         {
+            RenderSun(screen, view, projection);
+
             shader.world = Matrix4.Identity;
             shader.view = view;
             shader.projection = projection;
@@ -201,6 +207,25 @@ namespace Gal3DGame
             shader.SetVerticesNormals(normals);
 
             shader.SetIndices(indices);
+
+            shader.Render(screen);
+        }
+
+        private void RenderSun(Screen screen, Matrix4 view, Matrix4 projection)
+        {
+            shader.world = Matrix4.CreateTranslation(10, 10, 10); ;
+            shader.view = view;
+            shader.projection = projection;
+            //shader.texture = groundTexture;
+            shader.ambientLight = 1.0f;
+            shader.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
+
+            /*shader.SetVerticesPositions(positions);
+            shader.SetVerticesUvs(uvs);
+            shader.SetVerticesNormals(normals);
+
+            shader.SetIndices(indices);*/
+            shader.ExtractData(sunModel);
 
             shader.Render(screen);
         }
