@@ -109,6 +109,9 @@ namespace Gal3DEngine
             int ty = (int)(texture.GetLength(1) * (1 - uv.Y));
             if (ty >= texture.GetLength(1))
                 ty = texture.GetLength(1) - 1;
+            if (tx < 0) tx = 0;
+            if (ty < 0) ty = 0;
+
             Color3 c = texture[tx, ty];
 
             c.r = Convert.ToByte(c.r * brightness);
