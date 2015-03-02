@@ -5,6 +5,7 @@ using System.Text;
 using Gal3DEngine;
 using OpenTK;
 using Gal3DEngine.IndicesTypes;
+using Gal3DEngine.UTILS;
 
 namespace Gal3DGame
 {
@@ -27,6 +28,8 @@ namespace Gal3DGame
 
         private static Model sunModel;
 
+        private List<Box> boxes;
+
         public static void LoadContent()
         {
             groundTexture = Texture.LoadTexture("Resources/City.png");
@@ -44,6 +47,8 @@ namespace Gal3DGame
             Setup(positionsLst);
 
             SetupGroundIndices(indicesLst);
+
+            boxes = new List<Box>();
 
             SetupBuildings(positionsLst, indicesLst);
 
@@ -168,6 +173,10 @@ namespace Gal3DGame
 
                         //Wall +Z
                         AddRect(c, d, h, g, 8, 9, 10, 11, 4, indicesLst);
+
+
+                        boxes.Add(new Box(BlockSize / 2, buildingHeight / 2, BlockSize / 2,
+                            new Vector3((x + 0.5f) * BlockSize, buildingHeight / 2, (y + 0.5f) * BlockSize)));
                     }
                 }
             }
@@ -195,6 +204,13 @@ namespace Gal3DGame
         {
             RenderSun(screen, view, projection);
 
+            RenderBuildings(screen, view, projection);
+
+            RenderBoxes(screen, view, projection);
+        }
+
+        private void RenderBuildings(Screen screen, Matrix4 view, Matrix4 projection)
+        {
             shader.world = Matrix4.Identity;
             shader.view = view;
             shader.projection = projection;
@@ -228,6 +244,14 @@ namespace Gal3DGame
             shader.ExtractData(sunModel);
 
             shader.Render(screen);
+        }
+
+        private void RenderBoxes(Screen screen, Matrix4 view, Matrix4 projection)
+        {
+            for(int i = 0; i < boxes.Count; i++)
+            {
+                boxes[i].DrawCube(screen, Matrix4.Identity, view, projection);
+            }
         }
 
         private bool IsOutlineBuilding(int x, int y)
