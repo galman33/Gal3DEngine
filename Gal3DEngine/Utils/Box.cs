@@ -51,12 +51,12 @@ namespace Gal3DEngine.UTILS
                     point.Z >= min.Z && point.Z <= max.Z;
         }
 
-        public void DrawCube(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection)
+        public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection)
         {
-            DrawCube(screen, world, view, projection, new Color3(0, 255, 0));
+            Render(screen, world, view, projection, new Color3(0, 255, 0));
         }
 
-        public void DrawCube(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection, Color3 color)
+        public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection, Color3 color)
         {
             var min = GetMin();
             var max = GetMax();
