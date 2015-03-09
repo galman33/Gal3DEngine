@@ -13,10 +13,10 @@ namespace DanielFlappyGame
         private float jumpVelocity;
         private float velocityY = 0;
         private float velocityZ = 0;
-        private float gravity = 0;//0.005f;
+        private float gravity = 0.005f;
 
-        public FlappyBird(Vector3 translation, Vector3 rotation, Vector3 scale, Model model, float velocityY, float velocityZ)
-            : base(translation, rotation, scale, model)
+        public FlappyBird(Vector3 translation, Vector3 rotation, Vector3 scale, Model model, float velocityY, float velocityZ , Vector3 lightDirection)
+            : base(translation, rotation, scale, model , lightDirection)
         {
             this.jumpVelocity = velocityY;
             this.velocityZ = velocityZ;

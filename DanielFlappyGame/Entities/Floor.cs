@@ -10,7 +10,7 @@ namespace DanielFlappyGame
     public class Floor
     {
         Color3[,] texture;
-        Vector3 translation;
+        public Vector3 translation;
         Vector3 scale;
         Vector3 rotation;
 
@@ -28,6 +28,11 @@ namespace DanielFlappyGame
             InitFloor();
         }
 
+        public void Update(Vector3 translation)
+        {
+            this.translation = translation;
+        }
+
         private void InitFloor()
         {
             vertices = new Vector4[4];
@@ -43,9 +48,7 @@ namespace DanielFlappyGame
             normals= new Vector3[1];
 
            normals[0] = new Vector3(0,1,0);
-           // normals[1] = new Vector3(0,1,0);
-            //normals[2] = new Vector3(0,1,0);
-            //normals[3] = new Vector3(0,1,0);
+           
 
             indices = new IndexPositionUVNormal[6];
             indices[0] = new IndexPositionUVNormal(0, 0, 0);
@@ -63,7 +66,9 @@ namespace DanielFlappyGame
             (Program.world as FlapGame).curShader.SetIndices(indices);
             (Program.world as FlapGame).curShader.SetVerticesUvs(uvs);
             (Program.world as FlapGame).curShader.texture = texture;
-            (Program.world as FlapGame).curShader.world = /*Matrix4.CreateScale(scale)    **/ Matrix4.CreateTranslation(translation);
+            (Program.world as FlapGame).curShader.lightDirection = -normals[0];//new Vector3(0, -1, 0);
+            (Program.world as FlapGame).curShader.ambientLight = 0.5f;
+            (Program.world as FlapGame).curShader.world =  Matrix4.CreateTranslation(translation);
             (Program.world as FlapGame).curShader.Render(screen);
         }
 

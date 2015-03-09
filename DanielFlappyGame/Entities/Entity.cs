@@ -14,18 +14,20 @@ namespace DanielFlappyGame
        protected Vector3 rot, scale, translation;
        protected Matrix4 worldMatrix;
        protected Model model;
+       protected Vector3 light;
 
        private Cube entityCube;
 
        public event DestroyDelegate DestroyEntity;
 
-       public Entity(Vector3 translation, Vector3 rotation, Vector3 scale, Model model)
+       public Entity(Vector3 translation, Vector3 rotation, Vector3 scale, Model model , Vector3 lightDirection)
        {
            this.translation = translation;
            this.scale = scale;
            this.rot = rotation;           
            this.model = model;
            this.Position = translation;
+           light = lightDirection;
            this.entityCube = makeCube(this.Position, 1);
        }
 
@@ -35,6 +37,7 @@ namespace DanielFlappyGame
            GetMatrix(this.translation, this.rot, this.scale, out this.worldMatrix);
            (Program.world as FlapGame).curShader.ExtractData(model);
            (Program.world as FlapGame).curShader.world = worldMatrix;
+           (Program.world as FlapGame).curShader.lightDirection = light;
            (Program.world as FlapGame).curShader.Render(screen);
            Cube.DrawCube(screen, /*Matrix4.CreateScale(entityCube.radiusX ,entityCube.radiusY , entityCube.radiusZ) */ Matrix4.CreateTranslation(this.Position), (Program.world as FlapGame).curShader.view, (Program.world as FlapGame).curShader.projection);
        }
