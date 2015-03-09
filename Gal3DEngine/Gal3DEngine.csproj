@@ -79,7 +79,11 @@
     <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utils\Animation.cs" />
+<<<<<<< HEAD
     <Compile Include="Utils\Cube.cs" />
+=======
+    <Compile Include="Utils\Box.cs" />
+>>>>>>> origin/engine
     <Compile Include="Utils\TextRender.cs" />
     <Compile Include="VertexUV.cs" />
     <Compile Include="Game.cs" />
