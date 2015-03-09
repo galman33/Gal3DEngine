@@ -36,3 +36,10 @@ C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Gal3DEng
 C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\OpenTK.dll
 C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Gal3DEngine.pdb
 C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\obj\x86\Debug\DanielFlappyGame.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\ArialFont.bmp
+C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\ArialFontData.csv
+C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\BrickRound0108_5_S.jpg
+C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\road_damaged_0049_01_s.jpg
+C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\CobbleStones2.obj
+C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\TunnelT.jpg
+C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\tunnel.obj

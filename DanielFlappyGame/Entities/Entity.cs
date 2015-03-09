@@ -69,8 +69,6 @@ namespace DanielFlappyGame
            {
                DestroyEntity(this);
            }
-       }
-
-       
+       }      
     }
 }
