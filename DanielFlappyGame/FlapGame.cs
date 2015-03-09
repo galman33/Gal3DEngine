@@ -25,7 +25,9 @@ namespace DanielFlappyGame
         float rot = 0.1f;
 
         Model catModel;
-        Model flapModel;       
+        Model flapModel;
+
+        private HighScoresManager HSManager;
 
         public ShaderFlat curShader;
 
@@ -36,13 +38,14 @@ namespace DanielFlappyGame
 
         protected override void OnLoad(EventArgs e)
         {
+           
             base.OnLoad(e);
+            HSManager = new HighScoresManager();
             Program.world = this;
             rand = new Random();
             curShader = AvailableShaders.ShaderFlat;
             catModel = new Model("Resources/tunnel.obj", "Resources/TunnelT.jpg");
-            flapModel = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
-            //floor = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
+            flapModel = new Model("Resources/Cat2.obj", "Resources/Cat2.png");            
             Init();
         }
 
@@ -50,7 +53,7 @@ namespace DanielFlappyGame
         {
             points = 0;
             gameCam = new Camera();
-
+            
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 10.0f);
 
             flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, new Vector3(0.5f, 0.5f, 0.5f), flapModel, 0.05f, 0.01f, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
@@ -86,7 +89,10 @@ namespace DanielFlappyGame
             }
         }
 
-
+        public void AddScore(int score  , string name)
+        {
+            HSManager.AddScore(new Score() { date = DateTime.Now, name = name, points = score });
+        }
         
         protected override void Update()
         {
@@ -244,6 +250,7 @@ namespace DanielFlappyGame
 
         public void GameOver()
         {
+            AddScore(this.points, "Daniel");
             Init();            
         }       
 

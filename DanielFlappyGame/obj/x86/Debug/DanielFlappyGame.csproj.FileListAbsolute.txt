@@ -43,3 +43,4 @@ C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resource
 C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\CobbleStones2.obj
 C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\TunnelT.jpg
 C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\Resources\tunnel.obj
+C:\Users\Daniel\Documents\GitHub\Gal3DEngine\DanielFlappyGame\bin\Debug\HighScores.xml
