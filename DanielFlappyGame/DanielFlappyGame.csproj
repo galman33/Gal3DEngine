@@ -50,6 +50,7 @@
     <Compile Include="Entities\Floor.cs" />
     <Compile Include="FlapGame.cs" />
     <Compile Include="Entities\FlappyBird.cs" />
+    <Compile Include="HighScoresManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,6 +70,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="HighScores.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\BrickRound0108_5_S.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
