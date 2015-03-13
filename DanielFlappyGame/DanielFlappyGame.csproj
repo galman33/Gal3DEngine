@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Floor.cs" />
-    <Compile Include="FlapGame.cs" />
+    <Compile Include="FlapGameWorld.cs" />
     <Compile Include="Entities\FlappyBird.cs" />
     <Compile Include="HighScoresManager.cs" />
     <Compile Include="Program.cs" />

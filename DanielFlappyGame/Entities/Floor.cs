@@ -61,15 +61,15 @@ namespace DanielFlappyGame
 
         public void Render(Screen screen)
         {           
-            (Program.world as FlapGame).curShader.SetVerticesNormals(normals);
-            (Program.world as FlapGame).curShader.SetVerticesPositions(vertices);
-            (Program.world as FlapGame).curShader.SetIndices(indices);
-            (Program.world as FlapGame).curShader.SetVerticesUvs(uvs);
-            (Program.world as FlapGame).curShader.texture = texture;
-            (Program.world as FlapGame).curShader.lightDirection = -normals[0];//new Vector3(0, -1, 0);
-            (Program.world as FlapGame).curShader.ambientLight = 0.5f;
-            (Program.world as FlapGame).curShader.world =  Matrix4.CreateTranslation(translation);
-            (Program.world as FlapGame).curShader.Render(screen);
+            (Program.world as FlapGameWorld).curShader.SetVerticesNormals(normals);
+            (Program.world as FlapGameWorld).curShader.SetVerticesPositions(vertices);
+            (Program.world as FlapGameWorld).curShader.SetIndices(indices);
+            (Program.world as FlapGameWorld).curShader.SetVerticesUvs(uvs);
+            (Program.world as FlapGameWorld).curShader.texture = texture;
+            (Program.world as FlapGameWorld).curShader.lightDirection = -normals[0];//new Vector3(0, -1, 0);
+            (Program.world as FlapGameWorld).curShader.ambientLight = 0.5f;
+            (Program.world as FlapGameWorld).curShader.world =  Matrix4.CreateTranslation(translation);
+            (Program.world as FlapGameWorld).curShader.Render(screen);
         }
 
     }

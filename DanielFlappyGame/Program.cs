@@ -11,7 +11,7 @@ namespace DanielFlappyGame
         public static Game world;
         static void Main(string[] args)
         {
-            new FlapGame();
+            new FlapGameWorld();
         }
     }
 }

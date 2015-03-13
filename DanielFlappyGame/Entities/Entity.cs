@@ -35,11 +35,11 @@ namespace DanielFlappyGame
        {
            //update the world matrix
            GetMatrix(this.translation, this.rot, this.scale, out this.worldMatrix);
-           (Program.world as FlapGame).curShader.ExtractData(model);
-           (Program.world as FlapGame).curShader.world = worldMatrix;
-           (Program.world as FlapGame).curShader.lightDirection = light;
-           (Program.world as FlapGame).curShader.Render(screen);
-           Cube.DrawCube(screen, /*Matrix4.CreateScale(entityCube.radiusX ,entityCube.radiusY , entityCube.radiusZ) */ Matrix4.CreateTranslation(this.Position), (Program.world as FlapGame).curShader.view, (Program.world as FlapGame).curShader.projection);
+           (Program.world as FlapGameWorld).curShader.ExtractData(model);
+           (Program.world as FlapGameWorld).curShader.world = worldMatrix;
+           (Program.world as FlapGameWorld).curShader.lightDirection = light;
+           (Program.world as FlapGameWorld).curShader.Render(screen);
+           Cube.DrawCube(screen, /*Matrix4.CreateScale(entityCube.radiusX ,entityCube.radiusY , entityCube.radiusZ) */ Matrix4.CreateTranslation(this.Position), (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
        }
 
        private Cube makeCube(Vector3 position, float size)
@@ -56,7 +56,7 @@ namespace DanielFlappyGame
        {
            //update translation
            this.translation = this.Position;
-           if (this.Position.Z - (Program.world as FlapGame).flappyflappy.Position.Z > 1)
+           if (this.Position.Z - (Program.world as FlapGameWorld).flappyflappy.Position.Z > 1)
            {
                Destroy();
            }

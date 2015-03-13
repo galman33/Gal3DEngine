@@ -26,16 +26,16 @@ namespace DanielFlappyGame
         {
             base.Update();
             UpdatePosition();
-            if (collide((Program.world as FlapGame).GetTunnles()))
+            if (collide((Program.world as FlapGameWorld).GetTunnles()))
             {
-                (Program.world as FlapGame).GameOver();
+                (Program.world as FlapGameWorld).GameOver();
             }
             
-            var tunnles = CheckForPassedTunnels((Program.world as FlapGame).GetTunnles());
+            var tunnles = CheckForPassedTunnels((Program.world as FlapGameWorld).GetTunnles());
             if(tunnles!= null)
             {
-                (Program.world as FlapGame).PassedTunnles(tunnles);
-                (Program.world as FlapGame).AddPoints();
+                (Program.world as FlapGameWorld).PassedTunnles(tunnles);
+                (Program.world as FlapGameWorld).AddPoints();
             }
         }
 
