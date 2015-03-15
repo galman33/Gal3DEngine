@@ -79,7 +79,7 @@
     <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utils\Animation.cs" />
-    <Compile Include="Utils\Cube.cs" />
+    <Compile Include="Utils\Box.cs" />
     <Compile Include="Utils\TextRender.cs" />
     <Compile Include="VertexUV.cs" />
     <Compile Include="Game.cs" />
@@ -102,9 +102,7 @@
     <None Include="Resources\cow.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\ArialFontData.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Resources\ArialFontData.csv" />
     <None Include="Resources\Sasuke.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -125,9 +123,7 @@
     <Content Include="Resources\cow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\ArialFont.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resources\ArialFont.bmp" />
     <Content Include="Resources\TesTexture.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
