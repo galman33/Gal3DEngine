@@ -58,7 +58,7 @@ namespace DanielFlappyGame
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 10.0f);
 
             flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, new Vector3(0.5f, 0.5f, 0.5f), flapModel, 0.05f, 0.01f, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
-            floor = new Floor(new Vector3(0, -0.3f, 0), new Vector3(1000,  1, 1000), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
+            floor = new Floor(new Vector3(-1.5f, -1.5f, 0), new Vector3(3.5f,  1, 30.1f), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
 
             //clear all tunnles in the game for game to start
             Tunnels.Clear();
@@ -106,7 +106,7 @@ namespace DanielFlappyGame
                  entity.Update();
              }
              ChangeStateOfCamara();
-             floor.translation.Z = flappyflappy.Position.Z + 3;
+            // floor.translation.Z = flappyflappy.Position.Z -   1.2f;
             //tunnles update logic
             curDelta = curDelta.Add(TimeSpan.FromMilliseconds(16/4));
             if(curDelta.TotalMilliseconds > delta.TotalMilliseconds)//Math.Abs(this.flappyflappy.Position.Z - this.Tunnels[Tunnels.Count-1].Position.Z) <3) //curDelta.TotalMilliseconds > delta.TotalMilliseconds)

@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Scores>
-  
+  <Score>
+    <Points>
+      0
+    </Points>
+    <Name>Flappy</Name>
+    <Date>15/03/2015</Date>
+  </Score>
   
 </Scores>

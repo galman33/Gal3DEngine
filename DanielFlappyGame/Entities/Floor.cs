@@ -36,7 +36,15 @@ namespace DanielFlappyGame
         private void InitFloor()
         {
             vertices = new Vector4[4];
-            vertices[0] = new Vector4(0, 0, 0, 1);
+            /*
+            0,0,-1    1,0,-1
+            2_________3
+            |*--------|
+            |---*-----|
+            0_________1
+             0,0,0     1,0,0
+            */
+            vertices[0] = new Vector4(0, 0, 0.01f, 1);
             vertices[1] = new Vector4(1, 0, 0, 1);
             vertices[2] = new Vector4(0, 0, -1, 1);
             vertices[3] = new Vector4(1, 0, -1, 1);
@@ -51,12 +59,16 @@ namespace DanielFlappyGame
            
 
             indices = new IndexPositionUVNormal[6];
-            indices[0] = new IndexPositionUVNormal(0, 0, 0);
-            indices[1] = new IndexPositionUVNormal(1, 1, 0);
-            indices[2] = new IndexPositionUVNormal(2, 2, 0);
-            indices[3] = new IndexPositionUVNormal(3, 3, 0);
-            indices[4] = new IndexPositionUVNormal(2, 2, 0);
-            indices[5] = new IndexPositionUVNormal(1, 1, 0);
+            /*indices[1] = new IndexPositionUVNormal(2, 2, 0);
+            indices[2] = new IndexPositionUVNormal(1, 1, 0);
+            indices[0] = new IndexPositionUVNormal(0, 0, 0);*/
+
+            indices[0] = new IndexPositionUVNormal(3, 3, 0);
+            indices[1] = new IndexPositionUVNormal(2, 2, 0);
+            indices[2] = new IndexPositionUVNormal(1, 1, 0);
+            indices[3] = new IndexPositionUVNormal(0, 0, 0);
+            indices[4] = new IndexPositionUVNormal(1, 1, 0);
+            indices[5] = new IndexPositionUVNormal(2, 2, 0);
         }
 
         public void Render(Screen screen)
@@ -68,7 +80,7 @@ namespace DanielFlappyGame
             (Program.world as FlapGameWorld).curShader.texture = texture;
             (Program.world as FlapGameWorld).curShader.lightDirection = -normals[0];//new Vector3(0, -1, 0);
             (Program.world as FlapGameWorld).curShader.ambientLight = 0.5f;
-            (Program.world as FlapGameWorld).curShader.world =  Matrix4.CreateTranslation(translation);
+            (Program.world as FlapGameWorld).curShader.world = Matrix4.CreateScale(scale) * Matrix4.CreateTranslation(translation); 
             (Program.world as FlapGameWorld).curShader.Render(screen);
         }
 
