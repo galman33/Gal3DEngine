@@ -206,7 +206,7 @@ namespace Gal3DGame
 
             RenderBuildings(screen, view, projection);
 
-            RenderBoxes(screen, view, projection);
+            //RenderBoxes(screen, view, projection);
         }
 
         private void RenderBuildings(Screen screen, Matrix4 view, Matrix4 projection)
@@ -259,5 +259,17 @@ namespace Gal3DGame
             return x == 0 || y == 0 || x == buildingsArray.GetLength(0) - 1 || y == buildingsArray.GetLength(1) - 1;
         }
 
+
+        public bool IsCollidingWith(Box box)
+        {
+            for (int i = 0; i < boxes.Count; i++)
+            {
+                if (Box.IsColliding(box, boxes[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

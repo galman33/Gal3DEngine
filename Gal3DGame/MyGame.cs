@@ -32,7 +32,6 @@ namespace Gal3DGame
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 20.0f);
 
             camera = new Camera();
-            camera.Position.Z = 4;
 
             aircraft = new Aircraft();
 
@@ -41,6 +40,14 @@ namespace Gal3DGame
             enviroment = new Enviroment();
 
             BackgroundColor = new Color3(128, 255, 255);
+
+            ResetGame();
+        }
+
+        private void ResetGame()
+        {
+            aircraft.Reset();
+            camera.Rotation = Quaternion.Identity;
         }
 
         protected override void Update()
@@ -50,6 +57,11 @@ namespace Gal3DGame
 
             camera.Rotation = Quaternion.Slerp(camera.Rotation, aircraft.Rotation, (float)Time.DeltaTime * 3.0f);
             camera.Position = aircraft.Position - Vector3.Transform(-Vector3.UnitZ, camera.Rotation).Normalized() * 2;
+
+            if (enviroment.IsCollidingWith(aircraft.CollisionBox))
+            {
+                ResetGame();
+            }
         }
 
         protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
