@@ -10,23 +10,37 @@ namespace DanielFlappyGame
 {
     public class FlappyBird : Entity
     {
+
+        private static Model modelS;
+
         private float jumpVelocity;
         private float velocityY = 0;
         private float velocityZ = 0;
         private float gravity = 0.005f;
 
-        public FlappyBird(Vector3 translation, Vector3 rotation, Vector3 scale, Model model, float velocityY, float velocityZ , Vector3 lightDirection)
-            : base(translation, rotation, scale, model , lightDirection)
+        public FlappyBird(Vector3 translation, Vector3 rotation, Vector3 scale, float velocityY, float velocityZ , Vector3 lightDirection)
+            : base(translation, rotation, scale , lightDirection)
         {
             this.jumpVelocity = velocityY;
             this.velocityZ = velocityZ;
+            this.model = modelS;
+            AdjustHitBox();
+        }
+
+        private void AdjustHitBox()
+        {
+            this.entityCube = new Box(1.5f/4 , 1.5f/4, 1.5f/4,this.Position);
+        }
+        public static void LoadModel()
+        {
+            modelS = new Model("Resources\\Cat2.obj", "Resources\\Cat2.png");            
         }
 
         public override void Update()
         {
             base.Update();
             UpdatePosition();
-            if (collide((Program.world as FlapGameWorld).GetTunnles()))
+            if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles()))
             {
                 (Program.world as FlapGameWorld).GameOver();
             }
@@ -39,7 +53,7 @@ namespace DanielFlappyGame
             }
         }
 
-        private Entity[] CheckForPassedTunnels(List<Entity> entities)
+        private Pipe[] CheckForPassedTunnels(List<Pipe> entities)
         {            
             for (int i = 0; i < entities.Count; i += 2) // the list contains tuple of to tunnles
             {
@@ -50,9 +64,7 @@ namespace DanielFlappyGame
             }
             return null;
         }
-
-
-
+        
         public void UpdatePosition()
         {
             velocityY -= gravity;
@@ -65,9 +77,9 @@ namespace DanielFlappyGame
             velocityY = jumpVelocity;
         }
 
-        public bool collide(List<Entity> entities)
+        public bool CollideTunnels(List<Pipe> entities)
         {
-            foreach (Entity entity in entities)
+            foreach (Pipe entity in entities)
             {
                  if (IsCollide(entity))
                     return true;
@@ -79,7 +91,7 @@ namespace DanielFlappyGame
            
 
             Box thisCollide = this.entityCube;
-            Box collideHitbox = collideWith.entityCube;///new Cube(0.15f, 0.15f, 0.15f, new Vector3(collideWith.Position.X , collideWith.Position.Y+ 0.15f/2 , collideWith.Position.Z));
+            Box collideHitbox = collideWith.entityCube;
 
             bool collide = Box.IsColliding(thisCollide, collideHitbox);
             return collide;

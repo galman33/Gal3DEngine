@@ -20,12 +20,12 @@ namespace DanielFlappyGame
 
        public event DestroyDelegate DestroyEntity;
 
-       public Entity(Vector3 translation, Vector3 rotation, Vector3 scale, Model model , Vector3 lightDirection)
+       public Entity(Vector3 translation, Vector3 rotation, Vector3 scale, Vector3 lightDirection)
        {
            this.translation = translation;
            this.scale = scale;
            this.rot = rotation;           
-           this.model = model;
+           
            this.Position = translation;
            this.light = lightDirection;
            this.entityCube = makeCube(this.Position, 1);
@@ -40,11 +40,12 @@ namespace DanielFlappyGame
            (Program.world as FlapGameWorld).curShader.lightDirection = light;
            (Program.world as FlapGameWorld).curShader.Render(screen);
            this.entityCube.Render(screen, Matrix4.CreateTranslation(this.Position), (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
+           
        }
 
        private Box makeCube(Vector3 position, float size)
        {              
-           return new Box(size, size , size, position);
+           return new Box(size/3, size/3 , size, position);
        }
 
        private void GetMatrix(Vector3 translation , Vector3 rotation , Vector3  scale , out Matrix4 world )
@@ -63,15 +64,40 @@ namespace DanielFlappyGame
        }
        public Model GetModel()
        {
-           return this.model;
+           return model;
        }
 
-       public void Destroy()
+       public virtual void Destroy()
        {
            if(DestroyEntity!= null)
            {
                DestroyEntity(this);
            }
-       }      
+       }       
+    }
+
+    public class Pipe : Entity
+    {
+        private static Model modelS;
+        public Pipe(Vector3 Position ,Vector3 rotation, Vector3 lightDirection) : base(Position , rotation , new Vector3(0.1f , 0.1f , 0.1f) ,lightDirection ) 
+        {
+            this.model = modelS;
+            AdjustHitBox();
+        }
+
+        public static void LoadModel()
+        {            
+            modelS = new Model("Resources\\tunnel.obj", "Resources\\TunnelT.jpg");
+        }
+
+        private void AdjustHitBox()
+        {
+            this.entityCube = new Box(0.15f , 0.7f , 0.15f, Vector3.Add(this.Position , new Vector3(0,0,1)));
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+        }
     }
 }

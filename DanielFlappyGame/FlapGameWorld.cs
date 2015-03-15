@@ -11,9 +11,9 @@ using Gal3DEngine.UTILS;
 namespace DanielFlappyGame
 {
     public class FlapGameWorld : Game
-    {       
-        private List<Entity> Tunnels = new List<Entity>();
-        private List<Entity> passedTunnles = new List<Entity>(); // the bird already passed them but the camera still sees them
+    {
+        private List<Pipe> Tunnels = new List<Pipe>();
+        private List<Pipe> passedTunnles = new List<Pipe>(); // the bird already passed them but the camera still sees them
         public FlappyBird flappyflappy;
         public Floor floor;
 
@@ -21,11 +21,7 @@ namespace DanielFlappyGame
         private TimeSpan curDelta = TimeSpan.Zero;
         
         private Camera gameCam;
-        Matrix4 projection;
-        float rot = 0.1f;
-
-        Model catModel;
-        Model flapModel;
+        Matrix4 projection;           
 
         private HighScoresManager HSManager;
 
@@ -44,9 +40,11 @@ namespace DanielFlappyGame
             Program.world = this;
             rand = new Random();
             curShader = AvailableShaders.ShaderFlat;
-            catModel = new Model("Resources/tunnel.obj", "Resources/TunnelT.jpg");
-            flapModel = new Model("Resources/Cat2.obj", "Resources/Cat2.png");
-            this.BackgroundColor = new Color3(0, 50, 255);
+
+            Pipe.LoadModel();
+            FlappyBird.LoadModel();
+
+            this.BackgroundColor = new Color3(0, 0, 0);
             Init();
         }
 
@@ -55,18 +53,18 @@ namespace DanielFlappyGame
             points = 0;
             gameCam = new Camera();
             
-            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 10.0f);
+            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.8f, 10.0f);
 
-            flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, new Vector3(0.5f, 0.5f, 0.5f), flapModel, 0.05f, 0.01f, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
-            floor = new Floor(new Vector3(-1.5f, -1.5f, 0), new Vector3(3.5f,  1, 30.1f), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
+            flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, new Vector3(0.5f, 0.5f, 0.5f), 0.05f, 0.01f, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
+            floor = new Floor(new Vector3(-1.5f, -1.5f, 0), new Vector3(3.5f,  1, 3.1f), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
 
             //clear all tunnles in the game for game to start
             Tunnels.Clear();
             passedTunnles.Clear();
 
             Vector3[] positions = GetRandomPoint(-3f + flappyflappy.Position.Z);
-            Tunnels.Add(new Entity(positions[0], new Vector3(0, 0, (float)Math.PI), new Vector3(0.1f, 0.1f, 0.1f), catModel, Vector3.Normalize(new Vector3(1, -0.25f, -1))));
-            Tunnels.Add(new Entity(positions[1], Vector3.Zero, new Vector3(0.1f, 0.1f, 0.1f), catModel, Vector3.Normalize(new Vector3(1, -0.25f, -1))));
+            Tunnels.Add(new Pipe(positions[0], new Vector3(0, 0, (float)Math.PI), Vector3.Normalize(new Vector3(1, -0.25f, -1))));
+            Tunnels.Add(new Pipe(positions[1], Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1))));
             Tunnels[Tunnels.Count - 1].DestroyEntity += EntityDestroyed;
             Tunnels[Tunnels.Count - 2].DestroyEntity += EntityDestroyed;
 
@@ -106,7 +104,7 @@ namespace DanielFlappyGame
                  entity.Update();
              }
              ChangeStateOfCamara();
-            // floor.translation.Z = flappyflappy.Position.Z -   1.2f;
+           
             //tunnles update logic
             curDelta = curDelta.Add(TimeSpan.FromMilliseconds(16/4));
             if(curDelta.TotalMilliseconds > delta.TotalMilliseconds)//Math.Abs(this.flappyflappy.Position.Z - this.Tunnels[Tunnels.Count-1].Position.Z) <3) //curDelta.TotalMilliseconds > delta.TotalMilliseconds)
@@ -116,8 +114,8 @@ namespace DanielFlappyGame
                 Vector3[] positions = GetRandomPoint(-3f + flappyflappy.Position.Z);
                 if (recycleTunnels.Count ==0)
                 {
-                    Tunnels.Add(new Entity(positions[0],  new Vector3(0,0,(float)Math.PI), new Vector3(0.1f, 0.1f, 0.1f), catModel ,Vector3.Normalize(new Vector3(1, -0.25f, -1))));
-                    Tunnels.Add(new Entity(positions[1], Vector3.Zero, new Vector3(0.1f, 0.1f, 0.1f), catModel, Vector3.Normalize(new Vector3(1, -0.25f, -1))));
+                    Tunnels.Add(new Pipe(positions[0], new Vector3(0, 0, (float)Math.PI), Vector3.Normalize(new Vector3(1, -0.25f, -1))));
+                    Tunnels.Add(new Pipe(positions[1], Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1))));
                     Tunnels[Tunnels.Count - 1].DestroyEntity += EntityDestroyed;
                     Tunnels[Tunnels.Count - 2].DestroyEntity += EntityDestroyed;
                 }
@@ -141,7 +139,10 @@ namespace DanielFlappyGame
            {
                //move along the bird
                gameCam.Position.Z = flappyflappy.Position.Z + 2; 
-               //gameCam.Position.Y =flappyflappy.Position.Y+ 0.5f;
+               if(Math.Abs(gameCam.Position.Y - flappyflappy.Position.Y) > 0.8)
+               {
+                   gameCam.Position.Y += (gameCam.Position.Y > flappyflappy.Position.Y) ? -0.15f : +0.15f;
+               }               
            }
            else
            {
@@ -164,11 +165,11 @@ namespace DanielFlappyGame
         {
             floor.Render(Screen);
             flappyflappy.Render(Screen);
-            foreach (Entity entity in Tunnels)
+            foreach (Pipe entity in Tunnels)
             {
                 entity.Render(Screen);
             }
-            foreach (Entity entity in passedTunnles)
+            foreach (Pipe entity in passedTunnles)
             {
                 entity.Render(Screen);
             }
@@ -245,7 +246,7 @@ namespace DanielFlappyGame
             }
         }
 
-        public List<Entity> GetTunnles()
+        public List<Pipe> GetTunnles()
         {
             return this.Tunnels;
         }       
@@ -254,17 +255,17 @@ namespace DanielFlappyGame
         {
             AddScore(this.points, "Flappy");
             Init();            
-        }       
+        }
 
-        public void PassedTunnles(Entity[] tunnles)
+        public void PassedTunnles(Pipe[] tunnles)
         {
-            foreach (Entity tunnel in tunnles)
+            foreach (Pipe tunnel in tunnles)
             {               
                 Tunnels.Remove(tunnel);
                 passedTunnles.Add(tunnel);
             }
         }
-        private List<Entity> recycleTunnels = new List<Entity>();
+        private List<Pipe> recycleTunnels = new List<Pipe>();
 
         public void AddPoints()
         {
@@ -284,7 +285,7 @@ namespace DanielFlappyGame
 
         private void EntityDestroyed(Entity entity)
         {
-            recycleTunnels.Add(entity);
+            recycleTunnels.Add((entity as Pipe));
         }
     }
 }
