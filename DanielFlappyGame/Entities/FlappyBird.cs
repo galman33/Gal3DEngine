@@ -75,13 +75,13 @@ namespace DanielFlappyGame
             return false;
         }
         public bool IsCollide(Entity collideWith)
-        {            
-            Model modelEntity = collideWith.GetModel();
-            
-            Cube thisHitbox = new Cube(0.06f, 0.06f, 0.06f, new Vector3(this.Position.X, this.Position.Y + 0.15f / 2, this.Position.Z));
-            Cube collideHitbox = new Cube(0.15f, 0.15f, 0.15f, new Vector3(collideWith.Position.X , collideWith.Position.Y+ 0.15f/2 , collideWith.Position.Z));
+        {   
+           
 
-            bool collide =  Cube.Collide(thisHitbox , collideHitbox);
+            Box thisCollide = this.entityCube;
+            Box collideHitbox = collideWith.entityCube;///new Cube(0.15f, 0.15f, 0.15f, new Vector3(collideWith.Position.X , collideWith.Position.Y+ 0.15f/2 , collideWith.Position.Z));
+
+            bool collide = Box.IsColliding(thisCollide, collideHitbox);
             return collide;
         }     
     }
