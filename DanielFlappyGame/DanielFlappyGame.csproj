@@ -51,6 +51,7 @@
     <Compile Include="FlapGameWorld.cs" />
     <Compile Include="Entities\FlappyBird.cs" />
     <Compile Include="HighScoresManager.cs" />
+    <Compile Include="MenuWorld.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -22,7 +22,7 @@ namespace DanielFlappyGame
             scores = (from n in doc.Root.Elements("Score")
                             select new Score
                             {
-                                points =int.Parse(n.Element("Points").Value),
+                                points =int.Parse((string)(n.Element("Points"))),
                                 name = (string)n.Element("Name"),
                                 date = DateTime.Parse((string)n.Element("Date"))
 
@@ -44,7 +44,7 @@ namespace DanielFlappyGame
         public Score GetTopScore()
         {
             List<Score> scores = GetScores();
-            int max = 0;
+            int max = -1;
             Score maxScore = null;
 
             foreach(Score score in scores)
