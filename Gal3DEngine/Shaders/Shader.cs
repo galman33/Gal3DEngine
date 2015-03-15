@@ -167,7 +167,7 @@ namespace Gal3DEngine
             LineData lineData = MyProcessScanLine(gradient1, gradient2, pa, pb, pc, pd, triData);
 
             // drawing a line from left (sx) to right (ex) 
-            for (var x = Math.Max(sx, -screen.Height / 2); x < endX; x++)
+            for (var x = Math.Max(sx, -screen.Width / 2); x < endX; x++)
             {
                 float gradient = (x - sx) / (float)(ex - sx);
 
