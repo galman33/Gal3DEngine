@@ -32,6 +32,8 @@ namespace DanielFlappyGame
 
         public ShaderFlat curShader;
 
+       
+
         public FlapGameWorld() : base(640, 480)
         {
 
@@ -39,7 +41,7 @@ namespace DanielFlappyGame
 
         protected override void OnLoad(EventArgs e)
         {
-           
+            
             base.OnLoad(e);
             HSManager = new HighScoresManager();
             Program.world = this;
