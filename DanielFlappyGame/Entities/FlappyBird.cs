@@ -16,20 +16,20 @@ namespace DanielFlappyGame
         private float jumpVelocity;
         private float velocityY = 0;
         private float velocityZ = 0;
-        private float gravity = 0.005f;
+        private float gravity = 0.0035f;
 
-        public FlappyBird(Vector3 translation, Vector3 rotation, Vector3 scale, float velocityY, float velocityZ , Vector3 lightDirection)
-            : base(translation, rotation, scale , lightDirection)
+        public FlappyBird(Vector3 translation, Vector3 rotation, Vector3 lightDirection)
+            : base(translation, rotation, new Vector3(0.5f, 0.5f, 0.5f) , lightDirection)
         {
-            this.jumpVelocity = velocityY;
-            this.velocityZ = velocityZ;
+            this.jumpVelocity = 0.07f;
+            this.velocityZ = 0.015f;
             this.model = modelS;
             AdjustHitBox();
         }
 
         private void AdjustHitBox()
         {
-            this.entityCube = new Box(1.5f/4 , 1.5f/4, 1.5f/4,this.Position);
+            this.entityCube = new Box(0.25f, 0.25f, 0.25f, this.Position);
         }
         public static void LoadModel()
         {
@@ -40,6 +40,7 @@ namespace DanielFlappyGame
         {
             base.Update();
             UpdatePosition();
+            AdjustHitBox();
             if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles()))
             {
                 (Program.world as FlapGameWorld).GameOver();
@@ -87,9 +88,7 @@ namespace DanielFlappyGame
             return false;
         }
         public bool IsCollide(Entity collideWith)
-        {   
-           
-
+        { 
             Box thisCollide = this.entityCube;
             Box collideHitbox = collideWith.entityCube;
 

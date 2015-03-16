@@ -39,7 +39,7 @@ namespace DanielFlappyGame
            (Program.world as FlapGameWorld).curShader.world = worldMatrix;
            (Program.world as FlapGameWorld).curShader.lightDirection = light;
            (Program.world as FlapGameWorld).curShader.Render(screen);
-           this.entityCube.Render(screen, Matrix4.CreateTranslation(this.Position), (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
+           this.entityCube.Render(screen,Matrix4.Identity, (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
            
        }
 
@@ -92,7 +92,13 @@ namespace DanielFlappyGame
 
         private void AdjustHitBox()
         {
-            this.entityCube = new Box(0.15f , 0.7f , 0.15f, Vector3.Add(this.Position , new Vector3(0,0,1)));
+            this.entityCube = new Box(0.15f , 0.5f , 0.15f, Vector3.Add(this.Position , new Vector3(0,0,2)));
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            AdjustHitBox();
         }
 
         public override void Destroy()

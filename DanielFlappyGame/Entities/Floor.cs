@@ -19,11 +19,11 @@ namespace DanielFlappyGame
         Vector3[] normals;
         IndexPositionUVNormal[] indices;
 
-        public Floor(Vector3 translation ,Vector3 scale , Vector3 rotation , string url)
+        public Floor(Vector3 translation ,Vector3 rotation , string url)
         {
             texture = Texture.LoadTexture(url);
             this.translation = translation;
-            this.scale = scale;
+            this.scale = new Vector3(4.5f, 1, 3.1f);
             this.rotation = rotation;
             InitFloor();
         }
@@ -71,8 +71,19 @@ namespace DanielFlappyGame
             indices[5] = new IndexPositionUVNormal(2, 2, 0);
         }
 
-        public void Render(Screen screen)
-        {           
+        public void Render(Screen screen , int floorsAmount)
+        {
+            Matrix4[] worlds = new Matrix4[floorsAmount];
+            
+            for(int i = 0; i<floorsAmount; i++ )
+            {
+                worlds[i] = Matrix4.CreateScale(scale) * Matrix4.CreateTranslation(translation + new Vector3(0, 0, -3) * i);
+                InnerRender(screen, worlds[i]);
+            }
+            
+        }
+        private void InnerRender(Screen screen , Matrix4 world)
+        {
             (Program.world as FlapGameWorld).curShader.SetVerticesNormals(normals);
             (Program.world as FlapGameWorld).curShader.SetVerticesPositions(vertices);
             (Program.world as FlapGameWorld).curShader.SetIndices(indices);
@@ -80,9 +91,9 @@ namespace DanielFlappyGame
             (Program.world as FlapGameWorld).curShader.texture = texture;
             (Program.world as FlapGameWorld).curShader.lightDirection = -normals[0];//new Vector3(0, -1, 0);
             (Program.world as FlapGameWorld).curShader.ambientLight = 0.5f;
-            (Program.world as FlapGameWorld).curShader.world = Matrix4.CreateScale(scale) * Matrix4.CreateTranslation(translation); 
+            (Program.world as FlapGameWorld).curShader.world = world; //Matrix4.CreateScale(scale) * Matrix4.CreateTranslation(translation);
             (Program.world as FlapGameWorld).curShader.Render(screen);
-        }
+        }  
 
     }
 }
