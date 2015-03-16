@@ -39,7 +39,7 @@ namespace DanielFlappyGame
            (Program.world as FlapGameWorld).curShader.world = worldMatrix;
            (Program.world as FlapGameWorld).curShader.lightDirection = light;
            (Program.world as FlapGameWorld).curShader.Render(screen);
-           this.entityCube.Render(screen,Matrix4.Identity, (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
+           this.entityCube.Render(screen, (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
            
        }
 
@@ -74,36 +74,5 @@ namespace DanielFlappyGame
                DestroyEntity(this);
            }
        }       
-    }
-
-    public class Pipe : Entity
-    {
-        private static Model modelS;
-        public Pipe(Vector3 Position ,Vector3 rotation, Vector3 lightDirection) : base(Position , rotation , new Vector3(0.1f , 0.1f , 0.1f) ,lightDirection ) 
-        {
-            this.model = modelS;
-            AdjustHitBox();
-        }
-
-        public static void LoadModel()
-        {            
-            modelS = new Model("Resources\\tunnel.obj", "Resources\\TunnelT.jpg");
-        }
-
-        private void AdjustHitBox()
-        {
-            this.entityCube = new Box(0.15f , 0.5f , 0.15f, Vector3.Add(this.Position , new Vector3(0,0,2)));
-        }
-
-        public override void Update()
-        {
-            base.Update();
-            AdjustHitBox();
-        }
-
-        public override void Destroy()
-        {
-            base.Destroy();
-        }
-    }
+    }    
 }

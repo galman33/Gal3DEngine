@@ -48,8 +48,10 @@
   <ItemGroup>
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Floor.cs" />
+    <Compile Include="Entities\Pipe.cs" />
     <Compile Include="FlapGameWorld.cs" />
     <Compile Include="Entities\FlappyBird.cs" />
+    <Compile Include="GameUtils\Label.cs" />
     <Compile Include="HighScoresManager.cs" />
     <Compile Include="MenuWorld.cs" />
     <Compile Include="Program.cs" />

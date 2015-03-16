@@ -9,6 +9,7 @@ namespace DanielFlappyGame
 {
     public class MenuWorld : Game
     {
+        TextRender textRender;
         public MenuWorld() : base(640 , 480)
         {
 
@@ -17,13 +18,13 @@ namespace DanielFlappyGame
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            
+            textRender = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);
         }
 
         protected override void Render()
         {
             base.Render();
-            TextRender.BasicDrawText(Screen, "To Start Press Space", Fonts.ARIAL, Fonts.ARIALFONTDATA, new Vector2(30, 30));
+            textRender.RenderText(Screen, "To Start Press Space", new Vector2(30, 30));
         }
 
         protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)

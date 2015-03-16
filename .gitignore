@@ -5,3 +5,6 @@ DanielFlappyGame/obj
 *.tmp
 *.suo
 *.pdb
+DanielFlappyGame/obj/x86/Debug/DanielFlappyGame.pdb
+*.pdb
+DanielFlappyGame/obj/x86/Debug/DanielFlappyGame.exe

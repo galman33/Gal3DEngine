@@ -7,6 +7,8 @@ using OpenTK;
 using Gal3DEngine.Gizmos;
 using OpenTK.Input;
 using Gal3DEngine.UTILS;
+using DanielFlappyGame.GameUtils;
+using DanielFlappyGame.Entities;
 
 namespace DanielFlappyGame
 {
@@ -17,13 +19,16 @@ namespace DanielFlappyGame
         public FlappyBird flappyflappy;
         public Floor floor;
 
-        private TimeSpan delta = new TimeSpan(0, 0, 0, 1, 500);
+        private TimeSpan delta = new TimeSpan(0, 0, 0, 0, 700);
         private TimeSpan curDelta = TimeSpan.Zero;
         
         private Camera gameCam;
         Matrix4 projection;           
 
         private HighScoresManager HSManager;
+        private TextRender textRender;
+        private Label pointsLbl;
+        private Label topLbl;
 
         public ShaderFlat curShader;
 
@@ -40,7 +45,7 @@ namespace DanielFlappyGame
             Program.world = this;
             rand = new Random();
             curShader = AvailableShaders.ShaderFlat;
-
+            textRender = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);
             Pipe.LoadModel();
             FlappyBird.LoadModel();
 
@@ -52,7 +57,8 @@ namespace DanielFlappyGame
         {
             points = 0;
             gameCam = new Camera();
-            
+            front = false;
+            gameCam.Rotation = Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2);
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.3f, 10.0f);
 
             flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
@@ -69,6 +75,10 @@ namespace DanielFlappyGame
             Tunnels[Tunnels.Count - 2].DestroyEntity += EntityDestroyed;
 
             curShader.projection = projection;
+
+            pointsLbl = new Label("Points: "+ points , new Vector2(30,30));
+            topLbl = new Label("Top Score: " + HSManager.GetTopScore().points , new Vector2(30, 60));
+                 
         }
         protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
         {
@@ -138,11 +148,11 @@ namespace DanielFlappyGame
             {                
                 floor.translation.Z = gameCam.Position.Z-3;
             }
-        }
-
+        }       
         private void UpdateCamera()
         {
-           
+
+          
            if(front)
            {
                //move along the bird
@@ -155,7 +165,11 @@ namespace DanielFlappyGame
            }
            else
            {
-               gameCam.Position.Z = flappyflappy.Position.Z;
+               if (!stateChange)
+               {
+                   gameCam.Position.Z = flappyflappy.Position.Z;
+                   gameCam.Position.X = 5;
+               }
            }
         }
         protected override void Render()
@@ -163,9 +177,11 @@ namespace DanielFlappyGame
             base.Render();
 
             Matrix4 view = gameCam.GetViewMatrix();
-            curShader.view = view;            
-            TextRender.BasicDrawText(Screen, "Points: " + points, Fonts.ARIAL, Fonts.ARIALFONTDATA, new Vector2(30, 30));
-            TextRender.BasicDrawText(Screen , "Top: "+ HSManager.GetTopScore().points ,Fonts.ARIAL, Fonts.ARIALFONTDATA, new Vector2(30, 60));
+            curShader.view = view;
+            pointsLbl.text = "Points: " + points;
+            pointsLbl.RenderLabel(Screen, textRender);
+            topLbl.RenderLabel(Screen, textRender);           
+            
             //AxisGizmo.Render(Screen, Matrix4.CreateTranslation(viewTrans.X, viewTrans.Y - 0.5f, viewTrans.Z-3), view, projection);
             DrawEntities();            
         }
@@ -195,23 +211,23 @@ namespace DanielFlappyGame
             {
                 if (stateChange)
                 {
-                     t += (float)(Time.DeltaTime)*0.4f;
+                    t += (float)(Time.DeltaTime)*0.4f;
                     gameCam.Rotation = Quaternion.Slerp(Quaternion.Identity, Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2), t);
                     gameCam.Position.X += 0.2f;
                     gameCam.Position.Z -= 0.15f;
                     
-                    if (gameCam.Position.X >= 5 && gameCam.Position.Z <= flappyflappy.Position.Z && t <=1) //&& gameCam.Rotation.Y == (float)(Math.PI / 2))
+                    if (gameCam.Position.X >= 5 && gameCam.Position.Z <= flappyflappy.Position.Z && t <=0.8f) //&& gameCam.Rotation.Y == (float)(Math.PI / 2))
                     {                        
                         gameCam.Position.X = 5;
-                        t = 0.99f;
+                        t = 0.8f;
                         gameCam.Position.Z = flappyflappy.Position.Z;
                         stateChange = !stateChange;
                     }
                     else
                     {
-                        if (t <= 1)
+                        if (t <= 0.8f)
                         {
-                            t = 1f;
+                            t = 0.8f;
                             gameCam.Rotation = Quaternion.Slerp(Quaternion.Identity, Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2), t);
                         }
                         if (gameCam.Position.X >= 5)
@@ -290,9 +306,9 @@ namespace DanielFlappyGame
         private Vector3[] GetRandomPoint(float z)
         {          
           
-            float centerY = rand.Next(-7, 7) / 10.0f;
-            int maxRadius = (int)((1.2 - Math.Abs(centerY)) * 10);
-            float radius = rand.Next(5 , maxRadius) / 10.0f;
+            float centerY = rand.Next(-5, 5) / 10.0f;
+            int maxRadius = (int)((1.9 - Math.Abs(centerY)) * 10);
+            float radius = rand.Next(8 , maxRadius) / 10.0f;
 
             return new [] {new Vector3(0, centerY + radius, z) ,new Vector3(0, centerY - radius, z) } ;
         }

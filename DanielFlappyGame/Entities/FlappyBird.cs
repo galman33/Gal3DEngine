@@ -5,6 +5,7 @@ using System.Text;
 using OpenTK;
 using Gal3DEngine;
 using Gal3DEngine.UTILS;
+using DanielFlappyGame.Entities;
 
 namespace DanielFlappyGame
 {
@@ -29,7 +30,7 @@ namespace DanielFlappyGame
 
         private void AdjustHitBox()
         {
-            this.entityCube = new Box(0.25f, 0.25f, 0.25f, this.Position);
+            this.entityCube = new Box(0.20f, 0.20f, 0.20f, Vector3.Sub(this.Position , new Vector3(0,-0.2f, 0)));
         }
         public static void LoadModel()
         {
