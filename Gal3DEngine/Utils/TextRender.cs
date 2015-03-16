@@ -9,23 +9,44 @@ using System.Text;
 namespace Gal3DEngine.UTILS
 {
     public class TextRender
-    {       
-        public static void BasicDrawText(Screen screen, string text , string fontUrl ,string fontDataUrl, Vector2 position)
+    {
+        private string fontPath, fontDataPath;
+        List<String> charValues;
+        Bitmap map;
+        public TextRender(string fontUrl, string fontDataUrl)
         {
-            Bitmap map = new Bitmap(fontUrl);
+            this.fontPath = fontUrl;
+            this.fontDataPath = fontDataUrl;
+            LoadRender();
+        }
+
+        public void SetNewFont(string fontUrl, string fontDataUrl)
+        {
+            this.fontPath = fontUrl;
+            this.fontDataPath = fontDataUrl;
+            LoadRender();
+        }
+
+        private void LoadRender()
+        {
+            map = new Bitmap(this.fontPath);
+            charValues = File.ReadAllText(this.fontDataPath).Split(new char[] { '\n', ',' }).ToList();
+        }
+
+        public void RenderText(Screen screen, string text, Vector2 position)
+        {
             int baseHeight = 20;
-            position.Y = screen.Height -baseHeight - position.Y; //the Y is flipped
-            List<String> values = File.ReadAllText(fontDataUrl).Split(new char[]{'\n',','}).ToList();
-            int x = 0, y =0;
+            position.Y = screen.Height - baseHeight - position.Y; //the Y is flipped
+            int x = 0, y = 0;
             int space = 5;
-            for(int i = 0; i< text.Length; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 if (text[i] != ' ')
                 {
                     int index = (int)(text[i]) - 48;
                     x = index % 12 * 40;
                     y = index / 12 * 40;
-                    int width = int.Parse(values[values.IndexOf(values.First<string>(n => n.Contains("Char " + index + " Base Width")), 0) + 1]);
+                    int width = int.Parse(charValues[charValues.IndexOf(charValues.First<string>(n => n.Contains("Char " + index + " Base Width")), 0) + 1]);
                     for (int a = 0; a < width; a++)
                     {
                         for (int b = 0; b < 40; b++)
@@ -48,10 +69,10 @@ namespace Gal3DEngine.UTILS
                     }
                     position.X += space + space;
                 }
-            }            
+            }
         }
     }
-   
+
     public static class Fonts
     {
         public const string ARIAL = @"Resources\ArialFont.bmp";
