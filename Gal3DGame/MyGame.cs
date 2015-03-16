@@ -18,6 +18,8 @@ namespace Gal3DGame
         private Model bear;
         private Enviroment enviroment;
 
+        private List<Star> stars = new List<Star>();
+
         public MyGame() : base(500, 400)
         {
             
@@ -28,6 +30,7 @@ namespace Gal3DGame
             base.OnLoad(e);
             Aircraft.LoadContent();
             Enviroment.LoadContent();
+            Star.LoadContent();
 
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 20.0f);
 
@@ -39,9 +42,19 @@ namespace Gal3DGame
 
             enviroment = new Enviroment();
 
+            AddStars();
+
             BackgroundColor = new Color3(128, 255, 255);
 
             ResetGame();
+        }
+
+        private void AddStars()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                stars.Add(new Star(enviroment, aircraft));
+            }
         }
 
         private void ResetGame()
@@ -84,26 +97,22 @@ namespace Gal3DGame
 
             AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
 
-            RenderEnviroment(view);
-
-            aircraft.Render(Screen, projection, view);
-        }
-
-        private void RenderEnviroment(Matrix4 view)
-        {
             enviroment.Render(Screen, view, projection);
 
-            /*ShaderPhong.world = Matrix4.Identity;
-            ShaderPhong.view = view;
-            ShaderPhong.projection = projection;
+            aircraft.Render(Screen, projection, view);
 
-            ShaderPhong.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
-            ShaderPhong.ambientLight = 0.3f;
-
-            ShaderPhong.ExtractData(bear);
-
-            ShaderPhong.Render(Screen);*/
+            RenderStars(view);
         }
+
+        private void RenderStars(Matrix4 view)
+        {
+            for(int i = 0; i < stars.Count; i++)
+            {
+                stars[i].Render(Screen, projection, view);
+            }
+        }
+
+        public static Random Random = new Random();
 
     }
 }
