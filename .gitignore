@@ -4,3 +4,4 @@ DanielFlappyGame/bin
 DanielFlappyGame/obj
 *.tmp
 *.suo
+*.pdb
