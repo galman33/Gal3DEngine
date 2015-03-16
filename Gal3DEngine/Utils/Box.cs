@@ -1,4 +1,3 @@
-
 ﻿using OpenTK;
 using System;
 using System.Collections.Generic;
@@ -52,12 +51,12 @@ namespace Gal3DEngine.UTILS
                     point.Z >= min.Z && point.Z <= max.Z;
         }
 
-        public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection)
+        public void Render(Screen screen, Matrix4 view, Matrix4 projection)
         {
-            Render(screen, world, view, projection, new Color3(0, 255, 0));
+            Render(screen, view, projection, new Color3(0, 255, 0));
         }
 
-        public void Render(Screen screen, Matrix4 world, Matrix4 view, Matrix4 projection, Color3 color)
+        public void Render(Screen screen, Matrix4 view, Matrix4 projection, Color3 color)
         {
             var min = GetMin();
             var max = GetMax();
@@ -76,7 +75,7 @@ namespace Gal3DEngine.UTILS
             {
                 Vector4 tmp = new Vector4(wireFrames[i]);
                 tmp.W = 1;
-                ShaderHelper.TransformPosition(ref tmp, world * view * projection, screen);
+                ShaderHelper.TransformPosition(ref tmp, /*Matrix4.CreateTranslation(origin) **/ view * projection, screen);
                 wireFrames[i] = new Vector3(tmp);
             }
             /*
@@ -108,4 +107,4 @@ namespace Gal3DEngine.UTILS
 
     }
 }
- 
+
