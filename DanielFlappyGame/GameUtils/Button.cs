@@ -61,7 +61,7 @@ namespace DanielFlappyGame.GameUtils
         {
             if(path!= string.Empty)
             backGround = Texture.LoadTexture(path);
-            backGround = null;
+            else backGround = null;
         }      
 
         public void Render(Screen screen , TextRender render)
@@ -69,7 +69,7 @@ namespace DanielFlappyGame.GameUtils
             if(backGround!= null)
             ToolsHelper.RenderRectangle(screen, backGround, location);
             if (text != String.Empty)
-            render.RenderText(screen, this.text, Vector2.Add(this.location , new Vector2(this.width/2, this.height/2)));            
+            render.RenderText(screen, this.text, this.location + new Vector2(0f, this.height/6));            
         }
     }
 }

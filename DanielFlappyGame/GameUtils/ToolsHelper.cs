@@ -11,6 +11,8 @@ namespace DanielFlappyGame.GameUtils
        {
            public static void RenderRectangle(Screen screen , Color3[,] rec , Vector2 offset)
            {
+               int baseHeight = 40;
+               offset.Y = screen.Height - baseHeight - offset.Y;
                for (int a = 0; a < rec.GetLength(0); a++)
                {
                    for (int b = 0; b < rec.GetLength(1); b++)
