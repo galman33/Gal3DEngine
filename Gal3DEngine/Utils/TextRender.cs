@@ -43,9 +43,9 @@ namespace Gal3DEngine.UTILS
             {
                 if (text[i] != ' ')
                 {
-                    int index = (int)(text[i]) - 48;
-                    x = index % 12 * 40;
-                    y = index / 12 * 40;
+                    int index = (int)(text[i]) - 33;
+                    x = index % 16 * 32;
+                    y = index / 16 * 32;
                     int width = int.Parse(charValues[charValues.IndexOf(charValues.First<string>(n => n.Contains("Char " + index + " Base Width")), 0) + 1]);
                     for (int a = 0; a < width; a++)
                     {
@@ -75,7 +75,7 @@ namespace Gal3DEngine.UTILS
 
     public static class Fonts
     {
-        public const string ARIAL = @"Resources\ArialFont.bmp";
-        public const string ARIALFONTDATA = @"Resources\ArialFontData.csv";
+        public const string ARIAL = @"Resources\ArialFontNew.bmp";
+        public const string ARIALFONTDATA = @"Resources\ArialFontDataNew.csv";
     }
 }
