@@ -68,7 +68,7 @@ namespace Gal3DEngine
 
         public static bool operator !=(Color3 color1, Color3 color2)
         {
-            return color1.r != color2.r && color1.g != color2.g && color1.b != color2.b;
+            return color1.r != color2.r || color1.g != color2.g || color1.b != color2.b;
         }
 
         public static Color3 Transparent = new Color3(257, 257, 257);

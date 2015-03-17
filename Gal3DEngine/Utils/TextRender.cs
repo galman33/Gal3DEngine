@@ -77,7 +77,7 @@ namespace Gal3DEngine.UTILS
 
     public static class Fonts
     {
-        public const string ARIAL = @"Resources\ArialFontNew.bmp";
+        public const string ARIAL = @"Resources\ArialFontNew.jpg";
         public const string ARIALFONTDATA = @"Resources\ArialFontDataNew.csv";
     }
 }
