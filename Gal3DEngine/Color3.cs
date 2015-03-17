@@ -71,7 +71,7 @@ namespace Gal3DEngine
             return color1.r != color2.r || color1.g != color2.g || color1.b != color2.b;
         }
 
-        public static Color3 Transparent = new Color3(257, 257, 257);
+        public static Color3 Transparent = new Color3(255, 0, 255);
 
     }
 }
