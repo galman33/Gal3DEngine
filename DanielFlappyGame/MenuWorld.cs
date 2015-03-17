@@ -17,6 +17,8 @@ namespace DanielFlappyGame
         HighScoresManager manager;
 
         bool showHighScores;
+
+        List<Score> scores;
         public MenuWorld() : base(640 , 480)
         {
 
@@ -30,6 +32,11 @@ namespace DanielFlappyGame
             textRender = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);            
             highScoreBtn = new Button(30, 30, new Vector2(30, 60), "", "Resources\\HighScoresImg.png");            
             highScoreBtn.buttonPressed += highScoreBtn_buttonPressed;
+
+            scores = manager.GetScores();
+            if (scores.Count > 5)
+                scores.RemoveRange(0, scores.Count - 5);
+            scores.Reverse();
         }
 
         void highScoreBtn_buttonPressed()
@@ -55,10 +62,7 @@ namespace DanielFlappyGame
         }
 
         private void RenderHighScore()
-        {
-            List<Score> scores = manager.GetScores();
-            if(scores.Count > 5)
-            scores.RemoveRange(0, scores.Count - 5);
+        {            
             for(int i= 0; i< scores.Count; i++)
             {
                 Label lable = new Label(scores[i].ToString(), new Vector2(30, 30 * (i + 4)));

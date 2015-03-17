@@ -41,8 +41,9 @@ namespace DanielFlappyGame
             {
                 entity.Update();
             }
-            foreach (Entity entity in passedTunnles)
+            for (int i = 0; i < passedTunnles.Count; i++ )
             {
+                Pipe entity = passedTunnles[i];
                 entity.Update();
             }
 
@@ -109,6 +110,7 @@ namespace DanielFlappyGame
 
         private void EntityDestroyed(Entity entity)
         {
+            passedTunnles.Remove((entity as Pipe));
             recycleTunnels.Add((entity as Pipe));
         }
     }

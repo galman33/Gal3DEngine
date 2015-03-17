@@ -77,7 +77,7 @@ namespace DanielFlappyGame
 
         public override string ToString()
         {
-            return name + " : " + points + " Points";
+            return name + " : " + points + " Points in " + date.ToShortDateString();
         }
     }
 }
