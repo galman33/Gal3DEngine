@@ -95,9 +95,7 @@ namespace DanielFlappyGame
                 passedTunnles.Add(tunnel);
             }
         }
-        private List<Pipe> recycleTunnels = new List<Pipe>();
-
-        private int points;
+        private List<Pipe> recycleTunnels = new List<Pipe>();       
         Random rand;
         private Vector3[] GetRandomPoint(float z)
         {

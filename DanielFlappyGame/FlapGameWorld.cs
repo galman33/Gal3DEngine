@@ -35,8 +35,6 @@ namespace DanielFlappyGame
 
         protected override void OnLoad(EventArgs e)
         {
-            
-
             base.OnLoad(e);
             HSManager = new HighScoresManager();
             Program.world = this;            
@@ -53,12 +51,11 @@ namespace DanielFlappyGame
         {
             points = 0;
             gameCam = new Camera();
-            front = false;
-            gameCam.Rotation = Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2);
+            front = true;           
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.3f, 10.0f);
 
             flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
-            floor = new Floor(new Vector3(-1.5f, -1.5f, 0), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
+            floor = new Floor(new Vector3(-14.5f, -3.5f, 0), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
             pipesManager.Init();
             curShader.projection = projection;
 
@@ -105,20 +102,16 @@ namespace DanielFlappyGame
         {
             if(floor.translation.Z >this.gameCam.Position.Z)
             {                
-                floor.translation.Z = gameCam.Position.Z-3;
+               // floor.translation.Z = gameCam.Position.Z-3;
+                floor.Update(Vector3.Subtract(flappyflappy.Position, Vector3.UnitZ * 3));
             }
         }       
         private void UpdateCamera()
-        {
-
-          
+        {          
            if(front)
-           {
-               
-               gameCam.Position.Z = flappyflappy.Position.Z + 2.3f; 
-              
-               gameCam.Position.Y = flappyflappy.Position.Y; // TODO slerp
-                             
+           {               
+               gameCam.Position.Z = flappyflappy.Position.Z + 2.3f;               
+               gameCam.Position.Y = flappyflappy.Position.Y; // TODO slerp                             
            }
            else
            {
@@ -151,7 +144,7 @@ namespace DanielFlappyGame
         }
         
         private bool stateChange = false;
-        private bool front = true;
+        private bool front = false;
         private float t = 0.0f;
         
         private void ChangeStateOfCamara()

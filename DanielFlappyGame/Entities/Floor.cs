@@ -62,10 +62,7 @@ namespace DanielFlappyGame
            normals[0] = new Vector3(0,1,0);
            
 
-            indices = new IndexPositionUVNormal[6];
-            /*indices[1] = new IndexPositionUVNormal(2, 2, 0);
-            indices[2] = new IndexPositionUVNormal(1, 1, 0);
-            indices[0] = new IndexPositionUVNormal(0, 0, 0);*/
+            indices = new IndexPositionUVNormal[6];            
 
             indices[0] = new IndexPositionUVNormal(3, 3, 0);
             indices[1] = new IndexPositionUVNormal(2, 2, 0);
@@ -103,7 +100,7 @@ namespace DanielFlappyGame
         }
         private void AdjustHitBox()
         {
-            this.hitBox = new Box(this.scale.X, 2, this.scale.Z, this.translation);
+            this.hitBox = new Box(this.scale.X, 0.01f, this.scale.Z, this.translation);
         }
 
         public Box GetFloorHitBox()

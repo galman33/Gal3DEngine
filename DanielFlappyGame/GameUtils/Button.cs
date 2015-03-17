@@ -29,8 +29,20 @@ namespace DanielFlappyGame.GameUtils
             buttonRec = new Rectangle((int)location.X, (int)location.Y, width, height);
             this.text = text;
             LoadImage(backGroundPath);
-            (Program.world).MouseDown += Mouse_ButtonDown;
+            (Program.world).MouseUp += Button_MouseUp;
             //(Program.world).Mouse.ButtonDown += Mouse_ButtonDown;
+        }
+
+        void Button_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.Button == MouseButton.Left)
+            {
+                if (buttonRec.Contains(e.X, e.Y))
+                {
+                    if (buttonPressed != null)
+                        buttonPressed();
+                }
+            }
         }
 
         void Mouse_ButtonDown(object sender, MouseButtonEventArgs e)
@@ -47,13 +59,17 @@ namespace DanielFlappyGame.GameUtils
 
         private void LoadImage(string path)
         {
+            if(path!= string.Empty)
             backGround = Texture.LoadTexture(path);
+            backGround = null;
         }      
 
         public void Render(Screen screen , TextRender render)
         {
-            render.RenderText(screen, this.text, Vector2.Add(this.location , new Vector2(this.width/2, this.height/2)));
-
+            if(backGround!= null)
+            ToolsHelper.RenderRectangle(screen, backGround, location);
+            if (text != String.Empty)
+            render.RenderText(screen, this.text, Vector2.Add(this.location , new Vector2(this.width/2, this.height/2)));            
         }
     }
 }
