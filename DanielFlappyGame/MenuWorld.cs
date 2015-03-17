@@ -57,6 +57,7 @@ namespace DanielFlappyGame
         private void RenderHighScore()
         {
             List<Score> scores = manager.GetScores();
+            if(scores.Count > 5)
             scores.RemoveRange(0, scores.Count - 5);
             for(int i= 0; i< scores.Count; i++)
             {
