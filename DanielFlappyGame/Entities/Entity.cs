@@ -16,7 +16,7 @@ namespace DanielFlappyGame
        protected Model model;
        protected Vector3 light;
 
-       public Box entityCube;
+       public Box hitBox;
 
        public event DestroyDelegate DestroyEntity;
 
@@ -28,7 +28,7 @@ namespace DanielFlappyGame
            
            this.Position = translation;
            this.light = lightDirection;
-           this.entityCube = makeCube(this.Position, 1);
+           this.hitBox = makeCube(this.Position, 1);
        }
 
        public void Render(Screen screen)
@@ -39,7 +39,7 @@ namespace DanielFlappyGame
            (Program.world as FlapGameWorld).curShader.world = worldMatrix;
            (Program.world as FlapGameWorld).curShader.lightDirection = light;
            (Program.world as FlapGameWorld).curShader.Render(screen);
-           this.entityCube.Render(screen, (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
+           this.hitBox.Render(screen, (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
            
        }
 
@@ -57,10 +57,7 @@ namespace DanielFlappyGame
        {
            //update translation
            this.translation = this.Position;
-           if (this.Position.Z - (Program.world as FlapGameWorld).flappyflappy.Position.Z > 1)
-           {
-               Destroy();
-           }
+          
        }
        public Model GetModel()
        {

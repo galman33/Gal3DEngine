@@ -51,9 +51,13 @@
     <Compile Include="Entities\Pipe.cs" />
     <Compile Include="FlapGameWorld.cs" />
     <Compile Include="Entities\FlappyBird.cs" />
+    <Compile Include="GameUtils\Button.cs" />
     <Compile Include="GameUtils\Label.cs" />
+    <Compile Include="GameUtils\Rectangle.cs" />
+    <Compile Include="GameUtils\UITool.cs" />
     <Compile Include="HighScoresManager.cs" />
     <Compile Include="MenuWorld.cs" />
+    <Compile Include="PipesManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

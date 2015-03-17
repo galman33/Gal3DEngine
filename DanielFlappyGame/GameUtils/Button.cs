@@ -1,4 +1,5 @@
 ﻿using Gal3DEngine;
+using Gal3DEngine.UTILS;
 using OpenTK;
 using OpenTK.Input;
 using System;
@@ -9,7 +10,7 @@ using System.Text;
 namespace DanielFlappyGame.GameUtils
 {
     public delegate void ButtonPressed();
-    public class Button : UITool
+    public class Button
     {
         public event ButtonPressed buttonPressed;
         private string text;
@@ -49,9 +50,10 @@ namespace DanielFlappyGame.GameUtils
             backGround = Texture.LoadTexture(path);
         }      
 
-        public void Render(Screen screen)
+        public void Render(Screen screen , TextRender render)
         {
-            
+            render.RenderText(screen, this.text, Vector2.Add(this.location , new Vector2(this.width/2, this.height/2)));
+
         }
     }
 }

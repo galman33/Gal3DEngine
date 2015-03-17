@@ -8,6 +8,6 @@ namespace DanielFlappyGame.GameUtils
     public interface UITool
     {
 
-        public void Render();
+        void Render();
     }
 }

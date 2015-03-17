@@ -25,13 +25,17 @@ namespace DanielFlappyGame.Entities
 
         private void AdjustHitBox()
         {
-            this.entityCube = new Box(0.15f, 1f, 0.15f, this.Position);
+            this.hitBox = new Box(0.15f, 0.35f, 0.15f,this.Position);
         }
 
         public override void Update()
         {
             base.Update();
             AdjustHitBox();
+            if (this.Position.Z - (Program.world as FlapGameWorld).flappyflappy.Position.Z > 2)
+            {
+                Destroy();
+            }
         }
 
         public override void Destroy()

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Gal3DEngine.IndicesTypes;
+using Gal3DEngine.UTILS;
 namespace DanielFlappyGame
 {
     public class Floor
@@ -19,6 +20,8 @@ namespace DanielFlappyGame
         Vector3[] normals;
         IndexPositionUVNormal[] indices;
 
+        Box hitBox; 
+
         public Floor(Vector3 translation ,Vector3 rotation , string url)
         {
             texture = Texture.LoadTexture(url);
@@ -31,6 +34,7 @@ namespace DanielFlappyGame
         public void Update(Vector3 translation)
         {
             this.translation = translation;
+            AdjustHitBox();
         }
 
         private void InitFloor()
@@ -69,6 +73,7 @@ namespace DanielFlappyGame
             indices[3] = new IndexPositionUVNormal(0, 0, 0);
             indices[4] = new IndexPositionUVNormal(1, 1, 0);
             indices[5] = new IndexPositionUVNormal(2, 2, 0);
+            AdjustHitBox();
         }
 
         public void Render(Screen screen , int floorsAmount)
@@ -84,16 +89,27 @@ namespace DanielFlappyGame
         }
         private void InnerRender(Screen screen , Matrix4 world)
         {
-            (Program.world as FlapGameWorld).curShader.SetVerticesNormals(normals);
-            (Program.world as FlapGameWorld).curShader.SetVerticesPositions(vertices);
-            (Program.world as FlapGameWorld).curShader.SetIndices(indices);
-            (Program.world as FlapGameWorld).curShader.SetVerticesUvs(uvs);
-            (Program.world as FlapGameWorld).curShader.texture = texture;
-            (Program.world as FlapGameWorld).curShader.lightDirection = -normals[0];//new Vector3(0, -1, 0);
-            (Program.world as FlapGameWorld).curShader.ambientLight = 0.5f;
-            (Program.world as FlapGameWorld).curShader.world = world; //Matrix4.CreateScale(scale) * Matrix4.CreateTranslation(translation);
-            (Program.world as FlapGameWorld).curShader.Render(screen);
-        }  
+            ShaderFlat curShader = (Program.world as FlapGameWorld).curShader;
+            curShader.SetVerticesNormals(normals);
+            curShader.SetVerticesPositions(vertices);
+            curShader.SetIndices(indices);
+            curShader.SetVerticesUvs(uvs);
+            curShader.texture = texture;
+            curShader.lightDirection = -normals[0];//new Vector3(0, -1, 0);
+            curShader.ambientLight = 0.5f;
+            curShader.world = world; //Matrix4.CreateScale(scale) * Matrix4.CreateTranslation(translation);
+            curShader.Render(screen);
+            hitBox.Render(screen, curShader.view, curShader.projection);
+        }
+        private void AdjustHitBox()
+        {
+            this.hitBox = new Box(this.scale.X, 2, this.scale.Z, this.translation);
+        }
+
+        public Box GetFloorHitBox()
+        {
+            return hitBox;
+        }
 
     }
 }

@@ -30,7 +30,7 @@ namespace DanielFlappyGame
 
         private void AdjustHitBox()
         {
-            this.entityCube = new Box(0.20f, 0.20f, 0.20f, Vector3.Sub(this.Position , new Vector3(0,-0.2f, 0)));
+            this.hitBox = new Box(0.20f, 0.20f, 0.20f, Vector3.Add(this.Position , new Vector3(0,0.2f, 0)));
         }
         public static void LoadModel()
         {
@@ -42,7 +42,7 @@ namespace DanielFlappyGame
             base.Update();
             UpdatePosition();
             AdjustHitBox();
-            if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles()))
+            if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles()) )//|| CollideFloor())
             {
                 (Program.world as FlapGameWorld).GameOver();
             }
@@ -50,9 +50,14 @@ namespace DanielFlappyGame
             var tunnles = CheckForPassedTunnels((Program.world as FlapGameWorld).GetTunnles());
             if(tunnles!= null)
             {
-                (Program.world as FlapGameWorld).PassedTunnles(tunnles);
+                (Program.world as FlapGameWorld).PassedTunnels(tunnles);
                 (Program.world as FlapGameWorld).AddPoints();
             }
+        }
+
+        private bool CollideFloor()
+        {
+            return Box.IsColliding((Program.world as FlapGameWorld).floor.GetFloorHitBox(), this.hitBox);
         }
 
         private Pipe[] CheckForPassedTunnels(List<Pipe> entities)
@@ -90,8 +95,8 @@ namespace DanielFlappyGame
         }
         public bool IsCollide(Entity collideWith)
         { 
-            Box thisCollide = this.entityCube;
-            Box collideHitbox = collideWith.entityCube;
+            Box thisCollide = this.hitBox;
+            Box collideHitbox = collideWith.hitBox;
 
             bool collide = Box.IsColliding(thisCollide, collideHitbox);
             return collide;

@@ -14,13 +14,9 @@ namespace DanielFlappyGame
 {
     public class FlapGameWorld : Game
     {
-        private List<Pipe> Tunnels = new List<Pipe>();
-        private List<Pipe> passedTunnles = new List<Pipe>(); // the bird already passed them but the camera still sees them
         public FlappyBird flappyflappy;
-        public Floor floor;
-
-        private TimeSpan delta = new TimeSpan(0, 0, 0, 0, 700);
-        private TimeSpan curDelta = TimeSpan.Zero;
+        public PipesManager pipesManager;
+        public Floor floor;        
         
         private Camera gameCam;
         Matrix4 projection;           
@@ -30,9 +26,7 @@ namespace DanielFlappyGame
         private Label pointsLbl;
         private Label topLbl;
 
-        public ShaderFlat curShader;
-
-       
+        public ShaderFlat curShader;      
 
         public FlapGameWorld() : base(640, 480)
         {
@@ -42,13 +36,13 @@ namespace DanielFlappyGame
         protected override void OnLoad(EventArgs e)
         {
             
+
             base.OnLoad(e);
             HSManager = new HighScoresManager();
-            Program.world = this;
-            rand = new Random();
+            Program.world = this;            
             curShader = AvailableShaders.ShaderFlat;
             textRender = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);
-            Pipe.LoadModel();
+            pipesManager = new PipesManager();
             FlappyBird.LoadModel();
 
             this.BackgroundColor = new Color3(0, 0, 0);
@@ -65,17 +59,7 @@ namespace DanielFlappyGame
 
             flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
             floor = new Floor(new Vector3(-1.5f, -1.5f, 0), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
-
-            //clear all tunnles in the game for game to start
-            Tunnels.Clear();
-            passedTunnles.Clear();
-
-            Vector3[] positions = GetRandomPoint(-3f + flappyflappy.Position.Z);
-            Tunnels.Add(new Pipe(positions[0], new Vector3(0, 0, (float)Math.PI), Vector3.Normalize(new Vector3(1, -0.25f, -1))));
-            Tunnels.Add(new Pipe(positions[1], Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1))));
-            Tunnels[Tunnels.Count - 1].DestroyEntity += EntityDestroyed;
-            Tunnels[Tunnels.Count - 2].DestroyEntity += EntityDestroyed;
-
+            pipesManager.Init();
             curShader.projection = projection;
 
             pointsLbl = new Label("Points: "+ points , new Vector2(30,30));
@@ -110,36 +94,9 @@ namespace DanielFlappyGame
             base.Update();
 
              // update entities
-             flappyflappy.Update();
-             foreach (Entity entity in Tunnels)
-             {
-                 entity.Update();
-             }
-             ChangeStateOfCamara();
-           
-            //tunnles update logic
-            curDelta = curDelta.Add(TimeSpan.FromMilliseconds(16/4));
-            if(curDelta.TotalMilliseconds > delta.TotalMilliseconds)//Math.Abs(this.flappyflappy.Position.Z - this.Tunnels[Tunnels.Count-1].Position.Z) <3) //curDelta.TotalMilliseconds > delta.TotalMilliseconds)
-            {
-                curDelta = TimeSpan.Zero;
-
-                Vector3[] positions = GetRandomPoint(-3f + flappyflappy.Position.Z);
-                if (recycleTunnels.Count ==0)
-                {
-                    Tunnels.Add(new Pipe(positions[0], new Vector3(0, 0, (float)Math.PI), Vector3.Normalize(new Vector3(1, -0.25f, -1))));
-                    Tunnels.Add(new Pipe(positions[1], Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1))));
-                    Tunnels[Tunnels.Count - 1].DestroyEntity += EntityDestroyed;
-                    Tunnels[Tunnels.Count - 2].DestroyEntity += EntityDestroyed;
-                }
-                else
-                {
-                    recycleTunnels[0].Position = positions[0];
-                    recycleTunnels[1].Position = positions[1];
-                    Tunnels.Add(recycleTunnels[0]);
-                    Tunnels.Add(recycleTunnels[1]);
-                    recycleTunnels.RemoveRange(0, 2);
-                }
-            }
+            flappyflappy.Update();
+            pipesManager.Update();
+            ChangeStateOfCamara();           
             UpdateFloor();
             UpdateCamera();          
         }
@@ -157,13 +114,11 @@ namespace DanielFlappyGame
           
            if(front)
            {
-               //move along the bird
+               
                gameCam.Position.Z = flappyflappy.Position.Z + 2.3f; 
-              // if(Math.Abs(gameCam.Position.Y - flappyflappy.Position.Y) > 0.8)
-               //{
-                   gameCam.Position.Y = flappyflappy.Position.Y;
-                   //gameCam.Position.Y += (gameCam.Position.Y > flappyflappy.Position.Y) ? -0.15f : +0.15f;
-              // }               
+              
+               gameCam.Position.Y = flappyflappy.Position.Y; // TODO slerp
+                             
            }
            else
            {
@@ -192,15 +147,7 @@ namespace DanielFlappyGame
         {
             floor.Render(Screen , 2);
             flappyflappy.Render(Screen);
-            foreach (Pipe entity in Tunnels)
-            {
-                entity.Render(Screen);
-            }
-            foreach (Pipe entity in passedTunnles)
-            {
-                entity.Render(Screen);
-            }
-            
+            pipesManager.RenderPipes(Screen);            
         }
         
         private bool stateChange = false;
@@ -214,24 +161,19 @@ namespace DanielFlappyGame
                 if (stateChange)
                 {
                     t += (float)(Time.DeltaTime)*0.4f;
-                    gameCam.Rotation = Quaternion.Slerp(Quaternion.Identity, Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2), t);
+                    gameCam.Rotation = Quaternion.Slerp(Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2), gameCam.Rotation, (float)Time.DeltaTime * 5.0f);
                     gameCam.Position.X += 0.2f;
                     gameCam.Position.Z -= 0.15f;
                     
-                    if (gameCam.Position.X >= 5 && gameCam.Position.Z <= flappyflappy.Position.Z && t <=0.8f) //&& gameCam.Rotation.Y == (float)(Math.PI / 2))
+                    if (gameCam.Position.X >= 5 && gameCam.Position.Z <= flappyflappy.Position.Z) //&& gameCam.Rotation.Y == (float)(Math.PI / 2))
                     {                        
                         gameCam.Position.X = 5;
-                        t = 0.8f;
+                        
                         gameCam.Position.Z = flappyflappy.Position.Z;
                         stateChange = !stateChange;
                     }
                     else
-                    {
-                        if (t <= 0.8f)
-                        {
-                            t = 0.8f;
-                            gameCam.Rotation = Quaternion.Slerp(Quaternion.Identity, Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2), t);
-                        }
+                    {                       
                         if (gameCam.Position.X >= 5)
                         {
                             gameCam.Position.X = 5;
@@ -246,25 +188,21 @@ namespace DanielFlappyGame
             }
             else
             {
-                /*if (stateChange)
+                if (stateChange)
                 {
 
-                    gameCam.Rotation.Y -= (float)Time.DeltaTime * 200.0f;
-                    gameCam.Position.X -= 0.05f;
+                    gameCam.Rotation = Quaternion.Slerp(gameCam.Rotation, Quaternion.FromAxisAngle(Vector3.UnitY, 0), (float)Time.DeltaTime * 5.0f);
+                    gameCam.Position.X -= 0.15f;
                     gameCam.Position.Z += 0.15f;
-                    if (gameCam.Rotation.Y <= 0 && gameCam.Position.X <= 0 && gameCam.Position.Z >= flappyflappy.Position.Z + 2)
+                    if (gameCam.Position.X <= 0 && gameCam.Position.Z >= flappyflappy.Position.Z + 2)
                     {
-                        gameCam.Rotation.Y = 0;
+                        
                         gameCam.Position.X = 0;
                         gameCam.Position.Z = flappyflappy.Position.Z + 2;
                         stateChange = !stateChange;
                     }
                     else
-                    {
-                        if (gameCam.Rotation.Y <= 0)
-                        {
-                            gameCam.Rotation.Y = 0;
-                        }
+                    {                        
                         if (gameCam.Position.X <= 0)
                         {
                             gameCam.Position.X = 0;
@@ -274,50 +212,30 @@ namespace DanielFlappyGame
                             gameCam.Position.Z = flappyflappy.Position.Z + 2;
                         }
                     }
-                }*/
+                }
             }
-        }
+        } //change from front to side and the opposite
 
         public List<Pipe> GetTunnles()
         {
-            return this.Tunnels;
+            return this.pipesManager.GetTunnles();
         }       
 
         public void GameOver()
         {
             AddScore(this.points, "Flappy");
             Init();            
-        }
-
-        public void PassedTunnles(Pipe[] tunnles)
-        {
-            foreach (Pipe tunnel in tunnles)
-            {               
-                Tunnels.Remove(tunnel);
-                passedTunnles.Add(tunnel);
-            }
-        }
-        private List<Pipe> recycleTunnels = new List<Pipe>();
+        }        
 
         public void AddPoints()
         {
             points++;
         }
-        private int points;
-        Random rand;
-        private Vector3[] GetRandomPoint(float z)
-        {          
-          
-            float centerY = rand.Next(-5, 5) / 10.0f;
-            int maxRadius = (int)((1.9 - Math.Abs(centerY)) * 10);
-            float radius = rand.Next(8 , maxRadius) / 10.0f;
+        private int points;        
 
-            return new [] {new Vector3(0, centerY + radius, z) ,new Vector3(0, centerY - radius, z) } ;
-        }
-
-        private void EntityDestroyed(Entity entity)
+        public void PassedTunnels(Pipe[] pipes)
         {
-            recycleTunnels.Add((entity as Pipe));
+            pipesManager.PassedTunnles(pipes);
         }
     }
 }
