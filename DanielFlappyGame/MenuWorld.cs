@@ -12,6 +12,11 @@ namespace DanielFlappyGame
     {
         TextRender textRender;
         Button tmpBtn;
+        Button highScoreBtn;
+
+        HighScoresManager manager;
+
+        bool showHighScores;
         public MenuWorld() : base(640 , 480)
         {
 
@@ -21,21 +26,43 @@ namespace DanielFlappyGame
         {
             base.OnLoad(e);
             (Program.world) = this;
-            textRender = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);
-            tmpBtn = new Button(100, 50, new Vector2(40, 40), "Start", "Resources\\btnBackGround.png");
-            tmpBtn.buttonPressed += OnBtnClick;
+            manager = new HighScoresManager();
+            textRender = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);            
+            highScoreBtn = new Button(30, 30, new Vector2(30, 60), "", "Resources\\HighScoresImg.png");            
+            highScoreBtn.buttonPressed += highScoreBtn_buttonPressed;
+        }
+
+        void highScoreBtn_buttonPressed()
+        {
+            showHighScores = !showHighScores;
         }
 
         protected override void Render()
         {
             base.Render();
             textRender.RenderText(Screen, "To Start Press Space", new Vector2(30, 30));
-            tmpBtn.Render(Screen, textRender);
+            highScoreBtn.Render(Screen, textRender);
+            //tmpBtn.Render(Screen, textRender);
+            if (showHighScores)
+            {
+                RenderHighScore();
+            }
         }
 
         private void OnBtnClick()
         {
             StartFlapGame();
+        }
+
+        private void RenderHighScore()
+        {
+            List<Score> scores = manager.GetScores();
+            scores.RemoveRange(0, scores.Count - 5);
+            for(int i= 0; i< scores.Count; i++)
+            {
+                Label lable = new Label(scores[i].ToString(), new Vector2(30, 30 * (i + 4)));
+                lable.RenderLabel(Screen, textRender);
+            }
         }
 
         protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -45,6 +72,11 @@ namespace DanielFlappyGame
             {
                 StartFlapGame();
             }
+        }
+
+        protected override void Update()
+        {
+            base.Update();            
         }
 
         private void StartFlapGame()

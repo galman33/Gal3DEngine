@@ -73,6 +73,11 @@ namespace DanielFlappyGame
             element.Add(new XElement("Name", name));
             element.Add(new XElement("Date", date.ToShortDateString()));
             return element;
-        }   
+        }
+
+        public override string ToString()
+        {
+            return name + " : " + points + " Points";
+        }
     }
 }

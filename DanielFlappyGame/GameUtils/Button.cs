@@ -29,8 +29,7 @@ namespace DanielFlappyGame.GameUtils
             buttonRec = new Rectangle((int)location.X, (int)location.Y, width, height);
             this.text = text;
             LoadImage(backGroundPath);
-            (Program.world).MouseUp += Button_MouseUp;
-            //(Program.world).Mouse.ButtonDown += Mouse_ButtonDown;
+            (Program.world).MouseUp += Button_MouseUp;            
         }
 
         void Button_MouseUp(object sender, MouseButtonEventArgs e)
