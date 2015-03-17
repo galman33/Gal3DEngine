@@ -51,7 +51,9 @@ namespace Gal3DEngine.UTILS
                     {
                         for (int b = 0; b < 40; b++)
                         {
-                            screen.PutPixel((int)position.X + a, (int)position.Y + b, new Color3(map.GetPixel(a + x, 40 - b/*זה מתקן את הקטע שהוא הפוך*/ + y)));
+                            Color3 color = new Color3(map.GetPixel(a + x, 40 - b/*זה מתקן את הקטע שהוא הפוך*/ + y));
+                            if(color != Color3.Transparent)
+                            screen.PutPixel((int)position.X + a, (int)position.Y + b,color);
                         }
                     }
 

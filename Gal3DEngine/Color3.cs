@@ -27,9 +27,16 @@ namespace Gal3DEngine
 
         public Color3(System.Drawing.Color color)
         {
-            this.r = color.R;
-            this.g = color.G;
-            this.b = color.B;
+            if (color.A != 0)
+            {
+                this.r = color.R;
+                this.g = color.G;
+                this.b = color.B;
+            }
+            else
+            {
+                this = Transparent;
+            }
         }
 
         public override bool Equals(object obj)
@@ -51,6 +58,18 @@ namespace Gal3DEngine
         {
             return "Color:{R: " + r + ", G:" + g + ", B:" + b + "}";
         }
+
+        public static bool operator ==(Color3 color1, Color3 color2)
+        {
+            return color1.r == color2.r && color1.g == color2.g && color1.b == color2.b;
+        }
+
+        public static bool operator !=(Color3 color1, Color3 color2)
+        {
+            return color1.r != color2.r && color1.g != color2.g && color1.b != color2.b;
+        }
+
+        public static Color3 Transparent = new Color3(257, 257, 257);
 
     }
 }
