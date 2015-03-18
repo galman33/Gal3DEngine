@@ -26,7 +26,9 @@ namespace DanielFlappyGame
         private Label pointsLbl;
         private Label topLbl;
 
-        public ShaderFlat curShader;      
+        public ShaderFlat curShader;
+
+        private bool start;
 
         public FlapGameWorld() : base(640, 480)
         {
@@ -53,7 +55,7 @@ namespace DanielFlappyGame
             gameCam = new Camera();
             front = true;           
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.3f, 10.0f);
-
+            start = false;
             flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
             floor = new Floor(new Vector3(-14.5f, -3.5f, 0), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
             pipesManager.Init();
@@ -79,6 +81,11 @@ namespace DanielFlappyGame
             {
                 Init();
             }
+
+            if(e.Key == Key.Space)
+            {
+                start = true;
+            }
         }
 
         public void AddScore(int score  , string name)
@@ -89,20 +96,21 @@ namespace DanielFlappyGame
         protected override void Update()
         {
             base.Update();
-
-             // update entities
-            flappyflappy.Update();
-            pipesManager.Update();
-            ChangeStateOfCamara();           
-            UpdateFloor();
+            if (start)
+            {
+                // update entities
+                flappyflappy.Update();
+                pipesManager.Update();
+                ChangeStateOfCamara();
+                UpdateFloor();
+            }
             UpdateCamera();          
         }
 
         private void UpdateFloor()
         {
             if(floor.translation.Z >this.gameCam.Position.Z)
-            {                
-               // floor.translation.Z = gameCam.Position.Z-3;
+            {               
                 floor.Update(Vector3.Subtract(flappyflappy.Position, Vector3.UnitZ * 3));
             }
         }       
@@ -111,7 +119,8 @@ namespace DanielFlappyGame
            if(front)
            {               
                gameCam.Position.Z = flappyflappy.Position.Z + 2.3f;               
-               gameCam.Position.Y = flappyflappy.Position.Y; // TODO slerp                             
+               gameCam.Position.Y = flappyflappy.Position.Y;
+                           
            }
            else
            {
@@ -122,6 +131,7 @@ namespace DanielFlappyGame
                }
            }
         }
+
         protected override void Render()
         {
             base.Render();
@@ -132,7 +142,6 @@ namespace DanielFlappyGame
             pointsLbl.RenderLabel(Screen, textRender);
             topLbl.RenderLabel(Screen, textRender);           
             
-            //AxisGizmo.Render(Screen, Matrix4.CreateTranslation(viewTrans.X, viewTrans.Y - 0.5f, viewTrans.Z-3), view, projection);
             DrawEntities();            
         }
 
@@ -144,16 +153,14 @@ namespace DanielFlappyGame
         }
         
         private bool stateChange = false;
-        private bool front = false;
-        private float t = 0.0f;
+        private bool front = false;        
         
         private void ChangeStateOfCamara()
         {
             if (!front)
             {
                 if (stateChange)
-                {
-                    t += (float)(Time.DeltaTime)*0.4f;
+                {                    
                     gameCam.Rotation = Quaternion.Slerp(Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2), gameCam.Rotation, (float)Time.DeltaTime * 5.0f);
                     gameCam.Position.X += 0.2f;
                     gameCam.Position.Z -= 0.15f;

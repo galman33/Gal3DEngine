@@ -19,6 +19,7 @@ namespace DanielFlappyGame
         bool showHighScores;
 
         List<Score> scores;
+      
         public MenuWorld() : base(640 , 480)
         {
 
@@ -78,12 +79,7 @@ namespace DanielFlappyGame
                 StartFlapGame();
             }
         }
-
-        protected override void Update()
-        {
-            base.Update();            
-        }
-
+       
         private void StartFlapGame()
         {
             Program.world = new FlapGameWorld();
