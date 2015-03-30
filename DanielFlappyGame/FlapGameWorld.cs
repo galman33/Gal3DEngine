@@ -56,7 +56,7 @@ namespace DanielFlappyGame
             front = true;           
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.3f, 10.0f);
             start = false;
-            flappyflappy = new FlappyBird(new Vector3(0, 0, -2), Vector3.Zero, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
+            flappyflappy = new FlappyBird(new Vector3(0, 0, -2), new Vector3(0,(float)Math.PI, 0), Vector3.Normalize(new Vector3(1, -0.25f, -1)));
             floor = new Floor(new Vector3(-14.5f, -3.5f, 0), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
             pipesManager.Init();
             curShader.projection = projection;

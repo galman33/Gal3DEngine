@@ -13,6 +13,8 @@ namespace DanielFlappyGame
     {
 
         private static Model modelS;
+        private Animation flappyAnimation;
+        private static Model[] modelsS;
 
         private float jumpVelocity;
         private float velocityY = 0;
@@ -20,26 +22,33 @@ namespace DanielFlappyGame
         private float gravity = 0.0035f;
 
         public FlappyBird(Vector3 translation, Vector3 rotation, Vector3 lightDirection)
-            : base(translation, rotation, new Vector3(0.5f, 0.5f, 0.5f) , lightDirection)
+            : base(translation, rotation, new Vector3(0.12f, 0.12f, 0.12f) , lightDirection)
         {
             this.jumpVelocity = 0.07f;
             this.velocityZ = 0.015f;
             this.model = modelS;
+            flappyAnimation = new Animation(modelS, modelsS, "Flying", 60, true);
+            flappyAnimation.Play("Flying");
             AdjustHitBox();
         }
 
         private void AdjustHitBox()
         {
-            this.hitBox = new Box(0.20f, 0.20f, 0.20f, Vector3.Add(this.Position , new Vector3(0,0.2f, 0)));
+            this.hitBox = new Box(0.20f, 0.20f, 0.20f, Vector3.Add(this.Position , -new Vector3(0,0.00f, 0)));
         }
         public static void LoadModel()
         {
-            modelS = new Model("Resources\\Cat2.obj", "Resources\\Cat2.png");            
+            modelsS = new Model[2];
+            modelS = new Model("Resources\\flappy_bird.obj", "Resources\\flappyTexture.jpg");
+            modelsS[0] = modelS;
+            modelsS[1] = new Model("Resources\\flappy bird frame2.obj", "Resources\\flappyTexture.jpg");
+
         }
 
         public override void Update()
         {
             base.Update();
+            flappyAnimation.Update();
             UpdatePosition();
             AdjustHitBox();
             if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles()) )//|| CollideFloor())
