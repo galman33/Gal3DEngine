@@ -55,7 +55,7 @@ namespace Gal3DEngine
                         {
                             index = 0;
                         }
-                        curTimePassed = TimeSpan.Zero;
+                        curTimePassed = 0.0f;
                     }
                 }
             }
