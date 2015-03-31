@@ -31,9 +31,9 @@ namespace DanielFlappyGame
             InitFloor();
         }
 
-        public void Update(Vector3 translation)
+        public void Update(Vector3 birdPosition)
         {
-            this.translation = translation;
+            this.translation.Z = birdPosition.Z -3  ;
             AdjustHitBox();
         }
 

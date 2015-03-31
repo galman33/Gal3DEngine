@@ -102,8 +102,8 @@ namespace DanielFlappyGame
         {
 
             float centerY = rand.Next(-5, 5) / 10.0f;
-            int maxRadius = (int)((1.9 - Math.Abs(centerY)) * 10);
-            float radius = rand.Next(8, maxRadius) / 10.0f;
+            
+            float radius = 0.9f;
 
             return new[] { new Vector3(0, centerY + radius, z), new Vector3(0, centerY - radius, z) };
         }

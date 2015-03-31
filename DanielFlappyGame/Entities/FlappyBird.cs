@@ -6,6 +6,7 @@ using OpenTK;
 using Gal3DEngine;
 using Gal3DEngine.UTILS;
 using DanielFlappyGame.Entities;
+using DanielFlappyGame.Renders;
 
 namespace DanielFlappyGame
 {
@@ -13,22 +14,23 @@ namespace DanielFlappyGame
     {
 
         private static Model modelS;
-        private Animation flappyAnimation;
+        private Animation flappyAnimation;       
         private static Model[] modelsS;
 
         private float jumpVelocity;
         private float velocityY = 0;
         private float velocityZ = 0;
-        private float gravity = 0.0035f;
+        private float gravity = 0.0025f;
 
         public FlappyBird(Vector3 translation, Vector3 rotation, Vector3 lightDirection)
             : base(translation, rotation, new Vector3(0.12f, 0.12f, 0.12f) , lightDirection)
         {
-            this.jumpVelocity = 0.07f;
+            this.jumpVelocity = 0.06f;
             this.velocityZ = 0.015f;
             this.model = modelS;
-            flappyAnimation = new Animation(modelS, modelsS, "Flying", 60, true);
+            flappyAnimation = new Animation(model, modelsS, "Flying", 2, true);
             flappyAnimation.Play("Flying");
+            
             AdjustHitBox();
         }
 
@@ -49,9 +51,12 @@ namespace DanielFlappyGame
         {
             base.Update();
             flappyAnimation.Update();
+
+            //this.model = flappyAnimation.frameModel;
+            
             UpdatePosition();
             AdjustHitBox();
-            if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles()) )//|| CollideFloor())
+            if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles()))//|| CollideFloor())
             {
                 (Program.world as FlapGameWorld).GameOver();
             }

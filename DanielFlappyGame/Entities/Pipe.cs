@@ -25,7 +25,7 @@ namespace DanielFlappyGame.Entities
 
         private void AdjustHitBox()
         {
-            this.hitBox = new Box(0.15f, 0.35f, 0.15f,this.Position);
+            this.hitBox = new Box(0.15f, 0.35f, 0.15f,this.Position + new Vector3(0,0.1f,0));
         }
 
         public override void Update()

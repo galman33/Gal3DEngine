@@ -15,6 +15,7 @@ namespace DanielFlappyGame
        protected Matrix4 worldMatrix;
        protected Model model;
        protected Vector3 light;
+      
 
        public Box hitBox;
 
