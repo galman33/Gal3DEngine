@@ -40,7 +40,7 @@ namespace Gal3DEngine
         {
             for (int i = 0; i < indices.Length; i += 3)
             {
-                if (ShaderHelper.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height))
+                if (ShaderHelper.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height, screen.ClippingEnabled))
                 {
                     DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2]);
                 }
