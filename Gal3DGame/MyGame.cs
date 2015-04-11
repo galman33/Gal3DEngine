@@ -5,6 +5,7 @@ using System.Text;
 using Gal3DEngine;
 using OpenTK;
 using Gal3DEngine.Gizmos;
+using Gal3DEngine.UTILS;
 
 namespace Gal3DGame
 {
@@ -21,6 +22,8 @@ namespace Gal3DGame
         private List<Star> stars = new List<Star>();
 
         int points;
+
+		private TextRender pointsText;
 
         public MyGame() : base(500, 400)
         {
@@ -49,6 +52,8 @@ namespace Gal3DGame
             BackgroundColor = new Color3(128, 255, 255);
 
             ResetGame();
+
+			pointsText = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);
         }
 
         private void AddStars()
@@ -120,6 +125,8 @@ namespace Gal3DGame
             aircraft.Render(Screen, projection, view);
 
             RenderStars(view);
+
+			pointsText.RenderText(Screen, "Points: " + points, new Vector2(20, 20));
         }
 
         private void RenderStars(Matrix4 view)
