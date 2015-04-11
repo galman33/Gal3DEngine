@@ -241,7 +241,7 @@ namespace Gal3DGame
         {
             for(int i = 0; i < boxes.Count; i++)
             {
-                boxes[i].DrawCube(screen, Matrix4.Identity, view, projection);
+                boxes[i].Render(screen, view, projection);
             }
         }
 
