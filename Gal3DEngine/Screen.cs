@@ -15,14 +15,15 @@ namespace Gal3DEngine
         
         private Color3[] colorBuffer;
         private float[] zBuffer;
-
+        
         public Screen()
         {
-
+            ClippingEnabled = true;
         }
 
         public Screen(int width, int height)
         {
+            ClippingEnabled = true;
             Init(width, height);
         }
 
@@ -173,7 +174,10 @@ namespace Gal3DEngine
             float zstep = (z1 < z2) ? 1 : -1;
             int y = y1;
             float z = z1;
-            for (int x = x1; x <= x2; x++)
+
+            int maxX = steep ? Math.Min(x2, Height) : Math.Min(x2, Width);
+
+            for (int x = Math.Max(0, x1); x <= maxX; x++)
             {
                 TryPutPixel((steep ? y : x), (steep ? x : y), z, color);
                 errorY = errorY - dy;
@@ -234,5 +238,8 @@ namespace Gal3DEngine
                 DrawTriangleOutline(transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], new Color3(255, 255, 255));
             }
         }
+
+        public bool ClippingEnabled { get; set; }
+
     }
 }
