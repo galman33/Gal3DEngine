@@ -68,7 +68,7 @@ namespace Gal3DGame
             Gal3DEngine.Gizmos.AxisGizmo.Render(screen, Matrix4.CreateFromQuaternion(rotation) *
                 Matrix4.CreateTranslation(position), view, projection);
 
-            CollisionBox.DrawCube(screen, Matrix4.Identity, view, projection);
+            //CollisionBox.DrawCube(screen, Matrix4.Identity, view, projection);
         }
 
         public void KeyDown(OpenTK.Input.KeyboardKeyEventArgs e)

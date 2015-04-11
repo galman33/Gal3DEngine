@@ -20,6 +20,8 @@ namespace Gal3DGame
 
         private List<Star> stars = new List<Star>();
 
+        int points;
+
         public MyGame() : base(500, 400)
         {
             
@@ -53,13 +55,14 @@ namespace Gal3DGame
         {
             for (int i = 0; i < 20; i++)
             {
-                stars.Add(new Star(enviroment, aircraft));
+                stars.Add(new Star(enviroment, aircraft, this));
             }
         }
 
         private void ResetGame()
         {
             aircraft.Reset();
+            points = 0;
             camera.Rotation = Quaternion.Identity;
         }
 
@@ -68,13 +71,28 @@ namespace Gal3DGame
             base.Update();
             aircraft.Update();
 
-            camera.Rotation = Quaternion.Slerp(camera.Rotation, aircraft.Rotation, (float)Time.DeltaTime * 3.0f);
-            camera.Position = aircraft.Position - Vector3.Transform(-Vector3.UnitZ, camera.Rotation).Normalized() * 2;
+            UpdateStars();
+
+            UpdateCamera();
 
             if (enviroment.IsCollidingWith(aircraft.CollisionBox))
             {
                 ResetGame();
             }
+        }
+
+        private void UpdateStars()
+        {
+            for (int i = 0; i < stars.Count; i++)
+            {
+                stars[i].Update();
+            }
+        }
+
+        private void UpdateCamera()
+        {
+            camera.Rotation = Quaternion.Slerp(camera.Rotation, aircraft.Rotation, (float)Time.DeltaTime * 3.0f);
+            camera.Position = aircraft.Position - Vector3.Transform(-Vector3.UnitZ, camera.Rotation).Normalized() * 2;
         }
 
         protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -112,7 +130,10 @@ namespace Gal3DGame
             }
         }
 
-        public static Random Random = new Random();
-
+        public void AddPoint()
+        {
+            points++;
+            Console.WriteLine("Score: " + points);
+        }
     }
 }

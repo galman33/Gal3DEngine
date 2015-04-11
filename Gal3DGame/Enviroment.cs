@@ -58,8 +58,6 @@ namespace Gal3DGame
 
         private void GenerateBuildings()
         {
-            Random r = new Random();
-
             buildingsArray = new bool[CityLength, CityLength];
 
             for (int x = 0; x < buildingsArray.GetLength(0); x++)
@@ -72,7 +70,7 @@ namespace Gal3DGame
                     }
                     else
                     {
-                        buildingsArray[x, y] = r.Next(15) == 0; ;
+                        buildingsArray[x, y] = RandomHelper.Random.Next(15) == 0; ;
                     }
                 }
             }
@@ -131,7 +129,6 @@ namespace Gal3DGame
 
         private void SetupBuildings(List<Vector4> positionsLst, List<IndexPositionUVNormal> indicesLst)
         {
-            Random r = new Random();
             for (int y = 0; y < CityLength; y++)
             {
                 for (int x = 0; x < CityLength; x++)
@@ -143,7 +140,7 @@ namespace Gal3DGame
                         int c = GetGroundPositionIndex(x + 1, y + 1); // +x -y +z
                         int d = GetGroundPositionIndex(x, y + 1); // -x -y +z
 
-                        int floors = r.Next(1, 3); // 1 or 2
+                        int floors = RandomHelper.Random.Next(1, 3); // 1 or 2
 
                         if(IsOutlineBuilding(x, y))
                             floors = 2;
@@ -232,15 +229,9 @@ namespace Gal3DGame
             shader.world = Matrix4.CreateTranslation(10, 10, 10); ;
             shader.view = view;
             shader.projection = projection;
-            //shader.texture = groundTexture;
             shader.ambientLight = 1.0f;
             shader.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
 
-            /*shader.SetVerticesPositions(positions);
-            shader.SetVerticesUvs(uvs);
-            shader.SetVerticesNormals(normals);
-
-            shader.SetIndices(indices);*/
             shader.ExtractData(sunModel);
 
             shader.Render(screen);
@@ -270,6 +261,15 @@ namespace Gal3DGame
                 }
             }
             return false;
+        }
+
+        public void GetFreeTile(out int x, out int y)
+        {
+            do
+            {
+                x = RandomHelper.Random.Next(CityLength);
+                y = RandomHelper.Random.Next(CityLength);
+            } while (buildingsArray[x, y]);
         }
     }
 }

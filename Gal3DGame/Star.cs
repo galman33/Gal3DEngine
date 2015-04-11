@@ -18,29 +18,39 @@ namespace Gal3DGame
 
         private Enviroment environment;
         private Aircraft aircraft;
+        private MyGame game;
 
-        public Star(Enviroment environment, Aircraft aircraft)
+        public Star(Enviroment environment, Aircraft aircraft, MyGame game)
         {
             this.environment = environment;
             this.aircraft = aircraft;
+            this.game = game;
 
             Reset();
         }
 
         private void Reset()
         {
-            do
-            {
-                Vector3 position = new Vector3( (float)MyGame.Random.NextDouble() * 13 + 1,
-                                                (float)MyGame.Random.NextDouble() * 1.5f + 0.2f,
-                                                (float)MyGame.Random.NextDouble() * 13 + 1);
-                hitBox = new Box(0.1f, 0.1f, 0.1f, position);
-            } while (environment.IsCollidingWith(hitBox));
+            int x, y;
+            environment.GetFreeTile(out x, out y);
+            Vector3 position = new Vector3( x + 0.5f,
+                                            (float)RandomHelper.Random.NextDouble() * 1.5f + 0.2f,
+                                            y + 0.5f);
+            hitBox = new Box(0.1f, 0.1f, 0.1f, position);
         }
 
         public static void LoadContent()
         {
             starModel = new Model("Resources/Star.obj", "Resources/Star.bmp");
+        }
+
+        public void Update()
+        {
+            if (Box.IsColliding(hitBox, aircraft.CollisionBox))
+            {
+                game.AddPoint();
+                Reset();
+            }
         }
 
         public void Render(Screen screen, Matrix4 projection, Matrix4 view)
@@ -59,7 +69,7 @@ namespace Gal3DGame
 
             shader.Render(screen);
 
-            hitBox.DrawCube(screen, Matrix4.Identity, shader.view, shader.projection);
+            //hitBox.DrawCube(screen, Matrix4.Identity, shader.view, shader.projection);
         }
 
     }
