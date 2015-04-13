@@ -29,9 +29,9 @@ namespace Gal3DEngine
             //return !((shouldClip && ShouldClip(p1, p2, p3, width, height)) || ShouldCull(p1, p2, p3));
             if(shouldClip)
             {
-                    return ShouldClip(p1, p2, p3, width, height) || ShouldCull(p1, p2, p3);
+                    return !(ShouldClip(p1, p2, p3, width, height) || ShouldCull(p1, p2, p3));
             }
-            return ShouldCull(p1, p2, p3);
+            return !ShouldCull(p1, p2, p3);
         }
 
         // back face Culling check
