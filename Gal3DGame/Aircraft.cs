@@ -19,12 +19,18 @@ namespace Gal3DGame
 
         private ShaderPhong shader = AvailableShaders.ShaderPhong;
 
+        public Gal3DEngine.UTILS.Box CollisionBox { get; private set; }
+
         public Aircraft()
         {
             rotation = Quaternion.Identity;
             position = new Vector3();
 
             rotateX = rotateY = 0;
+
+            CollisionBox = new Gal3DEngine.UTILS.Box(0.15f, 0.15f, 0.15f, position);
+
+            Reset();
         }
 
         public static void LoadContent()
@@ -37,9 +43,9 @@ namespace Gal3DGame
             rotation = rotation * Quaternion.FromAxisAngle(Vector3.UnitX, rotateX * (float) Time.DeltaTime);
             rotation = rotation * Quaternion.FromAxisAngle(Vector3.UnitY, rotateY * (float)Time.DeltaTime);
 
-            //Console.WriteLine(rotateX);
-
             position += Forward * (float) Time.DeltaTime;
+
+            CollisionBox.origin = position;
         }
 
         public void Render(Screen screen, Matrix4 projection, Matrix4 view)
@@ -61,6 +67,8 @@ namespace Gal3DGame
 
             Gal3DEngine.Gizmos.AxisGizmo.Render(screen, Matrix4.CreateFromQuaternion(rotation) *
                 Matrix4.CreateTranslation(position), view, projection);
+
+            //CollisionBox.DrawCube(screen, Matrix4.Identity, view, projection);
         }
 
         public void KeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -87,6 +95,14 @@ namespace Gal3DGame
                 rotateY = 0;
             if (e.Key == OpenTK.Input.Key.Left)
                 rotateY = 0;
+        }
+
+        public void Reset()
+        {
+            position.X = 14f;
+            position.Y = 4.5f;
+            position.Z = 14f;
+            rotation = Quaternion.FromAxisAngle(Vector3.UnitY, 45);
         }
 
         public Vector3 Position

@@ -5,6 +5,7 @@ using System.Text;
 using Gal3DEngine;
 using OpenTK;
 using Gal3DEngine.Gizmos;
+using Gal3DEngine.UTILS;
 
 namespace Gal3DGame
 {
@@ -18,6 +19,12 @@ namespace Gal3DGame
         private Model bear;
         private Enviroment enviroment;
 
+        private List<Star> stars = new List<Star>();
+
+        int points;
+
+		private TextRender pointsText;
+
         public MyGame() : base(500, 400)
         {
             
@@ -28,11 +35,11 @@ namespace Gal3DGame
             base.OnLoad(e);
             Aircraft.LoadContent();
             Enviroment.LoadContent();
+            Star.LoadContent();
 
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.1f, 20.0f);
 
             camera = new Camera();
-            camera.Position.Z = 4;
 
             aircraft = new Aircraft();
 
@@ -40,7 +47,28 @@ namespace Gal3DGame
 
             enviroment = new Enviroment();
 
+            AddStars();
+
             BackgroundColor = new Color3(128, 255, 255);
+
+            ResetGame();
+
+			pointsText = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);
+        }
+
+        private void AddStars()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                stars.Add(new Star(enviroment, aircraft, this));
+            }
+        }
+
+        private void ResetGame()
+        {
+            aircraft.Reset();
+            points = 0;
+            camera.Rotation = Quaternion.Identity;
         }
 
         protected override void Update()
@@ -48,6 +76,26 @@ namespace Gal3DGame
             base.Update();
             aircraft.Update();
 
+            UpdateStars();
+
+            UpdateCamera();
+
+            if (enviroment.IsCollidingWith(aircraft.CollisionBox))
+            {
+                ResetGame();
+            }
+        }
+
+        private void UpdateStars()
+        {
+            for (int i = 0; i < stars.Count; i++)
+            {
+                stars[i].Update();
+            }
+        }
+
+        private void UpdateCamera()
+        {
             camera.Rotation = Quaternion.Slerp(camera.Rotation, aircraft.Rotation, (float)Time.DeltaTime * 3.0f);
             camera.Position = aircraft.Position - Vector3.Transform(-Vector3.UnitZ, camera.Rotation).Normalized() * 2;
         }
@@ -72,26 +120,27 @@ namespace Gal3DGame
 
             AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
 
-            RenderEnviroment(view);
-
-            aircraft.Render(Screen, projection, view);
-        }
-
-        private void RenderEnviroment(Matrix4 view)
-        {
             enviroment.Render(Screen, view, projection);
 
-            /*ShaderPhong.world = Matrix4.Identity;
-            ShaderPhong.view = view;
-            ShaderPhong.projection = projection;
+            aircraft.Render(Screen, projection, view);
 
-            ShaderPhong.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
-            ShaderPhong.ambientLight = 0.3f;
+            RenderStars(view);
 
-            ShaderPhong.ExtractData(bear);
-
-            ShaderPhong.Render(Screen);*/
+			pointsText.RenderText(Screen, "Points: " + points, new Vector2(20, 20));
         }
 
+        private void RenderStars(Matrix4 view)
+        {
+            for(int i = 0; i < stars.Count; i++)
+            {
+                stars[i].Render(Screen, projection, view);
+            }
+        }
+
+        public void AddPoint()
+        {
+            points++;
+            Console.WriteLine("Score: " + points);
+        }
     }
 }

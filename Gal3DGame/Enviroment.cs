@@ -5,6 +5,7 @@ using System.Text;
 using Gal3DEngine;
 using OpenTK;
 using Gal3DEngine.IndicesTypes;
+using Gal3DEngine.UTILS;
 
 namespace Gal3DGame
 {
@@ -27,6 +28,8 @@ namespace Gal3DGame
 
         private static Model sunModel;
 
+        private List<Box> boxes;
+
         public static void LoadContent()
         {
             groundTexture = Texture.LoadTexture("Resources/City.png");
@@ -45,6 +48,8 @@ namespace Gal3DGame
 
             SetupGroundIndices(indicesLst);
 
+            boxes = new List<Box>();
+
             SetupBuildings(positionsLst, indicesLst);
 
             positions = positionsLst.ToArray();
@@ -53,8 +58,6 @@ namespace Gal3DGame
 
         private void GenerateBuildings()
         {
-            Random r = new Random();
-
             buildingsArray = new bool[CityLength, CityLength];
 
             for (int x = 0; x < buildingsArray.GetLength(0); x++)
@@ -67,7 +70,7 @@ namespace Gal3DGame
                     }
                     else
                     {
-                        buildingsArray[x, y] = r.Next(15) == 0; ;
+                        buildingsArray[x, y] = RandomHelper.Random.Next(15) == 0; ;
                     }
                 }
             }
@@ -126,7 +129,6 @@ namespace Gal3DGame
 
         private void SetupBuildings(List<Vector4> positionsLst, List<IndexPositionUVNormal> indicesLst)
         {
-            Random r = new Random();
             for (int y = 0; y < CityLength; y++)
             {
                 for (int x = 0; x < CityLength; x++)
@@ -138,7 +140,7 @@ namespace Gal3DGame
                         int c = GetGroundPositionIndex(x + 1, y + 1); // +x -y +z
                         int d = GetGroundPositionIndex(x, y + 1); // -x -y +z
 
-                        int floors = r.Next(1, 3); // 1 or 2
+                        int floors = RandomHelper.Random.Next(1, 3); // 1 or 2
 
                         if(IsOutlineBuilding(x, y))
                             floors = 2;
@@ -168,6 +170,10 @@ namespace Gal3DGame
 
                         //Wall +Z
                         AddRect(c, d, h, g, 8, 9, 10, 11, 4, indicesLst);
+
+
+                        boxes.Add(new Box(BlockSize / 2, buildingHeight / 2, BlockSize / 2,
+                            new Vector3((x + 0.5f) * BlockSize, buildingHeight / 2, (y + 0.5f) * BlockSize)));
                     }
                 }
             }
@@ -195,6 +201,13 @@ namespace Gal3DGame
         {
             RenderSun(screen, view, projection);
 
+            RenderBuildings(screen, view, projection);
+
+            //RenderBoxes(screen, view, projection);
+        }
+
+        private void RenderBuildings(Screen screen, Matrix4 view, Matrix4 projection)
+        {
             shader.world = Matrix4.Identity;
             shader.view = view;
             shader.projection = projection;
@@ -216,18 +229,20 @@ namespace Gal3DGame
             shader.world = Matrix4.CreateTranslation(10, 10, 10); ;
             shader.view = view;
             shader.projection = projection;
-            //shader.texture = groundTexture;
             shader.ambientLight = 1.0f;
             shader.lightDirection = (new Vector3(-1, -1, -1)).Normalized();
 
-            /*shader.SetVerticesPositions(positions);
-            shader.SetVerticesUvs(uvs);
-            shader.SetVerticesNormals(normals);
-
-            shader.SetIndices(indices);*/
             shader.ExtractData(sunModel);
 
             shader.Render(screen);
+        }
+
+        private void RenderBoxes(Screen screen, Matrix4 view, Matrix4 projection)
+        {
+            for(int i = 0; i < boxes.Count; i++)
+            {
+                boxes[i].Render(screen, view, projection);
+            }
         }
 
         private bool IsOutlineBuilding(int x, int y)
@@ -235,5 +250,26 @@ namespace Gal3DGame
             return x == 0 || y == 0 || x == buildingsArray.GetLength(0) - 1 || y == buildingsArray.GetLength(1) - 1;
         }
 
+
+        public bool IsCollidingWith(Box box)
+        {
+            for (int i = 0; i < boxes.Count; i++)
+            {
+                if (Box.IsColliding(box, boxes[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void GetFreeTile(out int x, out int y)
+        {
+            do
+            {
+                x = RandomHelper.Random.Next(CityLength);
+                y = RandomHelper.Random.Next(CityLength);
+            } while (buildingsArray[x, y]);
+        }
     }
 }
