@@ -24,9 +24,14 @@ namespace Gal3DEngine
             normal = Vector3.Transform(normal, transformation);
         }
 
-        public static bool ShouldRender(Vector4 p1, Vector4 p2, Vector4 p3, int width, int height)
+        public static bool ShouldRender(Vector4 p1, Vector4 p2, Vector4 p3, int width, int height , bool shouldClip)
         {
-            return !(ShouldClip(p1, p2, p3, width, height) || ShouldCull(p1, p2, p3));
+            //return !((shouldClip && ShouldClip(p1, p2, p3, width, height)) || ShouldCull(p1, p2, p3));
+            if(shouldClip)
+            {
+                    return ShouldClip(p1, p2, p3, width, height) || ShouldCull(p1, p2, p3);
+            }
+            return ShouldCull(p1, p2, p3);
         }
 
         // back face Culling check

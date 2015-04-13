@@ -60,7 +60,8 @@ namespace Gal3DEngine
                             else
                                 play = false; // stops the animation
                         }
-                        curTimePassed = 0.0;
+
+                        curTimePassed = 0.0f;
                     }
                 }
             }

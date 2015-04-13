@@ -15,14 +15,15 @@ namespace Gal3DEngine
         
         private Color3[] colorBuffer;
         private float[] zBuffer;
-
+        
         public Screen()
         {
-
+            ClippingEnabled = true;
         }
 
         public Screen(int width, int height)
         {
+            ClippingEnabled = true;
             Init(width, height);
         }
 
@@ -237,5 +238,8 @@ namespace Gal3DEngine
                 DrawTriangleOutline(transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], new Color3(255, 255, 255));
             }
         }
+
+        public bool ClippingEnabled { get; set; }
+
     }
 }
