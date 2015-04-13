@@ -16,7 +16,6 @@ namespace Gal3DGame
         private Camera camera;
         private Matrix4 projection;
 
-        private Model bear;
         private Enviroment enviroment;
 
         private List<Star> stars = new List<Star>();
@@ -42,8 +41,6 @@ namespace Gal3DGame
             camera = new Camera();
 
             aircraft = new Aircraft();
-
-            bear = new Model("Resources/bear.obj", "Resources/bear.jpg");
 
             enviroment = new Enviroment();
 
