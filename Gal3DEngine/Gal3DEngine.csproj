@@ -90,47 +90,25 @@
     <Compile Include="VertexColor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ArialFontData.csv">
+    <None Include="Resources\ArialFontDataNew.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\bear.obj">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\cat.obj">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\Cat2.obj">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\cow.obj">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\Sasuke.obj">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Resources\bear.obj" />
+    <None Include="Resources\cat.obj" />
+    <None Include="Resources\Cat2.obj" />
+    <None Include="Resources\cow.obj" />
+    <None Include="Resources\Sasuke.obj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\ArialFont.bmp">
+    <Content Include="Resources\ArialFontNew.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\bear.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\body.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\cat.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Cat2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\cow.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\TesTexture.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resources\bear.jpg" />
+    <Content Include="Resources\body.png" />
+    <Content Include="Resources\cat.png" />
+    <Content Include="Resources\Cat2.png" />
+    <Content Include="Resources\cow.png" />
+    <Content Include="Resources\TesTexture.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
