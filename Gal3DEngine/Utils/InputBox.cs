@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Gal3DEngine.Utils
 {
-	class InputBox
+	public static class InputBox
 	{
 
 		public static string InputBox(string prompt, string title = "", string defaultResponse = "", int xPos = -1, int yPos = -1)
