@@ -5,14 +5,12 @@ using System.Text;
 
 namespace Gal3DEngine.IndicesTypes
 {
-    public class IndexPositionUVNormal : IndexPosition
+    public class IndexPositionUVNormal : IndexPositionUV
     {
-        public int uv;
         public int normal;
 
-        public IndexPositionUVNormal(int position, int uv, int normal) : base(position)
+        public IndexPositionUVNormal(int position, int uv, int normal) : base(position, uv)
         {
-            this.uv = uv;
             this.normal = normal;
         }
 
