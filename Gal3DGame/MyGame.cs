@@ -137,7 +137,6 @@ namespace Gal3DGame
         public void AddPoint()
         {
             points++;
-            Console.WriteLine("Score: " + points);
         }
     }
 }
