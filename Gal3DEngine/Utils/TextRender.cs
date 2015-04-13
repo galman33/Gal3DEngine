@@ -72,14 +72,6 @@ namespace Gal3DEngine.UTILS
                 }
                 else
                 {
-
-                    for (int a = 0; a < space; a++)
-                    {
-                        for (int b = 0; b < CharHeight; b++)
-                        {
-                            screen.PutPixel((int)position.X + a, (int)position.Y + b, new Color3(0, 0, 0));
-                        }
-                    }
                     position.X += space + space;
                 }
             }
