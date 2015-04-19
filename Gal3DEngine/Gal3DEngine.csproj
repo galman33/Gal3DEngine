@@ -49,6 +49,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="OpenTK">
       <HintPath>..\OpenTK.dll</HintPath>
     </Reference>
@@ -80,6 +81,7 @@
     <Compile Include="Time.cs" />
     <Compile Include="Utils\Animation.cs" />
     <Compile Include="Utils\Box.cs" />
+    <Compile Include="Utils\InputBox.cs" />
     <Compile Include="Utils\TextRender.cs" />
     <Compile Include="VertexUV.cs" />
     <Compile Include="Game.cs" />

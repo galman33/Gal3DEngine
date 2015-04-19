@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gal3DEngine
+namespace Gal3DEngine.Utils
 {
     public class Animation
     {
