@@ -271,5 +271,14 @@ namespace Gal3DGame
                 y = RandomHelper.Random.Next(CityLength);
             } while (buildingsArray[x, y]);
         }
+
+		public float CitySize
+		{
+			get
+			{
+				return BlockSize * CityLength;
+			}
+		}
+
     }
 }

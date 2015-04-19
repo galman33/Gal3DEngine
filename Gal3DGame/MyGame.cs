@@ -77,11 +77,18 @@ namespace Gal3DGame
 
             UpdateCamera();
 
-            if (enviroment.IsCollidingWith(aircraft.CollisionBox))
+            if (IsAircraftCrashing())
             {
                 ResetGame();
             }
         }
+
+		private bool IsAircraftCrashing()
+		{
+			return enviroment.IsCollidingWith(aircraft.CollisionBox) ||
+				aircraft.Position.Y < 0 || aircraft.Position.X < 0 || aircraft.Position.Z < 0 ||
+				aircraft.Position.X > enviroment.CitySize || aircraft.Position.Z > enviroment.CitySize;
+		}
 
         private void UpdateStars()
         {
