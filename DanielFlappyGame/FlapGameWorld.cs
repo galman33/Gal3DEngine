@@ -223,7 +223,7 @@ namespace DanielFlappyGame
 
         public void GameOver()
         {
-            AddScore(this.points, "Flappy");
+            AddScore(this.points, Gal3DEngine.Utils.InputBox.Show("Name:"));
             Init();            
         }        
 
