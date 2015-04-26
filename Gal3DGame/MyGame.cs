@@ -79,9 +79,16 @@ namespace Gal3DGame
 
             if (IsAircraftCrashing())
             {
-                ResetGame();
+				EndGame();
             }
         }
+
+		private void EndGame()
+		{
+			string playerName = InputBox.Show("You collected " + points + " stars!\r\nPlease enter you name:", "You lost!");
+			HighscoresManager.AddScore(playerName, points);
+			ResetGame();
+		}
 
 		private bool IsAircraftCrashing()
 		{

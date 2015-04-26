@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Aircraft.cs" />
     <Compile Include="Enviroment.cs" />
+    <Compile Include="HighscoresManager.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
