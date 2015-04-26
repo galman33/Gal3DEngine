@@ -19,7 +19,7 @@ namespace Gal3DGame
 
         private ShaderPhong shader = AvailableShaders.ShaderPhong;
 
-        public Gal3DEngine.UTILS.Box CollisionBox { get; private set; }
+        public Gal3DEngine.Utils.Box CollisionBox { get; private set; }
 
         public Aircraft()
         {
@@ -28,7 +28,7 @@ namespace Gal3DGame
 
             rotateX = rotateY = 0;
 
-            CollisionBox = new Gal3DEngine.UTILS.Box(0.15f, 0.15f, 0.15f, position);
+            CollisionBox = new Gal3DEngine.Utils.Box(0.15f, 0.15f, 0.15f, position);
 
             Reset();
         }

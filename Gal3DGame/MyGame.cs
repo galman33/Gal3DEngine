@@ -5,7 +5,7 @@ using System.Text;
 using Gal3DEngine;
 using OpenTK;
 using Gal3DEngine.Gizmos;
-using Gal3DEngine.UTILS;
+using Gal3DEngine.Utils;
 
 namespace Gal3DGame
 {
