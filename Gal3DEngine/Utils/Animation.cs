@@ -8,8 +8,8 @@ namespace Gal3DEngine.Utils
     public class Animation
     {
         private List<AnimationData> animations;
-        private Model frameModel;      
 
+        public Model frameModel; 
         private int index;
         private bool play;
         private string curAnimName;
@@ -43,18 +43,24 @@ namespace Gal3DEngine.Utils
         {
             if (play)
             {
-                curTimePassed = Time.DeltaTime * 1000; // in miliseconds
+                
                 if (IsAnimationExists(curAnimName))
                 {
-                    if (curTimePassed >= 1000 / GetAnimation(curAnimName).frameRate)
+                    curTimePassed += Time.DeltaTime; // in miliseconds
+                    if (curTimePassed >= 1/ GetAnimation(curAnimName).frameRate)
                     {
+                        index++;
                         Model entityModel = animations.First<AnimationData>(n => n.AnimationName == curAnimName).animationFrames[index];
                         frameModel = (entityModel);
-                        index++;
-                        if (index == GetAnimation(curAnimName).animationFrames.Length && GetAnimation(curAnimName).repeat) //end the anim cycle
+                        
+                        if (index == GetAnimation(curAnimName).animationFrames.Length - 1) //end the anim cycle
                         {
-                            index = 0;
+                            if (GetAnimation(curAnimName).repeat)
+                                index = -1;
+                            else
+                                play = false; // stops the animation
                         }
+
                         curTimePassed = 0.0f;
                     }
                 }
