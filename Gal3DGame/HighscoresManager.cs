@@ -83,5 +83,22 @@ namespace Gal3DGame
 			}
 		}
 
+		public static string GetHighscoresText()
+		{
+			var highscores = RetriveHighScores();
+
+			string txt = "";
+			int i = 1;
+			foreach(var score in highscores.PlayersPoints)
+			{
+				if(!string.IsNullOrEmpty(txt))
+					txt += "\r\n";
+				txt += i + ". " + score.PlayerName + " - " + score.Points;
+				i++;
+			}
+
+			return txt;
+		}
+
 	}
 }

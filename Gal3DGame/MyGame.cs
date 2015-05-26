@@ -6,6 +6,7 @@ using Gal3DEngine;
 using OpenTK;
 using Gal3DEngine.Gizmos;
 using Gal3DEngine.Utils;
+using System.Windows.Forms;
 
 namespace Gal3DGame
 {
@@ -87,6 +88,7 @@ namespace Gal3DGame
 		{
 			string playerName = InputBox.Show("You collected " + points + " stars!\r\nPlease enter you name:", "You lost!");
 			HighscoresManager.AddScore(playerName, points);
+			MessageBox.Show("--Highscores--\r\n\r\n" + HighscoresManager.GetHighscoresText());
 			ResetGame();
 		}
 
