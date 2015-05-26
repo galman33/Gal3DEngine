@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gal3DEngine", "Gal3DEngine\Gal3DEngine.csproj", "{CC613E18-98F1-48B6-9B67-646253F15499}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gal3DGame", "Gal3DGame\Gal3DGame.csproj", "{DEEDDF41-C8D3-48E0-99B7-2020BFA258E4}"

@@ -1,6 +1,4 @@
-Gal3DEngine/bin
-Gal3DEngine/obj
-Gal3DGame/bin
-Gal3DGame/obj
+*/bin
+*/obj
 *.tmp
 *.suo
