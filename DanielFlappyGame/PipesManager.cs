@@ -16,6 +16,8 @@ namespace DanielFlappyGame
         private TimeSpan delta = new TimeSpan(0, 0, 0, 0, 700);
         private TimeSpan curDelta = TimeSpan.Zero;
 
+        float radius = 0.95f;
+
         public PipesManager()
         {
             Pipe.LoadModel();
@@ -101,9 +103,7 @@ namespace DanielFlappyGame
         private Vector3[] GetRandomPoint(float z)
         {
 
-            float centerY = rand.Next(-5, 5) / 10.0f;
-            
-            float radius = 0.9f;
+            float centerY = rand.Next(-5, 5) / 10.0f;           
 
             return new[] { new Vector3(0, centerY + radius, z), new Vector3(0, centerY - radius, z) };
         }

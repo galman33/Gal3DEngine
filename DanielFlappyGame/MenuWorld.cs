@@ -15,7 +15,7 @@ namespace DanielFlappyGame
         Button highScoreBtn;
 
         HighScoresManager manager;
-
+        
         bool showHighScores;
 
         List<Score> scores;
@@ -38,6 +38,7 @@ namespace DanielFlappyGame
             if (scores.Count > 5)
                 scores.RemoveRange(0, scores.Count - 5);
             scores.Reverse();
+            
         }
 
         void highScoreBtn_buttonPressed()
@@ -55,6 +56,7 @@ namespace DanielFlappyGame
             {
                 RenderHighScore();
             }
+            
         }
 
         private void OnBtnClick()

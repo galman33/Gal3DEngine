@@ -24,10 +24,22 @@ namespace DanielFlappyGame.GameUtils
         Vector2[] uvs;
         IndexPositionUVNormal[] indices;
         Vector3[] normals;
+
+        private Vector3 GetMin()
+        {
+            return new Vector3(box.origin.X - box.radiusX, box.origin.Y - box.radiusY, box.origin.Z - box.radiusZ);
+        }
+
+        private Vector3 GetMax()
+        {
+            return new Vector3(box.origin.X + box.radiusX, box.origin.Y + box.radiusY, box.origin.Z + box.radiusZ);
+        }
+
+
         private void InitCubeMap()
         {
-            var min = box.GetMin();
-            var max = box.GetMax();
+            var min = GetMin();
+            var max = GetMax();
 
             wireFrames = new Vector4[8];
             wireFrames[0] = new Vector4(min.X, min.Y, min.Z, 1); // origin
@@ -49,16 +61,34 @@ namespace DanielFlappyGame.GameUtils
                3------5 
             */
             uvs = new Vector2[wireFrames.Length];
-            uvs[0] = new Vector2(0.5f, 2 / 3);
-            uvs[1] = new Vector2(0.5f, 1 / 3);
-            uvs[2] = new Vector2(1/4, 2 / 3);
-            uvs[3] = new Vector2(3/4, 2 / 3);
-            uvs[4] = new Vector2(1/4, 1 / 3);
-            uvs[5] = new Vector2(3/4, 1 / 3);
-            uvs[6] = new Vector2(0, 2 / 3);
-            uvs[7] = new Vector2(0, 1 / 3);
+            /*uvs[0] = new Vector2(1f / 2f,   2f / 3f);
+            uvs[1] = new Vector2(1f / 2f,   1f / 3f);
+            uvs[2] = new Vector2(1f / 4f,   2f / 3f);
+            uvs[3] = new Vector2(3f / 4f,   2f / 3f);
+            uvs[4] = new Vector2(1f / 4f,   1f / 3f);
+            uvs[5] = new Vector2(3f / 4f,   1f / 3f);
+            uvs[6] = new Vector2(0f     ,   1f / 3f);
+            uvs[7] = new Vector2(0f     ,   1f / 3f);*/
+            uvs[0] = new Vector2(1f / 2f, 1f / 3f);
+            uvs[1] = new Vector2(1f / 2f, 1f / 3f);
+            uvs[2] = new Vector2(1f / 4f, 2f / 3f);
+            uvs[3] = new Vector2(3f / 4f, 2f / 3f);
 
-            indices = new IndexPositionUVNormal[24];
+            List<IndexPositionUVNormal> indicesLst = new List<IndexPositionUVNormal>();
+
+            addRectIndices(indicesLst, 0, 3, 5, 1); // floor
+            addRectIndices(indicesLst, 2, 4, 7, 6); // ceil
+            addRectIndices(indicesLst, 4, 1, 5, 7); // right
+            addRectIndices(indicesLst, 2, 6, 3, 0); // left
+            addRectIndices(indicesLst, 4, 2, 0, 1); // front
+            addRectIndices(indicesLst, 6, 7, 5, 3); // back
+
+            indices = indicesLst.ToArray();
+
+            return;
+            
+            
+            //indices = new IndexPositionUVNormal[24];
             
             
             //floor rec
@@ -104,17 +134,27 @@ namespace DanielFlappyGame.GameUtils
         }
 
 
+        private void addRectIndices(List<IndexPositionUVNormal> indicesLst, int a, int b, int c, int d)
+        {
+            indicesLst.Add(new IndexPositionUVNormal(a, a, 0));
+            indicesLst.Add(new IndexPositionUVNormal(b, b, 0));
+            indicesLst.Add(new IndexPositionUVNormal(c, c, 0));
+
+            indicesLst.Add(new IndexPositionUVNormal(a, a, 0));
+            indicesLst.Add(new IndexPositionUVNormal(c, c, 0));
+            indicesLst.Add(new IndexPositionUVNormal(d, d, 0));
+        }
+
         public void Render(Screen screen , Matrix4 view , Matrix4 projection)
         {
-            for (int i = 0; i < wireFrames.Length; i++)
-            {
-                Vector4 tmp = new Vector4(wireFrames[i]);
-                tmp.W = 1;
-                ShaderHelper.TransformPosition(ref tmp, /*Matrix4.CreateTranslation(origin) **/ view * projection, screen);
-                wireFrames[i] = new Vector4(tmp);
-            }
-
-            Matrix4 world = Matrix4.CreateScale(1);           
+            //for (int i = 0; i < wireFrames.Length; i++)
+            //{
+            //    Vector4 tmp = new Vector4(wireFrames[i]);
+            //    tmp.W = 1;
+            //    ShaderHelper.TransformPosition(ref tmp, /*Matrix4.CreateTranslation(origin) **/ view * projection, screen);
+            //    wireFrames[i] = new Vector4(tmp);
+            //}
+            Matrix4 world = Matrix4.CreateTranslation(0, 0, -5);//Matrix4.CreateScale(5);           
 
             ShaderFlat curShader = (Program.world as FlapGameWorld).curShader;
            

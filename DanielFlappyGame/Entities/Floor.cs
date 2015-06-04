@@ -26,7 +26,7 @@ namespace DanielFlappyGame
         {
             texture = Texture.LoadTexture(url);
             this.translation = translation;
-            this.scale = new Vector3(4.5f, 1, 3.1f);
+            this.scale = new Vector3(10f, 1, 3.1f);
             this.rotation = rotation;
             InitFloor();
         }
@@ -92,7 +92,7 @@ namespace DanielFlappyGame
             curShader.SetIndices(indices);
             curShader.SetVerticesUvs(uvs);
             curShader.texture = texture;
-            curShader.lightDirection = -normals[0];//new Vector3(0, -1, 0);
+            curShader.lightDirection = -normals[0];
             curShader.ambientLight = 0.5f;
             curShader.world = world; //Matrix4.CreateScale(scale) * Matrix4.CreateTranslation(translation);
             curShader.Render(screen);

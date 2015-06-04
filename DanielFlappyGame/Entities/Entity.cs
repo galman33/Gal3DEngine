@@ -65,6 +65,11 @@ namespace DanielFlappyGame
            return model;
        }
 
+       public void SetModel(Model model)
+       {
+           this.model = model;
+       }
+
        public virtual void Destroy()
        {
            if(DestroyEntity!= null)

@@ -30,6 +30,8 @@ namespace DanielFlappyGame
 
         private bool start;
 
+        CubeMap map;
+
         public FlapGameWorld() : base(640, 480)
         {
 
@@ -60,7 +62,7 @@ namespace DanielFlappyGame
             floor = new Floor(new Vector3(-2f, -1.3f, 0), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
             pipesManager.Init();
             curShader.projection = projection;
-
+           
             pointsLbl = new Label("Points: "+ points , new Vector2(30,30));
             topLbl = new Label("Top Score: " + HSManager.GetTopScore().points , new Vector2(30, 60));
                  
@@ -107,9 +109,10 @@ namespace DanielFlappyGame
             UpdateCamera();          
         }
 
+        private float floorOffset = 1.0f;
         private void UpdateFloor()
         {
-            if(floor.translation.Z >this.gameCam.Position.Z)
+            if(floor.translation.Z - floorOffset >this.gameCam.Position.Z)
             {               
                 floor.Update(flappyflappy.Position);
             }
@@ -140,7 +143,7 @@ namespace DanielFlappyGame
             curShader.view = view;
             pointsLbl.text = "Points: " + points;
             pointsLbl.RenderLabel(Screen, textRender);
-            topLbl.RenderLabel(Screen, textRender);           
+            topLbl.RenderLabel(Screen, textRender);
             
             DrawEntities();            
         }
@@ -223,7 +226,7 @@ namespace DanielFlappyGame
 
         public void GameOver()
         {
-            AddScore(this.points, Gal3DEngine.Utils.InputBox.Show("Name:"));
+            AddScore(this.points, Gal3DEngine.Utils.InputBox.Show("Name:" , "New Score" , "FlappyNewbie"));
             Init();            
         }        
 

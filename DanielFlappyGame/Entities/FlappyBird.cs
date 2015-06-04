@@ -56,7 +56,7 @@ namespace DanielFlappyGame
             
             UpdatePosition();
             AdjustHitBox();
-            if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles()))//|| CollideFloor())
+            if (CollideTunnels((Program.world as FlapGameWorld).GetTunnles())|| CollideFloor())
             {
                 (Program.world as FlapGameWorld).GameOver();
             }
