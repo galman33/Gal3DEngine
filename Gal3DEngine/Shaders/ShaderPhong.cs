@@ -72,7 +72,7 @@ namespace Gal3DEngine
             DrawTriangles(indices);
         }
         
-        protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd)
+        protected override LineData GenerateScanLineData(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd)
         {
             LineData result = new LineData();
 

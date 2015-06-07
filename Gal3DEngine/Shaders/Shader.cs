@@ -150,7 +150,7 @@ namespace Gal3DEngine
             else
                 dP1P3 = 0;
 
-            triangleData = ProcessTriangle();
+            triangleData = GenerateTriangleData();
 
 
             int maxY = Math.Min(screen.Width / 2, (int)positions[p3.position].Y);
@@ -233,7 +233,7 @@ namespace Gal3DEngine
 
             int endX = Math.Min(ex, screen.Width / 2);
 
-            lineData = MyProcessScanLine(gradient1, gradient2, pa, pb, pc, pd);
+            lineData = GenerateScanLineData(gradient1, gradient2, pa, pb, pc, pd);
 
             // drawing a line from left (sx) to right (ex) 
             for (var x = Math.Max(sx, -screen.Width / 2); x < endX; x++)
@@ -248,7 +248,7 @@ namespace Gal3DEngine
 		/// Process three indices into triangle data.
 		/// </summary>
 		/// <returns>The triangle data</returns>
-        protected virtual TriangleData ProcessTriangle()
+        protected virtual TriangleData GenerateTriangleData()
         {
             return default(TriangleData);
         }
@@ -262,9 +262,8 @@ namespace Gal3DEngine
 		/// <param name="pb"></param>
 		/// <param name="pc"></param>
 		/// <param name="pd"></param>
-		/// <param name="triangleData"></param>
-		/// <returns>The scan linedata.</returns>
-        protected virtual LineData MyProcessScanLine(float gradient1, float gradient2, IndexData pa, IndexData pb, IndexData pc, IndexData pd)
+		/// <returns>The scanline data.</returns>
+        protected virtual LineData GenerateScanLineData(float gradient1, float gradient2, IndexData pa, IndexData pb, IndexData pc, IndexData pd)
         {
             return default(LineData);
         }
@@ -275,8 +274,6 @@ namespace Gal3DEngine
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <param name="gradient"></param>
-		/// <param name="lineData"></param>
-		/// <param name="screen"></param>
         protected virtual void ProcessPixel(int x, int y, float gradient)
         {
 

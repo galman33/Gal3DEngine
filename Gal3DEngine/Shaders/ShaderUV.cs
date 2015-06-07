@@ -64,12 +64,12 @@ namespace Gal3DEngine
 			DrawTriangles(indices);
 		}
 
-		protected override TriangleData ProcessTriangle()
+		protected override TriangleData GenerateTriangleData()
 		{
 			return new TriangleData();
 		}
 
-		protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUV pa, IndexPositionUV pb, IndexPositionUV pc, IndexPositionUV pd)
+		protected override LineData GenerateScanLineData(float gradient1, float gradient2, IndexPositionUV pa, IndexPositionUV pb, IndexPositionUV pc, IndexPositionUV pd)
 		{
 			LineData result = new LineData();
 
