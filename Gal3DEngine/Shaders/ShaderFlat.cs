@@ -76,7 +76,7 @@ namespace Gal3DEngine
             DrawTriangles(indices);
         }
 
-        protected override TriangleData ProcessTriangle(IndexPositionUVNormal p1, IndexPositionUVNormal p2, IndexPositionUVNormal p3)
+        protected override TriangleData ProcessTriangle()
         {
             TriangleData result = new TriangleData();
 

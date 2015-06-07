@@ -62,23 +62,6 @@ namespace Gal3DEngine
 		protected Screen screen;
 
 		/// <summary>
-		/// The current triangle data.
-		/// </summary>
-		protected TriangleData currentTriangleData;
-
-		/// <summary>
-		/// The current line data.
-		/// </summary>
-		protected LineData currentLineData;
-
-		/// <param name="p1">The first index of the triangle.</param>
-		protected IndexData p1;
-		/// <param name="p2">The second index of the triangle.</param>
-		protected IndexData p2;
-		/// <param name="p3">The third index of the triangle.</param>
-		protected IndexData p3;
-
-		/// <summary>
 		/// Render the loaded data into the screen.
 		/// </summary>
 		/// <param name="screen"></param>
@@ -86,6 +69,13 @@ namespace Gal3DEngine
         {
 			this.screen = screen;
         }
+
+		/// <param name="p1">The first index of the triangle.</param>
+		protected IndexData p1;
+		/// <param name="p2">The second index of the triangle.</param>
+		protected IndexData p2;
+		/// <param name="p3">The third index of the triangle.</param>
+		protected IndexData p3;
 
 		/// <summary>
 		/// Draws every triangle.
@@ -105,6 +95,16 @@ namespace Gal3DEngine
                 }
             }
         }
+
+		/// <summary>
+		/// The current triangle data.
+		/// </summary>
+		protected TriangleData currentTriangleData;
+
+		/// <summary>
+		/// The current line data.
+		/// </summary>
+		protected LineData currentLineData;
 
 		/// <summary>
 		/// Draws a specific triangle (3 indices).
@@ -150,7 +150,7 @@ namespace Gal3DEngine
             else
                 dP1P3 = 0;
 
-            currentTriangleData = ProcessTriangle(p1, p2, p3);
+            currentTriangleData = ProcessTriangle();
 
 
             int maxY = Math.Min(screen.Width / 2, (int)positions[p3.position].Y);
@@ -247,11 +247,8 @@ namespace Gal3DEngine
 		/// <summary>
 		/// Process three indices into triangle data.
 		/// </summary>
-		/// <param name="p1"></param>
-		/// <param name="p2"></param>
-		/// <param name="p3"></param>
 		/// <returns>The triangle data</returns>
-        protected virtual TriangleData ProcessTriangle(IndexData p1, IndexData p2, IndexData p3)
+        protected virtual TriangleData ProcessTriangle()
         {
             return default(TriangleData);
         }
