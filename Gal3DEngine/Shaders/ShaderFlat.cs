@@ -90,7 +90,7 @@ namespace Gal3DEngine
             return result;
         }
 
-        protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd, TriangleData triData)
+        protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd)
         {
             LineData result = new LineData();
 
@@ -106,16 +106,16 @@ namespace Gal3DEngine
             result.uv1 = ShaderHelper.Lerp(uvs[pa.uv] / positions[pa.position].W, uvs[pb.uv] / positions[pb.position].W, gradient1);
             result.uv2 = ShaderHelper.Lerp(uvs[pc.uv] / positions[pc.position].W, uvs[pd.uv] / positions[pd.position].W, gradient2);
 
-            result.brightness = triData.brightness;
+            result.brightness = currentTriangleData.brightness;
 
             return result;
         }
 
-        protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData)
+        protected override void ProcessPixel(int x, int y, float gradient)
         {
-            var w = 1 / ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
-            var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) * w;
-            Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient) * w;
+            var w = 1 / ShaderHelper.Lerp(currentLineData.w1, currentLineData.w2, gradient);
+            var z = ShaderHelper.Lerp(currentLineData.z1, currentLineData.z2, gradient) * w;
+            Vector2 uv = ShaderHelper.Lerp(currentLineData.uv1, currentLineData.uv2, gradient) * w;
 
             int tx = (int)(texture.GetLength(0) * uv.X);
             if (tx >= texture.GetLength(0))
@@ -128,9 +128,9 @@ namespace Gal3DEngine
             if (ty < 0) ty = 0;
             Color3 c = texture[tx, ty];
 
-            c.r = Convert.ToByte(c.r * lineData.brightness);
-            c.g = Convert.ToByte(c.g * lineData.brightness);
-            c.b = Convert.ToByte(c.b * lineData.brightness);
+            c.r = Convert.ToByte(c.r * currentLineData.brightness);
+            c.g = Convert.ToByte(c.g * currentLineData.brightness);
+            c.b = Convert.ToByte(c.b * currentLineData.brightness);
 
             screen.TryPutPixel(x, y, z, c);
         }

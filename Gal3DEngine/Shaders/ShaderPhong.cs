@@ -70,7 +70,7 @@ namespace Gal3DEngine
             DrawTriangles(indices);
         }
         
-        protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd, object triangleData)
+        protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd)
         {
             LineData result = new LineData();
 
@@ -92,12 +92,12 @@ namespace Gal3DEngine
             return result;
         }
 
-        protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData)
+        protected override void ProcessPixel(int x, int y, float gradient)
         {
-            var w = ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
-            var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) / w;
-            Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient) / w;
-            Vector3 n = ShaderHelper.Lerp(lineData.n1, lineData.n2, gradient).Normalized() / w;
+            var w = ShaderHelper.Lerp(currentLineData.w1, currentLineData.w2, gradient);
+            var z = ShaderHelper.Lerp(currentLineData.z1, currentLineData.z2, gradient) / w;
+            Vector2 uv = ShaderHelper.Lerp(currentLineData.uv1, currentLineData.uv2, gradient) / w;
+            Vector3 n = ShaderHelper.Lerp(currentLineData.n1, currentLineData.n2, gradient).Normalized() / w;
 
             float brightness = Vector3.Dot(n, -lightDirection);
             if(brightness < ambientLight) brightness = ambientLight;

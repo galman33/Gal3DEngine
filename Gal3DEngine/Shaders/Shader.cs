@@ -62,6 +62,16 @@ namespace Gal3DEngine
 		protected Screen screen;
 
 		/// <summary>
+		/// The current triangle data.
+		/// </summary>
+		protected TriangleData currentTriangleData;
+
+		/// <summary>
+		/// The current line data.
+		/// </summary>
+		protected LineData currentLineData;
+
+		/// <summary>
 		/// Render the loaded data into the screen.
 		/// </summary>
 		/// <param name="screen"></param>
@@ -133,7 +143,7 @@ namespace Gal3DEngine
             else
                 dP1P3 = 0;
 
-            TriangleData triData = ProcessTriangle(p1, p2, p3);
+            currentTriangleData = ProcessTriangle(p1, p2, p3);
 
 
             int maxY = Math.Min(screen.Width / 2, (int)positions[p3.position].Y);
@@ -155,11 +165,11 @@ namespace Gal3DEngine
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(y, p1, p3, p1, p2, triData);
+                        ProcessScanLine(y, p1, p3, p1, p2);
                     }
                     else
                     {
-                        ProcessScanLine(y, p1, p3, p2, p3, triData);
+                        ProcessScanLine(y, p1, p3, p2, p3);
                     }
                 }
             }
@@ -180,11 +190,11 @@ namespace Gal3DEngine
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(y, p1, p2, p1, p3, triData);
+                        ProcessScanLine(y, p1, p2, p1, p3);
                     }
                     else
                     {
-                        ProcessScanLine(y, p2, p3, p1, p3, triData);
+                        ProcessScanLine(y, p2, p3, p1, p3);
                     }
                 }
             }
@@ -200,8 +210,7 @@ namespace Gal3DEngine
 		/// <param name="pb"></param>
 		/// <param name="pc"></param>
 		/// <param name="pd"></param>
-		/// <param name="triData">The triangle's data.</param>
-        private void ProcessScanLine(int y, IndexData pa, IndexData pb, IndexData pc, IndexData pd, TriangleData triData)
+        private void ProcessScanLine(int y, IndexData pa, IndexData pb, IndexData pc, IndexData pd)
         {
             // Thanks to current Y, we can compute the gradient to compute others values like
             // the starting X (sx) and ending X (ex) to draw between
@@ -217,14 +226,14 @@ namespace Gal3DEngine
 
             int endX = Math.Min(ex, screen.Width / 2);
 
-            LineData lineData = MyProcessScanLine(gradient1, gradient2, pa, pb, pc, pd, triData);
+            currentLineData = MyProcessScanLine(gradient1, gradient2, pa, pb, pc, pd);
 
             // drawing a line from left (sx) to right (ex) 
             for (var x = Math.Max(sx, -screen.Width / 2); x < endX; x++)
             {
                 float gradient = (x - sx) / (float)(ex - sx);
 
-                ProcessPixel(x, y, gradient, ref lineData);
+                ProcessPixel(x, y, gradient);
             }
         }
 
@@ -234,7 +243,7 @@ namespace Gal3DEngine
 		/// <param name="p1"></param>
 		/// <param name="p2"></param>
 		/// <param name="p3"></param>
-		/// <returns>The triangle data.</returns>
+		/// <returns>The triangle data</returns>
         protected virtual TriangleData ProcessTriangle(IndexData p1, IndexData p2, IndexData p3)
         {
             return default(TriangleData);
@@ -251,7 +260,7 @@ namespace Gal3DEngine
 		/// <param name="pd"></param>
 		/// <param name="triangleData"></param>
 		/// <returns>The scan linedata.</returns>
-        protected virtual LineData MyProcessScanLine(float gradient1, float gradient2, IndexData pa, IndexData pb, IndexData pc, IndexData pd, TriangleData triangleData)
+        protected virtual LineData MyProcessScanLine(float gradient1, float gradient2, IndexData pa, IndexData pb, IndexData pc, IndexData pd)
         {
             return default(LineData);
         }
@@ -264,7 +273,7 @@ namespace Gal3DEngine
 		/// <param name="gradient"></param>
 		/// <param name="lineData"></param>
 		/// <param name="screen"></param>
-        protected virtual void ProcessPixel(int x, int y, float gradient, ref LineData lineData)
+        protected virtual void ProcessPixel(int x, int y, float gradient)
         {
 
         }
