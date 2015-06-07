@@ -8,6 +8,9 @@ using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
+	/// <summary>
+	/// Used for tetsing purposes. Not part of the project.
+	/// </summary>
     class TestGame : Game
     {
 

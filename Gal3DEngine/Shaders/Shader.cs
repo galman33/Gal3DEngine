@@ -7,22 +7,47 @@ using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
+	/// <summary>
+	/// Responsible of transforming and drawing triangles (vertices and indices) into screen pixels.
+	/// </summary>
+	/// <typeparam name="IndexData">The index data type.</typeparam>
+	/// <typeparam name="TriangleData">The triangle data type.</typeparam>
+	/// <typeparam name="LineData">The line data type.</typeparam>
     public class Shader<IndexData, TriangleData, LineData> where IndexData : IndexPosition
     {
 
         protected Vector4[] positions;
 
+		/// <summary>
+		/// Set the vertices positions data.
+		/// </summary>
+		/// <param name="positions"></param>
         public void SetVerticesPositions(Vector4[] positions)
         {
             this.positions = (Vector4[])positions.Clone();
         }
 
+		/// <summary>
+		/// Extracts the model data into the shader.
+		/// </summary>
+		/// <param name="model">The model to extract data from.</param>
         public virtual void ExtractData(Model model)
         {
             SetVerticesPositions(model.Vertices);
         }
 
+		/// <summary>
+		/// A delegate to a transform method.
+		/// </summary>
         public delegate void TransformMethod<InData, InTransformation>(ref InData data, InTransformation transformation, Screen screen);
+		/// <summary>
+		/// Apply batch transformation to multiple data using a transformation method.
+		/// For example: Applying normal's transformation to all of the normals.
+		/// </summary>
+		/// <param name="transformMethod">A delegate to the transform method.</param>
+		/// <param name="data">The data.</param>
+		/// <param name="transformation">The transform.</param>
+		/// <param name="screen">The screen.</param>
         protected static void TransformData<InData, InTransformation>(TransformMethod<InData, InTransformation> transformMethod, InData[] data, InTransformation transformation, Screen screen)
         {
             for (int i = 0; i < data.Length; i++)
@@ -31,11 +56,20 @@ namespace Gal3DEngine
             }
         }
 
+		/// <summary>
+		/// Render the loaded data into the screen.
+		/// </summary>
+		/// <param name="screen"></param>
         public virtual void Render(Screen screen)
         {
 
         }
 
+		/// <summary>
+		/// Draws every triangle.
+		/// </summary>
+		/// <param name="indices">The indexes of the triangles in the data. (Each 3 indices represent a triangle).</param>
+		/// <param name="screen"></param>
         protected virtual void DrawTriangles(IndexData[] indices, Screen screen)
         {
             for (int i = 0; i < indices.Length; i += 3)
@@ -47,6 +81,13 @@ namespace Gal3DEngine
             }
         }
 
+		/// <summary>
+		/// Draws a specific triangle (3 indices).
+		/// </summary>
+		/// <param name="screen">The screen.</param>
+		/// <param name="p1">The first index of the triangle.</param>
+		/// <param name="p2">The second index of the triangle.</param>
+		/// <param name="p3">The third index of the triangle.</param>
         private void DrawTriangle(Screen screen, IndexData p1, IndexData p2, IndexData p3)
         {
             // Sorting the points in order to always have this order on screen p1, p2 & p3
@@ -145,9 +186,18 @@ namespace Gal3DEngine
             }
         }
 
-        // drawing line between 2 points from left to right
-        // papb -> pcpd
-        // pa, pb, pc, pd must then be sorted before
+		/// <summary>
+		/// drawing line between 2 points from left to right
+		/// papb -> pcpd
+		/// pa, pb, pc, pd must then be sorted before
+		/// </summary>
+		/// <param name="screen">The screen.</param>
+		/// <param name="y">The y of the process line.</param>
+		/// <param name="pa"></param>
+		/// <param name="pb"></param>
+		/// <param name="pc"></param>
+		/// <param name="pd"></param>
+		/// <param name="triData">The triangle's data.</param>
         private void ProcessScanLine(Screen screen, int y, IndexData pa, IndexData pb, IndexData pc, IndexData pd, TriangleData triData)
         {
             // Thanks to current Y, we can compute the gradient to compute others values like
@@ -175,16 +225,42 @@ namespace Gal3DEngine
             }
         }
 
+		/// <summary>
+		/// Process three indices into triangle data.
+		/// </summary>
+		/// <param name="p1"></param>
+		/// <param name="p2"></param>
+		/// <param name="p3"></param>
+		/// <returns>The triangle data.</returns>
         protected virtual TriangleData ProcessTriangle(IndexData p1, IndexData p2, IndexData p3)
         {
             return default(TriangleData);
         }
 
+		/// <summary>
+		/// Process a triangle and interpolations into a process line data.
+		/// </summary>
+		/// <param name="gradient1"></param>
+		/// <param name="gradient2"></param>
+		/// <param name="pa"></param>
+		/// <param name="pb"></param>
+		/// <param name="pc"></param>
+		/// <param name="pd"></param>
+		/// <param name="triangleData"></param>
+		/// <returns>The scan linedata.</returns>
         protected virtual LineData MyProcessScanLine(float gradient1, float gradient2, IndexData pa, IndexData pb, IndexData pc, IndexData pd, TriangleData triangleData)
         {
             return default(LineData);
         }
 
+		/// <summary>
+		/// Process and draw a screen pixel.
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="gradient"></param>
+		/// <param name="lineData"></param>
+		/// <param name="screen"></param>
         protected virtual void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
         {
 
