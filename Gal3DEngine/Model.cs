@@ -7,6 +7,9 @@ using Gal3DEngine.IndicesTypes;
 
 namespace Gal3DEngine
 {
+    /// <summary>
+    /// Holds the data of a certain model.
+    /// </summary>
     public class Model
     {
         /// <summary>
