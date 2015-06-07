@@ -6,25 +6,32 @@ using OpenTK;
 
 namespace Gal3DEngine.Gizmos
 {
-    public class GridGizmo
+    /// <summary>
+    /// Helper class for rendering a grid gizmo.
+    /// </summary>
+    public static class GridGizmo
     {
+        /// <summary>
+        /// Render the grid gizmo with spefic world, view and projection matrices on a given Screen.
+        /// </summary>
+        /// <param name="screen">The screen to render on.</param>
+        /// <param name="world">The world matrix of the grid gizmo.</param>
+        /// <param name="view">The view matrix of the grid gizmo.</param>
+        /// <param name="projection">The projection matrix of the grid gizmo.</param>
         public static void Render(Screen screen , Matrix4 world, Matrix4 view, Matrix4 projection)
         {
             //X - red
             //Y - Green
-            //Z - blue
-           
-
-            Tuple<Vector4 , Vector4>[,] grid = new Tuple<Vector4 , Vector4>[screen.Width/20 , screen.Height / 20];
-            for (int x = 0; x < grid.GetLength(0); x++)
+            //Z - blue            
+            for (int x = 0; x < screen.Width / 20; x++)
             {
-                for (int y = 0; y < grid.GetLength(1); y++)
+                for (int y = 0; y < screen.Height / 20; y++)
                 {
                     Vector4 top =new Vector4(x*20 ,  0 , 0, 1);
                     Vector4 buttom =  new Vector4(x*20 , screen.Height , 0 , 1);
                     ShaderHelper.TransformPosition(ref top, world * view * projection, screen);
                     ShaderHelper.TransformPosition(ref buttom, world * view * projection, screen);
-                    //grid[x,y] = new Tuple<Vector4,Vector4>(top , buttom);
+                    
                     screen.DrawLine(top, buttom, new Color3(255, 0, 0));
                 }
             }

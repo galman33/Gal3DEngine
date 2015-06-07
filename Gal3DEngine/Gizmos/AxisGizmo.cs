@@ -6,8 +6,18 @@ using OpenTK;
 
 namespace Gal3DEngine.Gizmos
 {
-    public class AxisGizmo
+    /// <summary>
+    /// Helper class for rendering x,y,z axis gizmos.
+    /// </summary>
+    public static class AxisGizmo
     {
+        /// <summary>
+        /// Render the gizmos with spefic world, view and projection matrices on a given Screen.
+        /// </summary>
+        /// <param name="screen">The screen to render on.</param>
+        /// <param name="world">The world matrix of the gizmos.</param>
+        /// <param name="view">The view matrix of the gizmos.</param>
+        /// <param name="projection">The projection matrix of the gizmos.</param>
         public static void Render(Screen screen , Matrix4 world, Matrix4 view, Matrix4 projection)
         {
             //X - red
@@ -41,7 +51,7 @@ namespace Gal3DEngine.Gizmos
                 }
             }
         }
-
+        
         private static bool ShouldRender(Vector4 p, Screen screen)
         {
             return p.X >= 0 && p.X < screen.Width && p.Y >= 0 && p.Y >= 0 && p.Y < screen.Height && p.Z > 0 && p.Z < 1;
