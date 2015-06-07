@@ -56,6 +56,8 @@ namespace Gal3DEngine
 
 		public override void Render(Screen screen)
 		{
+			base.Render(screen);
+
 			Matrix4 transformation = world * view * projection;
 			TransformData(ShaderHelper.TransformPosition, positions, transformation, screen);
 
