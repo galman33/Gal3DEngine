@@ -90,9 +90,9 @@ namespace Gal3DEngine
 
 		protected override void ProcessPixel(int x, int y, float gradient)
 		{
-			var w = 1 / ShaderHelper.Lerp(currentLineData.w1, currentLineData.w2, gradient);
-			var z = ShaderHelper.Lerp(currentLineData.z1, currentLineData.z2, gradient) * w;
-			Vector2 uv = ShaderHelper.Lerp(currentLineData.uv1, currentLineData.uv2, gradient) * w;
+			var w = 1 / ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
+			var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) * w;
+			Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient) * w;
 
 			int tx = (int)(texture.GetLength(0) * uv.X);
 			if (tx >= texture.GetLength(0))

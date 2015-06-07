@@ -99,12 +99,12 @@ namespace Gal3DEngine
 		/// <summary>
 		/// The current triangle data.
 		/// </summary>
-		protected TriangleData currentTriangleData;
+		protected TriangleData triangleData;
 
 		/// <summary>
 		/// The current line data.
 		/// </summary>
-		protected LineData currentLineData;
+		protected LineData lineData;
 
 		/// <summary>
 		/// Draws a specific triangle (3 indices).
@@ -150,7 +150,7 @@ namespace Gal3DEngine
             else
                 dP1P3 = 0;
 
-            currentTriangleData = ProcessTriangle();
+            triangleData = ProcessTriangle();
 
 
             int maxY = Math.Min(screen.Width / 2, (int)positions[p3.position].Y);
@@ -233,7 +233,7 @@ namespace Gal3DEngine
 
             int endX = Math.Min(ex, screen.Width / 2);
 
-            currentLineData = MyProcessScanLine(gradient1, gradient2, pa, pb, pc, pd);
+            lineData = MyProcessScanLine(gradient1, gradient2, pa, pb, pc, pd);
 
             // drawing a line from left (sx) to right (ex) 
             for (var x = Math.Max(sx, -screen.Width / 2); x < endX; x++)
