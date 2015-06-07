@@ -8,7 +8,9 @@ using Gal3DEngine.IndicesTypes;
 namespace Gal3DEngine
 {
 
-
+	/// <summary>
+	/// Renders a mesh with each triangle at a single flat brightness according to the ligh direction.
+	/// </summary>
     public class ShaderFlat : Shader<IndexPositionUVNormal, ShaderFlat.TriangleData, ShaderFlat.LineData>
     {
 
@@ -25,33 +27,57 @@ namespace Gal3DEngine
             public float brightness;
         }
 
+		/// <summary>
+		/// The world matrix.
+		/// </summary>
         public Matrix4 world;
+		/// <summary>
+		/// The view matrix.
+		/// </summary>
         public Matrix4 view;
+		/// <summary>
+		/// The projection matrix.
+		/// </summary>
         public Matrix4 projection;
+		/// <summary>
+		/// The light direction.
+		/// </summary>
         public Vector3 lightDirection;
+		/// <summary>
+		/// The minimum brightness.
+		/// </summary>
         public float ambientLight;
 
+		/// <summary>
+		/// The texture.
+		/// </summary>
         public Color3[,] texture;
 
         private Vector2[] uvs;
         private Vector3[] normals;
-        private IndexPositionUVNormal[] indices;
 
+		/// <summary>
+		/// Set the vertices UVs.
+		/// </summary>
+		/// <param name="uvs"></param>
         public void SetVerticesUvs(Vector2[] uvs)
         {
             this.uvs = uvs;
         }
 
+		/// <summary>
+		/// Set the vertices normals.
+		/// </summary>
+		/// <param name="normals"></param>
         public void SetVerticesNormals(Vector3[] normals)
         {
             this.normals = (Vector3[])normals.Clone();
         }
 
-        public void SetIndices(IndexPositionUVNormal[] indices)
-        {
-            this.indices = indices;
-        }
-
+		/// <summary>
+		/// Extracts the model data into the shader.
+		/// </summary>
+		/// <param name="model">The model to extract data from.</param>
         public override void ExtractData(Model model)
         {
             base.ExtractData(model);
@@ -64,6 +90,10 @@ namespace Gal3DEngine
             SetIndices(model.indices);
         }
 
+		/// <summary>
+		/// Render the loaded data into the screen.
+		/// </summary>
+		/// <param name="screen">The screen</param>
         public override void Render(Screen screen)
         {
 			base.Render(screen);

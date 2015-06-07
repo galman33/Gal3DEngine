@@ -17,6 +17,7 @@ namespace Gal3DEngine
     {
 
         protected Vector4[] positions;
+		protected IndexData[] indices;
 
 		/// <summary>
 		/// Set the vertices positions data.
@@ -26,6 +27,15 @@ namespace Gal3DEngine
         {
             this.positions = (Vector4[])positions.Clone();
         }
+
+		/// <summary>
+		/// Set the indices of the triangles.
+		/// </summary>
+		/// <param name="indices"></param>
+		public void SetIndices(IndexData[] indices)
+		{
+			this.indices = indices;
+		}
 
 		/// <summary>
 		/// Extracts the model data into the shader.
@@ -64,7 +74,7 @@ namespace Gal3DEngine
 		/// <summary>
 		/// Render the loaded data into the screen.
 		/// </summary>
-		/// <param name="screen"></param>
+		/// <param name="screen">The screen</param>
         public virtual void Render(Screen screen)
         {
 			this.screen = screen;
