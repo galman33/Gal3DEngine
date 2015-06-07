@@ -67,7 +67,7 @@ namespace Gal3DEngine
             normalTransformation.Transpose();
             TransformData(ShaderHelper.TransformNormal, normals, normalTransformation, screen);
             
-            DrawTriangles(indices, screen);
+            DrawTriangles(indices);
         }
         
         protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd, object triangleData)
@@ -92,7 +92,7 @@ namespace Gal3DEngine
             return result;
         }
 
-        protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
+        protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData)
         {
             var w = ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
             var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) / w;

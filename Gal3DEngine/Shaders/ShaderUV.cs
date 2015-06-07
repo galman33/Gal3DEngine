@@ -59,7 +59,7 @@ namespace Gal3DEngine
 			Matrix4 transformation = world * view * projection;
 			TransformData(ShaderHelper.TransformPosition, positions, transformation, screen);
 
-			DrawTriangles(indices, screen);
+			DrawTriangles(indices);
 		}
 
 		protected override TriangleData ProcessTriangle(IndexPositionUV p1, IndexPositionUV p2, IndexPositionUV p3)
@@ -86,7 +86,7 @@ namespace Gal3DEngine
 			return result;
 		}
 
-		protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
+		protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData)
 		{
 			var w = 1 / ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
 			var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) * w;

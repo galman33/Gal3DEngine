@@ -57,12 +57,17 @@ namespace Gal3DEngine
         }
 
 		/// <summary>
+		/// The current screen.
+		/// </summary>
+		protected Screen screen;
+
+		/// <summary>
 		/// Render the loaded data into the screen.
 		/// </summary>
 		/// <param name="screen"></param>
         public virtual void Render(Screen screen)
         {
-
+			this.screen = screen;
         }
 
 		/// <summary>
@@ -70,13 +75,13 @@ namespace Gal3DEngine
 		/// </summary>
 		/// <param name="indices">The indexes of the triangles in the data. (Each 3 indices represent a triangle).</param>
 		/// <param name="screen"></param>
-        protected virtual void DrawTriangles(IndexData[] indices, Screen screen)
+        protected virtual void DrawTriangles(IndexData[] indices)
         {
             for (int i = 0; i < indices.Length; i += 3)
             {
                 if (ShaderHelper.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height, screen.ClippingEnabled))
                 {
-                    DrawTriangle(screen, indices[i + 0], indices[i + 1], indices[i + 2]);
+                    DrawTriangle(indices[i + 0], indices[i + 1], indices[i + 2]);
                 }
             }
         }
@@ -84,11 +89,10 @@ namespace Gal3DEngine
 		/// <summary>
 		/// Draws a specific triangle (3 indices).
 		/// </summary>
-		/// <param name="screen">The screen.</param>
 		/// <param name="p1">The first index of the triangle.</param>
 		/// <param name="p2">The second index of the triangle.</param>
 		/// <param name="p3">The third index of the triangle.</param>
-        private void DrawTriangle(Screen screen, IndexData p1, IndexData p2, IndexData p3)
+        private void DrawTriangle(IndexData p1, IndexData p2, IndexData p3)
         {
             // Sorting the points in order to always have this order on screen p1, p2 & p3
             // with p1 always up (thus having the Y the lowest possible to be near the top screen)
@@ -151,11 +155,11 @@ namespace Gal3DEngine
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(screen, y, p1, p3, p1, p2, triData);
+                        ProcessScanLine(y, p1, p3, p1, p2, triData);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p1, p3, p2, p3, triData);
+                        ProcessScanLine(y, p1, p3, p2, p3, triData);
                     }
                 }
             }
@@ -176,11 +180,11 @@ namespace Gal3DEngine
                 {
                     if (y < positions[p2.position].Y)
                     {
-                        ProcessScanLine(screen, y, p1, p2, p1, p3, triData);
+                        ProcessScanLine(y, p1, p2, p1, p3, triData);
                     }
                     else
                     {
-                        ProcessScanLine(screen, y, p2, p3, p1, p3, triData);
+                        ProcessScanLine(y, p2, p3, p1, p3, triData);
                     }
                 }
             }
@@ -191,14 +195,13 @@ namespace Gal3DEngine
 		/// papb -> pcpd
 		/// pa, pb, pc, pd must then be sorted before
 		/// </summary>
-		/// <param name="screen">The screen.</param>
 		/// <param name="y">The y of the process line.</param>
 		/// <param name="pa"></param>
 		/// <param name="pb"></param>
 		/// <param name="pc"></param>
 		/// <param name="pd"></param>
 		/// <param name="triData">The triangle's data.</param>
-        private void ProcessScanLine(Screen screen, int y, IndexData pa, IndexData pb, IndexData pc, IndexData pd, TriangleData triData)
+        private void ProcessScanLine(int y, IndexData pa, IndexData pb, IndexData pc, IndexData pd, TriangleData triData)
         {
             // Thanks to current Y, we can compute the gradient to compute others values like
             // the starting X (sx) and ending X (ex) to draw between
@@ -221,7 +224,7 @@ namespace Gal3DEngine
             {
                 float gradient = (x - sx) / (float)(ex - sx);
 
-                ProcessPixel(x, y, gradient, ref lineData, screen);
+                ProcessPixel(x, y, gradient, ref lineData);
             }
         }
 
@@ -261,7 +264,7 @@ namespace Gal3DEngine
 		/// <param name="gradient"></param>
 		/// <param name="lineData"></param>
 		/// <param name="screen"></param>
-        protected virtual void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
+        protected virtual void ProcessPixel(int x, int y, float gradient, ref LineData lineData)
         {
 
         }
