@@ -8,7 +8,9 @@ using Gal3DEngine.IndicesTypes;
 namespace Gal3DEngine
 {
 
-
+	/// <summary>
+	/// Renders a textured mesh with no lightning.
+	/// </summary>
 	public class ShaderUV : Shader<IndexPositionUV, ShaderUV.TriangleData, ShaderUV.LineData>
 	{
 
@@ -24,25 +26,40 @@ namespace Gal3DEngine
 			public Vector2 uv1, uv2;
 		}
 
+		/// <summary>
+		/// The world matrix.
+		/// </summary>
 		public Matrix4 world;
+		/// <summary>
+		/// The view matrix.
+		/// </summary>
 		public Matrix4 view;
+		/// <summary>
+		/// The projection matrix.
+		/// </summary>
 		public Matrix4 projection;
 
+		/// <summary>
+		/// The texture.
+		/// </summary>
 		public Color3[,] texture;
 
 		private Vector2[] uvs;
 		private IndexPositionUV[] indices;
 
+		/// <summary>
+		/// Set the vertices UVs.
+		/// </summary>
+		/// <param name="uvs"></param>
 		public void SetVerticesUvs(Vector2[] uvs)
 		{
 			this.uvs = uvs;
 		}
 
-		public void SetIndices(IndexPositionUV[] indices)
-		{
-			this.indices = indices;
-		}
-
+		/// <summary>
+		/// Extracts the model data into the shader.
+		/// </summary>
+		/// <param name="model">The model to extract data from.</param>
 		public override void ExtractData(Model model)
 		{
 			base.ExtractData(model);
@@ -54,20 +71,26 @@ namespace Gal3DEngine
 			SetIndices(model.indices);
 		}
 
+		/// <summary>
+		/// Render the loaded data into the screen.
+		/// </summary>
+		/// <param name="screen">The screen</param>
 		public override void Render(Screen screen)
 		{
+			base.Render(screen);
+
 			Matrix4 transformation = world * view * projection;
 			TransformData(ShaderHelper.TransformPosition, positions, transformation, screen);
 
-			DrawTriangles(indices, screen);
+			DrawTriangles(indices);
 		}
 
-		protected override TriangleData ProcessTriangle(IndexPositionUV p1, IndexPositionUV p2, IndexPositionUV p3)
+		protected override TriangleData GenerateTriangleData()
 		{
 			return new TriangleData();
 		}
 
-		protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUV pa, IndexPositionUV pb, IndexPositionUV pc, IndexPositionUV pd, TriangleData triangleData)
+		protected override LineData GenerateScanLineData(float gradient1, float gradient2, IndexPositionUV pa, IndexPositionUV pb, IndexPositionUV pc, IndexPositionUV pd)
 		{
 			LineData result = new LineData();
 
@@ -86,7 +109,7 @@ namespace Gal3DEngine
 			return result;
 		}
 
-		protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
+		protected override void ProcessPixel(int x, int y, float gradient)
 		{
 			var w = 1 / ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
 			var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) * w;
