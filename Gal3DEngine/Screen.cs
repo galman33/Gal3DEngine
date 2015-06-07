@@ -8,6 +8,9 @@ using OpenTK;
 
 namespace Gal3DEngine
 {
+    /// <summary>
+    /// Represents the physical screeen. Used to render pixels to the screen.
+    /// </summary>
     public class Screen
     {
         /// <summary>

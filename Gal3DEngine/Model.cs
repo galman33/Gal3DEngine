@@ -9,15 +9,32 @@ namespace Gal3DEngine
 {
     public class Model
     {
-
+        /// <summary>
+        /// Holds the vertices data of the model.
+        /// </summary>
         public Vector4[] Vertices { private set; get; }
+        /// <summary>
+        /// Holds the uv data of the model.
+        /// </summary>
         public Vector2[] UVs { private set; get; }
+        /// <summary>
+        /// Holds the normals data of the model
+        /// </summary>
         public Vector3[] Normals { private set; get; }
-
+        /// <summary>
+        /// Holds the texture data of the model.
+        /// </summary>
         public Color3[,] texture { private set; get; }
-
+        /// <summary>
+        /// Holds the indices data of the model
+        /// </summary>
         public IndexPositionUVNormal[] indices { private set; get; }
 
+        /// <summary>
+        /// Initiallize a new model by .OBJ file and a texture file. 
+        /// </summary>
+        /// <param name="objPath">The .obj file</param>
+        /// <param name="texturePath">The image - texture of the model</param>
         public Model(string objPath, string texturePath)
         {
             Load(System.IO.File.ReadAllText(objPath));
@@ -26,7 +43,11 @@ namespace Gal3DEngine
 
         private Random rand = new Random();
 
-        public void Load(string content)
+        /// <summary>
+        /// Load the content of the model from the .obj file
+        /// </summary>
+        /// <param name="content">the data of the .obj file</param>
+        private void Load(string content)
         {
             List<Vector4> verticesLst = new List<Vector4>();
             List<Vector2> uvLst = new List<Vector2>();
