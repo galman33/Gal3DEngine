@@ -10,8 +10,8 @@ namespace Gal3DEngine
 {
     public class Screen
     {
-        public int Width;
-        public int Height;
+        public int Width { get; private set; }
+		public int Height { get; private set; }
         
         private Color3[] colorBuffer;
         private float[] zBuffer;

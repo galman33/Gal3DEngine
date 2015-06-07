@@ -59,15 +59,15 @@ namespace Gal3DEngine
 			Matrix4 transformation = world * view * projection;
 			TransformData(ShaderHelper.TransformPosition, positions, transformation, screen);
 
-			DrawTriangles(indices, screen);
+			DrawTriangles(indices);
 		}
 
-		protected override TriangleData ProcessTriangle(IndexPositionUV p1, IndexPositionUV p2, IndexPositionUV p3)
+		protected override TriangleData ProcessTriangle()
 		{
 			return new TriangleData();
 		}
 
-		protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUV pa, IndexPositionUV pb, IndexPositionUV pc, IndexPositionUV pd, TriangleData triangleData)
+		protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUV pa, IndexPositionUV pb, IndexPositionUV pc, IndexPositionUV pd)
 		{
 			LineData result = new LineData();
 
@@ -86,11 +86,11 @@ namespace Gal3DEngine
 			return result;
 		}
 
-		protected override void ProcessPixel(int x, int y, float gradient, ref LineData lineData, Screen screen)
+		protected override void ProcessPixel(int x, int y, float gradient)
 		{
-			var w = 1 / ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
-			var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) * w;
-			Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient) * w;
+			var w = 1 / ShaderHelper.Lerp(currentLineData.w1, currentLineData.w2, gradient);
+			var z = ShaderHelper.Lerp(currentLineData.z1, currentLineData.z2, gradient) * w;
+			Vector2 uv = ShaderHelper.Lerp(currentLineData.uv1, currentLineData.uv2, gradient) * w;
 
 			int tx = (int)(texture.GetLength(0) * uv.X);
 			if (tx >= texture.GetLength(0))
