@@ -71,6 +71,13 @@ namespace Gal3DEngine
 		/// </summary>
 		protected LineData currentLineData;
 
+		/// <param name="p1">The first index of the triangle.</param>
+		protected IndexData p1;
+		/// <param name="p2">The second index of the triangle.</param>
+		protected IndexData p2;
+		/// <param name="p3">The third index of the triangle.</param>
+		protected IndexData p3;
+
 		/// <summary>
 		/// Render the loaded data into the screen.
 		/// </summary>
@@ -89,9 +96,12 @@ namespace Gal3DEngine
         {
             for (int i = 0; i < indices.Length; i += 3)
             {
-                if (ShaderHelper.ShouldRender(positions[indices[i + 0].position], positions[indices[i + 1].position], positions[indices[i + 2].position], screen.Width, screen.Height, screen.ClippingEnabled))
+				p1 = indices[i + 0];
+				p2 = indices[i + 1];
+				p3 = indices[i + 2];
+				if (ShaderHelper.ShouldRender(positions[p1.position], positions[p2.position], positions[p3.position], screen.Width, screen.Height, screen.ClippingEnabled))
                 {
-                    DrawTriangle(indices[i + 0], indices[i + 1], indices[i + 2]);
+                    DrawTriangle();
                 }
             }
         }
@@ -99,10 +109,7 @@ namespace Gal3DEngine
 		/// <summary>
 		/// Draws a specific triangle (3 indices).
 		/// </summary>
-		/// <param name="p1">The first index of the triangle.</param>
-		/// <param name="p2">The second index of the triangle.</param>
-		/// <param name="p3">The third index of the triangle.</param>
-        private void DrawTriangle(IndexData p1, IndexData p2, IndexData p3)
+        private void DrawTriangle()
         {
             // Sorting the points in order to always have this order on screen p1, p2 & p3
             // with p1 always up (thus having the Y the lowest possible to be near the top screen)
