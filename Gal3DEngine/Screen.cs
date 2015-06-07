@@ -16,11 +16,12 @@ namespace Gal3DEngine
         /// <summary>
         /// The width of the screen.
         /// </summary>
-        public int Width; 
+        public int Width { get; private set; }
         /// <summary>
         /// The height of the screen.
         /// </summary>
-        public int Height;
+		public int Height { get; private set; }
+        
         /// <summary>
         /// A buffer of Color represting the screen's pixels. 
         /// </summary>

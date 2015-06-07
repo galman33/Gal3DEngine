@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Gal3DEngine.UTILS
+namespace Gal3DEngine.Utils
 {
     public class TextRender
     {
