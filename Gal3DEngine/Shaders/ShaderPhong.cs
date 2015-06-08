@@ -9,7 +9,7 @@ namespace Gal3DEngine
 {
 
 	/// <summary>
-	/// Renders a mesh with interpolated brightness at every mesh.
+	/// Renders a mesh with interpolated brightness at every triangle.
 	/// </summary>
     public class ShaderPhong : Shader<IndexPositionUVNormal, object, ShaderPhong.LineData>
     {

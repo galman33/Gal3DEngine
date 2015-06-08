@@ -19,7 +19,7 @@ namespace Gal3DEngine
 		/// </summary>
         public int GameWidth { get; set; }
 		/// <summary>
-		/// The gama's screen height.
+		/// The game's screen height.
 		/// </summary>
         public int GameHeight { get; set; }
 
@@ -121,7 +121,7 @@ namespace Gal3DEngine
         }
 
 		/// <summary>
-		/// Render logic goes in here.
+		/// Render logic should go in here.
 		/// </summary>
         protected virtual void Render()
         {
@@ -129,7 +129,7 @@ namespace Gal3DEngine
         }
 
 		/// <summary>
-		/// Update logic goesin here.
+		/// Update logic should go in here.
 		/// </summary>
         protected virtual void Update()
         {

@@ -49,7 +49,7 @@ namespace Gal3DEngine
             Init(width, height);
         }
         /// <summary>
-        /// Initialize the Scrren by specific width and height.
+        /// Initialize the Screen by specific width and height.
         /// </summary>
         /// <param name="width">The width of the screen.</param>
         /// <param name="height">The height of the screen.</param>

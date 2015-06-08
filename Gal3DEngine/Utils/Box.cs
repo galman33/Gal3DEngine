@@ -90,7 +90,7 @@ namespace Gal3DEngine.Utils
             Render(screen, view, projection, new Color3(0, 255, 0));
         }
         /// <summary>
-        /// Renders the cur box into a given screen with view and projection matrices, and a given color to render with.
+        /// Renders the current box into a given screen with view and projection matrices, and a given color to render with.
         /// </summary>
         /// <param name="screen">The screen to render on.</param>
         /// <param name="view">The view matrix to render with.</param>
