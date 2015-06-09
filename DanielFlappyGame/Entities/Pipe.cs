@@ -47,7 +47,7 @@ namespace DanielFlappyGame.Entities
         }
 
         /// <summary>
-        /// Updates the pipe
+        /// Updates the pipe.
         /// </summary>
         public override void Update()
         {
