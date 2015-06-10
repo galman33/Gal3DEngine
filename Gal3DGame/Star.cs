@@ -8,6 +8,9 @@ using Gal3DEngine.Utils;
 
 namespace Gal3DGame
 {
+	/// <summary>
+	/// An in-game collectable start element.
+	/// </summary>
     class Star
     {
         private static Model starModel;
@@ -20,6 +23,12 @@ namespace Gal3DGame
         private Aircraft aircraft;
         private MyGame game;
 
+		/// <summary>
+		/// Create a new star element.
+		/// </summary>
+		/// <param name="environment">A reference to the environment.</param>
+		/// <param name="aircraft">A reference to the aircraft.</param>
+		/// <param name="game">A reference to the game manager</param>
         public Star(Enviroment environment, Aircraft aircraft, MyGame game)
         {
             this.environment = environment;
@@ -39,11 +48,17 @@ namespace Gal3DGame
             hitBox = new Box(0.1f, 0.1f, 0.1f, position);
         }
 
+		/// <summary>
+		/// Load into memory the resources used by the star.
+		/// </summary>
         public static void LoadContent()
         {
             starModel = new Model("Resources/Star.obj", "Resources/Star.bmp");
         }
 
+		/// <summary>
+		/// Update the star.
+		/// </summary>
         public void Update()
         {
             if (Box.IsColliding(hitBox, aircraft.CollisionBox))
@@ -53,6 +68,12 @@ namespace Gal3DGame
             }
         }
 
+		/// <summary>
+		/// Render the star.
+		/// </summary>
+		/// <param name="screen">The screen.</param>
+		/// <param name="projection">The projection Matrix.</param>
+		/// <param name="view">The view matrix.</param>
         public void Render(Screen screen, Matrix4 projection, Matrix4 view)
         {
             shader.world =  Matrix4.CreateRotationZ((float)Time.TotalTime * 2.0f) * //Rotate

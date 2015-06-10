@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace Gal3DGame
 {
+	/// <summary>
+	/// The game manager.
+	/// </summary>
     class MyGame : Game
     {
 
@@ -30,6 +33,10 @@ namespace Gal3DGame
             
         }
 
+		/// <summary>
+		/// Game resources loading.
+		/// </summary>
+		/// <param name="e"></param>
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -69,6 +76,9 @@ namespace Gal3DGame
             camera.Rotation = Quaternion.Identity;
         }
 
+		/// <summary>
+		/// Update the game state and update the game elements.
+		/// </summary>
         protected override void Update()
         {
             base.Update();
@@ -113,18 +123,29 @@ namespace Gal3DGame
             camera.Position = aircraft.Position - Vector3.Transform(-Vector3.UnitZ, camera.Rotation).Normalized() * 2;
         }
 
+		/// <summary>
+		/// Handle a keydown event.
+		/// </summary>
+		/// <param name="e"></param>
         protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
         {
             base.OnKeyDown(e);
             aircraft.KeyDown(e);
         }
 
+		/// <summary>
+		/// Handle a keyup event.
+		/// </summary>
+		/// <param name="e"></param>
         protected override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
         {
             base.OnKeyUp(e);
             aircraft.KeyUp(e);
         }
 
+		/// <summary>
+		/// Render the game elements.
+		/// </summary>
         protected override void Render()
         {
             base.Render();
@@ -150,6 +171,9 @@ namespace Gal3DGame
             }
         }
 
+		/// <summary>
+		/// Adds a point.
+		/// </summary>
         public void AddPoint()
         {
             points++;

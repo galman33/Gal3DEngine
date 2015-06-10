@@ -9,6 +9,9 @@ using Gal3DEngine.Utils;
 
 namespace Gal3DGame
 {
+	/// <summary>
+	/// Generating and rendering the Enviroment of the game consisted of the floor, buildings and the sun.
+	/// </summary>
     class Enviroment
     {
 
@@ -30,6 +33,9 @@ namespace Gal3DGame
 
         private List<Box> boxes;
 
+		/// <summary>
+		/// Load the resources used by the Enviroment.
+		/// </summary>
         public static void LoadContent()
         {
             groundTexture = Texture.LoadTexture("Resources/City.png");
@@ -197,6 +203,12 @@ namespace Gal3DGame
             return y * (CityLength + 1) + x;
         }
 
+		/// <summary>
+		/// Render the Enviroment
+		/// </summary>
+		/// <param name="screen">The screen.</param>
+		/// <param name="projection">The projection Matrix.</param>
+		/// <param name="view">The view matrix.</param>
         public void Render(Screen screen, Matrix4 view, Matrix4 projection)
         {
             RenderSun(screen, view, projection);
@@ -250,7 +262,11 @@ namespace Gal3DGame
             return x == 0 || y == 0 || x == buildingsArray.GetLength(0) - 1 || y == buildingsArray.GetLength(1) - 1;
         }
 
-
+		/// <summary>
+		/// Check if the Environment is colliding with a Box.
+		/// </summary>
+		/// <param name="box">The box.</param>
+		/// <returns>True if they are colliding.</returns>
         public bool IsCollidingWith(Box box)
         {
             for (int i = 0; i < boxes.Count; i++)
@@ -263,6 +279,11 @@ namespace Gal3DGame
             return false;
         }
 
+		/// <summary>
+		/// Get the position of a free tile, with no buildings on it.
+		/// </summary>
+		/// <param name="x">The X position of the tile.</param>
+		/// <param name="y">The Y position of the tile.</param>
         public void GetFreeTile(out int x, out int y)
         {
             do
@@ -272,6 +293,9 @@ namespace Gal3DGame
             } while (buildingsArray[x, y]);
         }
 
+		/// <summary>
+		/// The length of the city.
+		/// </summary>
 		public float CitySize
 		{
 			get

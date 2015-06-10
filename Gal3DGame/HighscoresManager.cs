@@ -7,19 +7,35 @@ using System.Xml.Serialization;
 
 namespace Gal3DGame
 {
-	public class HighscoresManager
+	/// <summary>
+	/// An helper class responsble for highscores managment.
+	/// </summary>
+	public static class HighscoresManager
 	{
 
 		private const int MaxScoresCount = 5;
 
+		/// <summary>
+		/// Player scores holder.
+		/// </summary>
 		public class Highscores
 		{
 			public List<PlayerNamePoints> PlayersPoints;
 		}
 
+
+		/// <summary>
+		/// A player name and points holder.
+		/// </summary>
 		public class PlayerNamePoints
 		{
+			/// <summary>
+			/// The name of the player.
+			/// </summary>
 			public string PlayerName;
+			/// <summary>
+			/// The amount of points that the player collected.
+			/// </summary>
 			public int Points;
 
 			public PlayerNamePoints()
@@ -34,6 +50,11 @@ namespace Gal3DGame
 			}
 		}
 
+		/// <summary>
+		/// Add a new highscore.
+		/// </summary>
+		/// <param name="playerName">The name of the player.</param>
+		/// <param name="points">The amount of points collected by the player.</param>
 		public static void AddScore(string playerName, int points)
 		{
 			Highscores highscores = RetriveHighScores();
@@ -83,6 +104,10 @@ namespace Gal3DGame
 			}
 		}
 
+		/// <summary>
+		/// Retrives a string of the top 10 players and their scores.
+		/// </summary>
+		/// <returns>A string of the top players scores.</returns>
 		public static string GetHighscoresText()
 		{
 			var highscores = RetriveHighScores();

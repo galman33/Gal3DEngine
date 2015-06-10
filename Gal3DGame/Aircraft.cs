@@ -7,6 +7,9 @@ using OpenTK;
 
 namespace Gal3DGame
 {
+	/// <summary>
+	/// The in-game aircraft controlled by the player.
+	/// </summary>
     class Aircraft
     {
         private static Model aircrafModel;
@@ -19,6 +22,9 @@ namespace Gal3DGame
 
         private ShaderPhong shader = AvailableShaders.ShaderPhong;
 
+		/// <summary>
+		/// The collision Box of the aircraft.
+		/// </summary>
         public Gal3DEngine.Utils.Box CollisionBox { get; private set; }
 
         public Aircraft()
@@ -33,11 +39,17 @@ namespace Gal3DGame
             Reset();
         }
 
+		/// <summary>
+		/// Load into memory the resources used by the Aircraft.
+		/// </summary>
         public static void LoadContent()
         {
             aircrafModel = new Model("Resources/Blue Ship_3d.obj", "Resources/Ship_3d_texture.png");
         }
 
+		/// <summary>
+		/// Update the Aircraft state.
+		/// </summary>
         public void Update()
         {
             rotation = rotation * Quaternion.FromAxisAngle(Vector3.UnitX, rotateX * (float) Time.DeltaTime);
@@ -48,6 +60,12 @@ namespace Gal3DGame
             CollisionBox.origin = position;
         }
 
+		/// <summary>
+		/// Render the Aircraft.
+		/// </summary>
+		/// <param name="screen"></param>
+		/// <param name="projection"></param>
+		/// <param name="view"></param>
         public void Render(Screen screen, Matrix4 projection, Matrix4 view)
         {
             shader.world = Matrix4.CreateScale(0.001f) *
@@ -71,6 +89,10 @@ namespace Gal3DGame
             //CollisionBox.DrawCube(screen, Matrix4.Identity, view, projection);
         }
 
+		/// <summary>
+		/// Handle a keydown event.
+		/// </summary>
+		/// <param name="e"></param>
         public void KeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
         {
             if (e.Key == OpenTK.Input.Key.Up)
@@ -84,6 +106,10 @@ namespace Gal3DGame
                 rotateY = 1;
         }
 
+		/// <summary>
+		/// Handle a keyUp event.
+		/// </summary>
+		/// <param name="e"></param>
         public void KeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
         {
             if (e.Key == OpenTK.Input.Key.Up)
@@ -97,6 +123,9 @@ namespace Gal3DGame
                 rotateY = 0;
         }
 
+		/// <summary>
+		/// Reset the Aircraft position and rotation.
+		/// </summary>
         public void Reset()
         {
             position.X = 14f;
@@ -105,6 +134,9 @@ namespace Gal3DGame
             rotation = Quaternion.FromAxisAngle(Vector3.UnitY, 45);
         }
 
+		/// <summary>
+		/// The position of the Aircraft.
+		/// </summary>
         public Vector3 Position
         {
             get
@@ -113,6 +145,9 @@ namespace Gal3DGame
             }
         }
 
+		/// <summary>
+		/// The rotation of the Aircraft.
+		/// </summary>
         public Quaternion Rotation
         {
             get
@@ -121,6 +156,9 @@ namespace Gal3DGame
             }
         }
 
+		/// <summary>
+		/// The forward vector of the Aircraft.
+		/// </summary>
         public Vector3 Forward
         {
             get
