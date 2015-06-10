@@ -8,17 +8,44 @@ using System.Text;
 
 namespace Gal3DEngine.Utils
 {
+    /// <summary>
+    /// Responisbles for rendering text into screen.
+    /// </summary>
     public class TextRender
     {
-        private string fontPath, fontDataPath;
-        List<String> charValues;
+        /// <summary>
+        /// The text font path.
+        /// </summary>
+        private string fontPath;
+        /// <summary>
+        /// The text font csv data file path.
+        /// </summary>
+        private string fontDataPath;
+
+        
+        /// <summary>
+        /// List containign the chars widths.
+        /// </summary>
         List<int> widths;
+        /// <summary>
+        /// The image containg the letters.
+        /// </summary>
         Bitmap map;
 
-
+        /// <summary>
+        /// The height of the letters.
+        /// </summary>
         public const int CharHeight = 32;
+        /// <summary>
+        /// The start letter of the available Text.
+        /// </summary>
         public const int StartUnicode = 33;
 
+        /// <summary>
+        /// Initiallize A renderer from given font (image) path and csv data file.
+        /// </summary>
+        /// <param name="fontUrl">The font (image) path.</param>
+        /// <param name="fontDataUrl">The font csv data file.</param>
         public TextRender(string fontUrl, string fontDataUrl)
         {
             this.fontPath = fontUrl;
@@ -26,6 +53,11 @@ namespace Gal3DEngine.Utils
             LoadRender();
         }
 
+        /// <summary>
+        /// Sets new font to the current TextRender
+        /// </summary>
+        /// <param name="fontUrl"></param>
+        /// <param name="fontDataUrl"></param>
         public void SetNewFont(string fontUrl, string fontDataUrl)
         {
             this.fontPath = fontUrl;
@@ -36,7 +68,7 @@ namespace Gal3DEngine.Utils
         private void LoadRender()
         {
             map = new Bitmap(this.fontPath);
-            charValues = File.ReadAllText(this.fontDataPath).Split(new char[] { '\n', ',' }).ToList();
+            List<String> charValues = File.ReadAllText(this.fontDataPath).Split(new char[] { '\n', ',' }).ToList();
             widths = new List<int>();
             for (int i = 0; i < map.Width / CharHeight * map.Height / CharHeight; i++)
             {
@@ -44,6 +76,12 @@ namespace Gal3DEngine.Utils
             }
         }
 
+        /// <summary>
+        /// Render a given text into a given screen , at a given position.
+        /// </summary>
+        /// <param name="screen">The screen to render the text on.</param>
+        /// <param name="text">The text to render.</param>
+        /// <param name="position">The position to render in.</param>
         public void RenderText(Screen screen, string text, Vector2 position)
         {
             int baseHeight = 20;
@@ -78,6 +116,9 @@ namespace Gal3DEngine.Utils
         }
     }
 
+    /// <summary>
+    /// Helper class providing all fonts paths and csv data paths.
+    /// </summary>
     public static class Fonts
     {
         public const string ARIAL = @"Resources\ArialFontNew.png";

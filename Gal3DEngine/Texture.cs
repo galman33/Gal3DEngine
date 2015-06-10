@@ -6,9 +6,16 @@ using System.Drawing;
 
 namespace Gal3DEngine
 {
-    public class Texture
+    /// <summary>
+    /// Helper class for loading image from the File System.
+    /// </summary>
+    public static class Texture
     {
-
+        /// <summary>
+        /// Load a texture from a specific path into a 2D pixel array.
+        /// </summary>
+        /// <param name="path">The path of the texture image</param>
+        /// <returns>2D array of pixels</returns>
         public static Color3[,] LoadTexture(string path)
         {
             Bitmap bmp = new Bitmap(path);

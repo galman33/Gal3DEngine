@@ -6,14 +6,36 @@ using System.Text;
 
 namespace Gal3DEngine.Utils
 {
+    /// <summary>
+    /// Holds the data of a 3D Box.
+    /// </summary>
     public class Box
     {
+        /// <summary>
+        /// The X axis radius of the Box.
+        /// </summary>
         public float radiusX;
+        /// <summary>
+        /// The Y axis radius of the Box.
+        /// </summary>
         public float radiusY;
+        /// <summary>
+        /// The Z axis radius of the Box.
+        /// </summary>
         public float radiusZ;
 
+        /// <summary>
+        /// The box origin position.
+        /// </summary>
         public Vector3 origin;
 
+        /// <summary>
+        /// Initiallize a box from given axis radius and box origin position.
+        /// </summary>
+        /// <param name="radiusX"></param>
+        /// <param name="radiusY"></param>
+        /// <param name="radiusZ"></param>
+        /// <param name="origin"></param>
         public Box(float radiusX, float radiusY, float radiusZ, Vector3 origin)
         {
             this.radiusX = radiusX;
@@ -31,7 +53,12 @@ namespace Gal3DEngine.Utils
         {
             return new Vector3(origin.X + radiusX, origin.Y + radiusY, origin.Z + radiusZ);
         }
-
+        /// <summary>
+        /// Check for collision between two Boxes.
+        /// </summary>
+        /// <param name="a">The first Box to check for collision.</param>
+        /// <param name="b">The second Box to check for collision.</param>
+        /// <returns></returns>
         public static bool IsColliding(Box a, Box b)
         {
             bool collide = (a.GetMax().X >= b.GetMin().X && a.GetMin().X <= b.GetMax().X)
@@ -42,6 +69,12 @@ namespace Gal3DEngine.Utils
             else return collide;
         }
 
+        /// <summary>
+        /// Checks wheter a 3D point is inside a given Box
+        /// </summary>
+        /// <param name="a">The box to check on.</param>
+        /// <param name="point">The point to check on.</param>
+        /// <returns></returns>
         public static bool IsPointContained(Box a, Vector3 point)
         {
             var min = a.GetMin();
@@ -51,11 +84,18 @@ namespace Gal3DEngine.Utils
                     point.Z >= min.Z && point.Z <= max.Z;
         }
 
+        
         public void Render(Screen screen, Matrix4 view, Matrix4 projection)
         {
             Render(screen, view, projection, new Color3(0, 255, 0));
         }
-
+        /// <summary>
+        /// Renders the current box into a given screen with view and projection matrices, and a given color to render with.
+        /// </summary>
+        /// <param name="screen">The screen to render on.</param>
+        /// <param name="view">The view matrix to render with.</param>
+        /// <param name="projection">The projection matrix to render with.</param>
+        /// <param name="color">The color to render with.</param>
         public void Render(Screen screen, Matrix4 view, Matrix4 projection, Color3 color)
         {
             var min = GetMin();

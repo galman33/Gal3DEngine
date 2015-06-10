@@ -8,6 +8,9 @@ using Gal3DEngine.IndicesTypes;
 namespace Gal3DEngine
 {
 
+	/// <summary>
+	/// Renders a mesh with interpolated brightness at every triangle.
+	/// </summary>
     public class ShaderPhong : Shader<IndexPositionUVNormal, object, ShaderPhong.LineData>
     {
 
@@ -19,33 +22,57 @@ namespace Gal3DEngine
             public Vector3 n1, n2;
         }
 
-        public Matrix4 world;
-        public Matrix4 view;
-        public Matrix4 projection;
-        public Vector3 lightDirection;
-        public float ambientLight;
+		/// <summary>
+		/// The world matrix.
+		/// </summary>
+		public Matrix4 world;
+		/// <summary>
+		/// The view matrix.
+		/// </summary>
+		public Matrix4 view;
+		/// <summary>
+		/// The projection matrix.
+		/// </summary>
+		public Matrix4 projection;
+		/// <summary>
+		/// The light direction.
+		/// </summary>
+		public Vector3 lightDirection;
+		/// <summary>
+		/// The minimum brightness.
+		/// </summary>
+		public float ambientLight;
 
+		/// <summary>
+		/// The texture.
+		/// </summary>
         public Color3[,] texture;
 
         private Vector2[] uvs;
         private Vector3[] normals;
-        private IndexPositionUVNormal[] indices;
 
+		/// <summary>
+		/// Set the vertices UVs.
+		/// </summary>
+		/// <param name="uvs"></param>
         public void SetVerticesUvs(Vector2[] uvs)
         {
             this.uvs = uvs;
         }
 
+		/// <summary>
+		/// Set the vertices normals.
+		/// </summary>
+		/// <param name="normals"></param>
         public void SetVerticesNormals(Vector3[] normals)
         {
             this.normals = (Vector3[])normals.Clone();
         }
 
-        public void SetIndices(IndexPositionUVNormal[] indices)
-        {
-            this.indices = indices;
-        }
-
+		/// <summary>
+		/// Extracts the model data into the shader.
+		/// </summary>
+		/// <param name="model">The model to extract data from.</param>
         public override void ExtractData(Model model) 
         {
             base.ExtractData(model);
@@ -58,6 +85,10 @@ namespace Gal3DEngine
             this.SetIndices(model.indices);
         }
 
+		/// <summary>
+		/// Render the loaded data into the screen.
+		/// </summary>
+		/// <param name="screen">The screen</param>
         public override void Render(Screen screen)
         {
 			base.Render(screen);
@@ -72,7 +103,7 @@ namespace Gal3DEngine
             DrawTriangles(indices);
         }
         
-        protected override LineData MyProcessScanLine(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd)
+        protected override LineData GenerateScanLineData(float gradient1, float gradient2, IndexPositionUVNormal pa, IndexPositionUVNormal pb, IndexPositionUVNormal pc, IndexPositionUVNormal pd)
         {
             LineData result = new LineData();
 
@@ -96,10 +127,10 @@ namespace Gal3DEngine
 
         protected override void ProcessPixel(int x, int y, float gradient)
         {
-            var w = ShaderHelper.Lerp(currentLineData.w1, currentLineData.w2, gradient);
-            var z = ShaderHelper.Lerp(currentLineData.z1, currentLineData.z2, gradient) / w;
-            Vector2 uv = ShaderHelper.Lerp(currentLineData.uv1, currentLineData.uv2, gradient) / w;
-            Vector3 n = ShaderHelper.Lerp(currentLineData.n1, currentLineData.n2, gradient).Normalized() / w;
+            var w = ShaderHelper.Lerp(lineData.w1, lineData.w2, gradient);
+            var z = ShaderHelper.Lerp(lineData.z1, lineData.z2, gradient) / w;
+            Vector2 uv = ShaderHelper.Lerp(lineData.uv1, lineData.uv2, gradient) / w;
+            Vector3 n = ShaderHelper.Lerp(lineData.n1, lineData.n2, gradient).Normalized() / w;
 
             float brightness = Vector3.Dot(n, -lightDirection);
             if(brightness < ambientLight) brightness = ambientLight;

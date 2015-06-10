@@ -8,25 +8,51 @@ using OpenTK;
 
 namespace Gal3DEngine
 {
+    /// <summary>
+    /// Represents the physical screeen. Used to render pixels to the screen.
+    /// </summary>
     public class Screen
     {
+        /// <summary>
+        /// The width of the screen.
+        /// </summary>
         public int Width { get; private set; }
+        /// <summary>
+        /// The height of the screen.
+        /// </summary>
 		public int Height { get; private set; }
         
+        /// <summary>
+        /// A buffer of Color represting the screen's pixels. 
+        /// </summary>
         private Color3[] colorBuffer;
+        /// <summary>
+        /// Depth array of the screen points.
+        /// </summary>
         private float[] zBuffer;
         
+        /// <summary>
+        /// Initialize the screen 
+        /// </summary>
         public Screen()
         {
             ClippingEnabled = true;
         }
-
+        /// <summary>
+        /// Initialize the screen with specific height and width. 
+        /// </summary>
+        /// <param name="width">The width of the screen.</param>
+        /// <param name="height">The height of the screen.</param>
         public Screen(int width, int height)
         {
             ClippingEnabled = true;
             Init(width, height);
         }
-
+        /// <summary>
+        /// Initialize the Screen by specific width and height.
+        /// </summary>
+        /// <param name="width">The width of the screen.</param>
+        /// <param name="height">The height of the screen.</param>
         public void Init(int width, int height)
         {
             this.Width = width;
@@ -34,13 +60,24 @@ namespace Gal3DEngine
             this.colorBuffer = new Color3[width * height];
             this.zBuffer = new float[width * height];
         }
-
+        /// <summary>
+        /// Put a pixel(Color) in a specific 2D location on the screen.
+        /// </summary>
+        /// <param name="x">The X-cordinate.</param>
+        /// <param name="y">The Y-cordinate.</param>
+        /// <param name="color">The color of the pixel.</param>
         public void PutPixel(int x, int y, Color3 color)
         {
             if(x < Width && x >= 0 && y < Height && y >=0)
                 colorBuffer[x + y * Width] = color;
         }
-
+        /// <summary>
+        /// Puts a 3D pixel on the 2D screen if it is possible.
+        /// </summary>
+        /// <param name="x">The X-cordinate.</param>
+        /// <param name="y">The Y-cordinate.</param>
+        /// <param name="z">The Z-cordinate.</param>
+        /// <param name="color">The color of the pixel.</param>
         public void TryPutPixel(int x, int y, float z, Color3 color)
         {
             x = x + Width / 2;
@@ -55,7 +92,12 @@ namespace Gal3DEngine
                 }
             }
         }
-
+        /// <summary>
+        /// Returns the color in a specific location on the screen.
+        /// </summary>
+        /// <param name="x">The X-cordinate.</param>
+        /// <param name="y">The Y-cordinate.</param>
+        /// <returns>The Color</returns>
         public Color3 ReadPixel(int x, int y)
         {
             if (x < Width && x >= 0 && y < Height && y >= 0)
@@ -63,7 +105,10 @@ namespace Gal3DEngine
             else
                 throw new Exception("Pixel not in screen!");
         }
-
+        /// <summary>
+        /// Clears the screen with a parameter background Color.
+        /// </summary>
+        /// <param name="clearColor">The color with which the screen is cleared with.</param>
         public void Clear(Color3 clearColor)
         {
             for (int x = 0; x < Width; x++)
@@ -75,12 +120,19 @@ namespace Gal3DEngine
                 }
             }
         }
-
+        /// <summary>
+        /// Renders the pixels on the screen.
+        /// </summary>
         public void Render()
         {
             GL.DrawPixels(Width, Height, PixelFormat.Rgb, PixelType.UnsignedByte, colorBuffer);
         }
-
+        /// <summary>
+        /// Draws a 2D line segment with a given color.
+        /// </summary>
+        /// <param name="p1">The start of the 2D segment.</param>
+        /// <param name="p2">The end of the 2D segment.</param>
+        /// <param name="color">The color of the 2D segment.</param>
         public void DrawLine(Vector2 p1, Vector2 p2, Color3 color)
         {
             DrawLine((int)p1.X, (int) p1.Y, (int) p2.X, (int) p2.Y, color);
@@ -209,6 +261,13 @@ namespace Gal3DEngine
             DrawLine(p2, p3, color);
         }
 
+        /// <summary>
+        /// Draws an outline of a 2D triangle (3 lines) from 3 given vertecies, in a given color.
+        /// </summary>
+        /// <param name="p1">The first vecrtex of the 2D triangle.</param>
+        /// <param name="p2">The second vecrtex of the 2D triangle.</param>
+        /// <param name="p3">The third vecrtex of the 2D triangle.</param>
+        /// <param name="color">The color of the 2D triangle.</param>
         public void DrawTriangleOutline(Vector2 p1, Vector2 p2, Vector2 p3, Color3 color)
         {
             DrawLine(p1, p2, color);
@@ -238,7 +297,7 @@ namespace Gal3DEngine
                 DrawTriangleOutline(transformedVertices[indices[i + 0]], transformedVertices[indices[i + 1]], transformedVertices[indices[i + 2]], new Color3(255, 255, 255));
             }
         }
-
+               
         public bool ClippingEnabled { get; set; }
 
     }
