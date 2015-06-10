@@ -8,6 +8,9 @@ using OpenTK;
 using DanielFlappyGame.GameUtils;
 namespace DanielFlappyGame
 {
+    /// <summary>
+    /// The first screen of the game.
+    /// </summary>
     public class MenuWorld : Game
     {
         TextRender textRender;
@@ -19,12 +22,17 @@ namespace DanielFlappyGame
         bool showHighScores;
 
         List<Score> scores;
-      
+        /// <summary>
+        /// Initiallize the Menu world.
+        /// </summary>
         public MenuWorld() : base(640 , 480)
         {
 
         }
-
+        /// <summary>
+        /// Load the content regarding the Menu world.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -40,12 +48,16 @@ namespace DanielFlappyGame
             scores.Reverse();
             
         }
-
+        /// <summary>
+        /// Shows or hides the HighScores of the computer.
+        /// </summary>
         void highScoreBtn_buttonPressed()
         {
             showHighScores = !showHighScores;
         }
-
+        /// <summary>
+        /// Renders the Menu world screen.
+        /// </summary>
         protected override void Render()
         {
             base.Render();
@@ -59,11 +71,16 @@ namespace DanielFlappyGame
             
         }
 
+        /// <summary>
+        /// Starts the Flap Game.
+        /// </summary>
         private void OnBtnClick()
         {
             StartFlapGame();
         }
-
+        /// <summary>
+        /// Renders the highScores of the computer.
+        /// </summary>
         private void RenderHighScore()
         {            
             for(int i= 0; i< scores.Count; i++)
@@ -82,6 +99,9 @@ namespace DanielFlappyGame
             }
         }
        
+        /// <summary>
+        /// Change thw world to the Flap Game world (the actual game).
+        /// </summary>
         private void StartFlapGame()
         {
             Program.world = new FlapGameWorld();
