@@ -83,10 +83,10 @@ namespace Gal3DGame
 
             shader.Render(screen);
 
-            Gal3DEngine.Gizmos.AxisGizmo.Render(screen, Matrix4.CreateFromQuaternion(rotation) *
+            /*Gal3DEngine.Gizmos.AxisGizmo.Render(screen, Matrix4.CreateFromQuaternion(rotation) *
                 Matrix4.CreateTranslation(position), view, projection);
 
-            //CollisionBox.DrawCube(screen, Matrix4.Identity, view, projection);
+            CollisionBox.DrawCube(screen, Matrix4.Identity, view, projection);*/
         }
 
 		/// <summary>
@@ -132,6 +132,7 @@ namespace Gal3DGame
             position.Y = 4.5f;
             position.Z = 14f;
             rotation = Quaternion.FromAxisAngle(Vector3.UnitY, 45);
+			rotateX = rotateY = 0;
         }
 
 		/// <summary>

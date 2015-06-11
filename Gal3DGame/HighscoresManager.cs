@@ -105,7 +105,7 @@ namespace Gal3DGame
 		}
 
 		/// <summary>
-		/// Retrives a string of the top 10 players and their scores.
+		/// Retrives a string of the top 5 players and their scores.
 		/// </summary>
 		/// <returns>A string of the top players scores.</returns>
 		public static string GetHighscoresText()

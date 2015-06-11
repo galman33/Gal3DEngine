@@ -75,6 +75,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="highscores.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Resources\City.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

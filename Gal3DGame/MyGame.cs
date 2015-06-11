@@ -59,6 +59,8 @@ namespace Gal3DGame
             ResetGame();
 
 			pointsText = new TextRender(Fonts.ARIAL, Fonts.ARIALFONTDATA);
+
+			Title = "Gal3DGame";
         }
 
         private void AddStars()
@@ -74,6 +76,8 @@ namespace Gal3DGame
             aircraft.Reset();
             points = 0;
             camera.Rotation = Quaternion.Identity;
+
+			Time.Init();
         }
 
 		/// <summary>
@@ -152,7 +156,7 @@ namespace Gal3DGame
 
             Matrix4 view = camera.GetViewMatrix();
 
-            AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
+            //AxisGizmo.Render(Screen, Matrix4.Identity, view, projection);
 
             enviroment.Render(Screen, view, projection);
 
