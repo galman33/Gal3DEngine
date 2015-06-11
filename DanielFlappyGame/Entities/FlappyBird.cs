@@ -93,15 +93,15 @@ namespace DanielFlappyGame
             
             UpdatePosition();
             AdjustHitBox();
-            if (CollidePipes((Program.world as FlapGameWorld).GetTunnles())|| CollideFloor())
+            if (CollidePipes((Program.world as FlapGameWorld).GetPipes())|| CollideFloor())
             {
                 (Program.world as FlapGameWorld).GameOver();
             }
             
-            var tunnles = CheckForPassedTunnels((Program.world as FlapGameWorld).GetTunnles());
+            var tunnles = CheckForPassedTunnels((Program.world as FlapGameWorld).GetPipes());
             if(tunnles!= null)
             {
-                (Program.world as FlapGameWorld).PassedTunnels(tunnles);
+                (Program.world as FlapGameWorld).PassedPipes(tunnles);
                 (Program.world as FlapGameWorld).AddPoints();
             }
         }

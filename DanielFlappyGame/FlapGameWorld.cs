@@ -12,31 +12,62 @@ using DanielFlappyGame.Entities;
 
 namespace DanielFlappyGame
 {
+    /// <summary>
+    /// The Game screen.
+    /// </summary>
     public class FlapGameWorld : Game
     {
+        /// <summary>
+        /// The FlappyBird(player) of the game.
+        /// </summary>
         public FlappyBird flappyflappy;
+        /// <summary>
+        /// The Pipe manufacturer.
+        /// </summary>
         public PipesManager pipesManager;
+        /// <summary>
+        /// The floor of the game.
+        /// </summary>
         public Floor floor;        
         
+        /// <summary>
+        /// The Camera of the game.
+        /// </summary>
         private Camera gameCam;
         Matrix4 projection;           
 
         private HighScoresManager HSManager;
         private TextRender textRender;
+        /// <summary>
+        /// Shows the current score of the game.
+        /// </summary>
         private Label pointsLbl;
+        /// <summary>
+        /// Shows the best highscore of the computer.
+        /// </summary>
         private Label topLbl;
-
+        /// <summary>
+        /// The current shader used for rendering of the game.
+        /// </summary>
         public ShaderFlat curShader;
-
+        /// <summary>
+        /// Holds the data if to start the game or nit.
+        /// </summary>
         private bool start;
 
-        CubeMap map;
-
+        //CubeMap map;
+        /// <summary>
+        /// The constructor of the game
+        /// </summary>
         public FlapGameWorld() : base(640, 480)
         {
 
         }
 
+        /// <summary>
+        /// Responsibles for the content loading of the game.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -51,6 +82,9 @@ namespace DanielFlappyGame
             Init();
         }
 
+        /// <summary>
+        /// Responsible for initiallizing the logic data of the game.
+        /// </summary>
         private void Init()
         {
             points = 0;
@@ -67,6 +101,10 @@ namespace DanielFlappyGame
             topLbl = new Label("Top Score: " + HSManager.GetTopScore().points , new Vector2(30, 60));
                  
         }
+        /// <summary>
+        /// Firs when a key is pressed.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -89,12 +127,18 @@ namespace DanielFlappyGame
                 start = true;
             }
         }
-
+        /// <summary>
+        /// Adds new HighScore.
+        /// </summary>
+        /// <param name="score">The hiighscore</param>
+        /// <param name="name">The nickname of the player.</param>
         public void AddScore(int score  , string name)
         {
             HSManager.AddScore(new Score() { date = DateTime.Now, name = name, points = score });
         }
-        
+        /// <summary>
+        /// Updates the game data every frame.
+        /// </summary>
         protected override void Update()
         {
             base.Update();
@@ -110,6 +154,9 @@ namespace DanielFlappyGame
         }
 
         private float floorOffset = 1.0f;
+        /// <summary>
+        /// Updates the floor according to the FlappyBird player.
+        /// </summary>
         private void UpdateFloor()
         {
             if(floor.translation.Z - floorOffset >this.gameCam.Position.Z)
@@ -117,6 +164,9 @@ namespace DanielFlappyGame
                 floor.Update(flappyflappy.Position);
             }
         }       
+        /// <summary>
+        /// Updates the Camera according to the FlappyBird player.
+        /// </summary>
         private void UpdateCamera()
         {          
            if(front)
@@ -134,7 +184,9 @@ namespace DanielFlappyGame
                }
            }
         }
-
+        /// <summary>
+        /// Renders all the objects of the game into the Screen.
+        /// </summary>
         protected override void Render()
         {
             base.Render();
@@ -147,17 +199,26 @@ namespace DanielFlappyGame
             
             DrawEntities();            
         }
-
+        /// <summary>
+        /// Drwas all the entities of the game into the Screen.
+        /// </summary>
         private void DrawEntities()
         {
             floor.Render(Screen , 2);
             flappyflappy.Render(Screen);
             pipesManager.RenderPipes(Screen);            
         }
-        
+        /// <summary>
+        /// Camera prespective is changing.
+        /// </summary>
         private bool stateChange = false;
+        /// <summary>
+        /// The camera prespective.
+        /// </summary>
         private bool front = false;        
-        
+        /// <summary>
+        /// Change the camera prespective(if needed)
+        /// </summary>
         private void ChangeStateOfCamara()
         {
             if (!front)
@@ -219,26 +280,37 @@ namespace DanielFlappyGame
             }
         } //change from front to side and the opposite
 
-        public List<Pipe> GetTunnles()
+        /// <summary>
+        /// Returns the Pipes objects if the game.
+        /// </summary>
+        /// <returns></returns>
+        public List<Pipe> GetPipes()
         {
-            return this.pipesManager.GetTunnles();
+            return this.pipesManager.GetPipes();
         }       
-
+        /// <summary>
+        /// Activates the GameOver mode.
+        /// </summary>
         public void GameOver()
         {
             AddScore(this.points, Gal3DEngine.Utils.InputBox.Show("Name:" , "New Score" , "FlappyNewbie"));
             Init();            
         }        
-
+        /// <summary>
+        /// Adds points to the player.
+        /// </summary>
         public void AddPoints()
         {
             points++;
         }
+        /// <summary>
+        /// The current points of the player in the game.
+        /// </summary>
         private int points;        
 
-        public void PassedTunnels(Pipe[] pipes)
+        public void PassedPipes(Pipe[] pipes)
         {
-            pipesManager.PassedTunnles(pipes);
+            pipesManager.PassedPipes(pipes);
         }
     }
 }
