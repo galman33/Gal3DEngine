@@ -14,9 +14,12 @@ namespace DanielFlappyGame
 
         public Entity Sun;
         public Entity Cloud;
-        public Environment()
+
+        private FlappyBird bird;
+        public Environment(FlappyBird bird)
         {
             LoadModels();
+            this.bird = bird;
             Sun = new Entity(new Vector3(1.5f, 2f, 2f),Vector3.One ,Vector3.One, Vector3.Normalize(new Vector3(1, -0.25f, -1)));
         }
 
@@ -28,12 +31,13 @@ namespace DanielFlappyGame
 
         public void Update()
         {
-           
+            //follow the bird
+            Sun.Position = new Vector3(bird.Position.X + 4, bird.Position.Y + 2, bird.Position.Z - 2);
         }
 
         public void Render(Screen screen)
         {
-
+            Sun.Render(screen);
         }
     }
 }

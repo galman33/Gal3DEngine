@@ -68,7 +68,7 @@ namespace DanielFlappyGame
         /// </summary>
         private void AdjustHitBox()
         {
-            this.hitBox = new Box(0.20f, 0.20f, 0.20f, Vector3.Add(this.Position , -new Vector3(0,0.00f, 0)));
+            this.hitBox = new Box(0.20f, 0.18f, 0.20f, Vector3.Add(this.Position , -new Vector3(0,0.00f, 0)));
         }
         /// <summary>
         /// Loads The models representing the Flappy Bird entity.
