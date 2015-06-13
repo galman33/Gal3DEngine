@@ -100,7 +100,7 @@ namespace DanielFlappyGame
         public DateTime date;
 
         /// <summary>
-        /// Converts the data into an XML element.
+        /// Converts the data into an representing XML element.
         /// </summary>
         /// <returns>Xml element</returns>
         public XElement MakeScoreElement()
@@ -112,12 +112,12 @@ namespace DanielFlappyGame
             return element;
         }
         /// <summary>
-        /// Converts the data into a String.
+        /// Converts the data into a represting String.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return name + " : " + points + " Points in " + date.ToShortDateString();
+            return name + ": " + points + " point"+ (points==1 ?"s" : "")+", " + date.ToShortDateString();
         }
     }
 }

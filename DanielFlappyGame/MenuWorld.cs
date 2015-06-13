@@ -46,6 +46,7 @@ namespace DanielFlappyGame
             if (scores.Count > 5)
                 scores.RemoveRange(0, scores.Count - 5);
             scores.Reverse();
+            this.BackgroundColor = new Color3(102, 102, 255);
             
         }
         /// <summary>
@@ -104,8 +105,9 @@ namespace DanielFlappyGame
         /// </summary>
         private void StartFlapGame()
         {
-            Program.world = new FlapGameWorld();
             Close();
+            Program.world = new FlapGameWorld();
+            
         }
     }
 }

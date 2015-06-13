@@ -55,6 +55,8 @@ namespace DanielFlappyGame
         /// </summary>
         private bool start;
 
+        private Button BackToMenuBtn;
+
         //CubeMap map;
         /// <summary>
         /// The constructor of the game
@@ -96,10 +98,19 @@ namespace DanielFlappyGame
             floor = new Floor(new Vector3(-2f, -1.3f, 0), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
             pipesManager.Init();
             curShader.projection = projection;
-           
+            
             pointsLbl = new Label("Points: "+ points , new Vector2(30,30));
             topLbl = new Label("Top Score: " + HSManager.GetTopScore().points , new Vector2(30, 60));
+
+            BackToMenuBtn = new Button(27, 25, new Vector2(30, 60), "", "Resources/BackBtn.png");
+            BackToMenuBtn.buttonPressed += BackToMenuBtn_buttonPressed;
                  
+        }
+
+        void BackToMenuBtn_buttonPressed()
+        {
+            Close();
+            Program.world = new MenuWorld();
         }
         /// <summary>
         /// Firs when a key is pressed.
@@ -148,7 +159,7 @@ namespace DanielFlappyGame
                 flappyflappy.Update();
                 pipesManager.Update();
                 ChangeStateOfCamara();
-                UpdateFloor();
+                UpdateFloor();                
             }
             UpdateCamera();          
         }
@@ -196,7 +207,7 @@ namespace DanielFlappyGame
             pointsLbl.text = "Points: " + points;
             pointsLbl.RenderLabel(Screen, textRender);
             topLbl.RenderLabel(Screen, textRender);
-            
+            BackToMenuBtn.Render(Screen , textRender);
             DrawEntities();            
         }
         /// <summary>
@@ -307,7 +318,10 @@ namespace DanielFlappyGame
         /// The current points of the player in the game.
         /// </summary>
         private int points;        
-
+        /// <summary>
+        /// Update the pipes by given Pipes who passed the Object (usually FlappyBird)activate the function.
+        /// </summary>
+        /// <param name="pipes"></param>
         public void PassedPipes(Pipe[] pipes)
         {
             pipesManager.PassedPipes(pipes);
