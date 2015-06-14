@@ -150,7 +150,7 @@ namespace DanielFlappyGame
         /// </summary>
         private void AdjustHitBox()
         {
-            this.hitBox = new Box(this.scale.X, 0.01f, this.scale.Z, this.translation);
+            this.hitBox = new Box(this.scale.X, 0.003f, this.scale.Z, this.translation);
         }
 
         /// <summary>

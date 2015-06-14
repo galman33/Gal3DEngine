@@ -73,7 +73,7 @@ namespace DanielFlappyGame
            (Program.world as FlapGameWorld).curShader.world = worldMatrix;
            (Program.world as FlapGameWorld).curShader.lightDirection = light;
            (Program.world as FlapGameWorld).curShader.Render(screen);
-           this.hitBox.Render(screen, (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
+           //this.hitBox.Render(screen, (Program.world as FlapGameWorld).curShader.view, (Program.world as FlapGameWorld).curShader.projection);
            
        }
 

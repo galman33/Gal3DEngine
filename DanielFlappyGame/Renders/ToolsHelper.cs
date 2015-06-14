@@ -9,7 +9,7 @@ namespace DanielFlappyGame.GameUtils
 {
        public static class ToolsHelper
        {
-           public static void RenderRectangle(Screen screen , Color3[,] rec , Vector2 offset)
+           public static void RenderImageRectangle(Screen screen , Color3[,] rec , Vector2 offset)
            {
                int baseHeight = 40;
                offset.Y = screen.Height - baseHeight - offset.Y;

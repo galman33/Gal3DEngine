@@ -113,7 +113,7 @@ namespace DanielFlappyGame.GameUtils
         public void Render(Screen screen , TextRender render)
         {
             if(backGround!= null)
-            ToolsHelper.RenderRectangle(screen, backGround, location);
+            ToolsHelper.RenderImageRectangle(screen, backGround, location);
             if (text != String.Empty)
             render.RenderText(screen, this.text, this.location + new Vector2(0f, this.height/6));            
         }

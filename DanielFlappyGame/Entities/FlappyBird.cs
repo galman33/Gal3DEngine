@@ -93,7 +93,7 @@ namespace DanielFlappyGame
             
             UpdatePosition();
             AdjustHitBox();
-            if (CollidePipes((Program.world as FlapGameWorld).GetPipes())|| CollideFloor())
+            if (CollidePipes((Program.world as FlapGameWorld).GetPipes()))//|| CollideFloor())
             {
                 (Program.world as FlapGameWorld).GameOver();
             }

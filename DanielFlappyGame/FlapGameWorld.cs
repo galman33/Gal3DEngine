@@ -28,12 +28,11 @@ namespace DanielFlappyGame
         /// <summary>
         /// The floor of the game.
         /// </summary>
-        public Floor floor;        
-        
+        public Floor floor;
         /// <summary>
-        /// The Camera of the game.
+        /// The cameraManger of the game.
         /// </summary>
-        private Camera gameCam;
+        CameraManager gameCamManager;
         Matrix4 projection;           
 
         private HighScoresManager HSManager;
@@ -80,7 +79,8 @@ namespace DanielFlappyGame
             pipesManager = new PipesManager();
             FlappyBird.LoadModel();
 
-            this.BackgroundColor = new Color3(0, 0, 0);
+            this.BackgroundColor = new Color3(102, 178, 255);
+            
             Init();
         }
 
@@ -90,12 +90,14 @@ namespace DanielFlappyGame
         private void Init()
         {
             points = 0;
-            gameCam = new Camera();
-            front = true;           
+            
+                       
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)Width / (float)Height, 0.3f, 10.0f);
             start = false;
             flappyflappy = new FlappyBird(new Vector3(0, 0, -2), new Vector3(0,(float)Math.PI, 0), Vector3.Normalize(new Vector3(1, -0.25f, -1)));
-            floor = new Floor(new Vector3(-2f, -1.3f, 0), Vector3.One , @"Resources/road_damaged_0049_01_s.jpg");
+            gameCamManager = new CameraManager(flappyflappy);
+            gameCamManager.Init();
+            floor = new Floor(new Vector3(-4f, -1.3f, 0), Vector3.One , @"Resources/StoneFloor.jpg");
             pipesManager.Init();
             curShader.projection = projection;
             
@@ -125,8 +127,7 @@ namespace DanielFlappyGame
             }
             if (e.Key == Key.Z)
             {
-                front = !front;
-                stateChange = true;
+                gameCamManager.ChangeState();
             }
             if(e.Key == Key.R)
             {
@@ -158,10 +159,10 @@ namespace DanielFlappyGame
                 // update entities
                 flappyflappy.Update();
                 pipesManager.Update();
-                ChangeStateOfCamara();
+                
                 UpdateFloor();                
             }
-            UpdateCamera();          
+            gameCamManager.UpdateCamera();          
         }
 
         private float floorOffset = 1.0f;
@@ -170,31 +171,12 @@ namespace DanielFlappyGame
         /// </summary>
         private void UpdateFloor()
         {
-            if(floor.translation.Z - floorOffset >this.gameCam.Position.Z)
+            if (floor.translation.Z - floorOffset > this.gameCamManager.gameCam.Position.Z)
             {               
                 floor.Update(flappyflappy.Position);
             }
         }       
-        /// <summary>
-        /// Updates the Camera according to the FlappyBird player.
-        /// </summary>
-        private void UpdateCamera()
-        {          
-           if(front)
-           {               
-               gameCam.Position.Z = flappyflappy.Position.Z + 2.3f;               
-               gameCam.Position.Y = flappyflappy.Position.Y;
-                           
-           }
-           else
-           {
-               if (!stateChange)
-               {
-                   gameCam.Position.Z = flappyflappy.Position.Z;
-                   gameCam.Position.X = 5;
-               }
-           }
-        }
+       
         /// <summary>
         /// Renders all the objects of the game into the Screen.
         /// </summary>
@@ -202,7 +184,7 @@ namespace DanielFlappyGame
         {
             base.Render();
 
-            Matrix4 view = gameCam.GetViewMatrix();
+            Matrix4 view = gameCamManager.gameCam.GetViewMatrix();
             curShader.view = view;
             pointsLbl.text = "Points: " + points;
             pointsLbl.RenderLabel(Screen, textRender);
@@ -217,80 +199,8 @@ namespace DanielFlappyGame
         {
             floor.Render(Screen , 2);
             flappyflappy.Render(Screen);
-            pipesManager.RenderPipes(Screen);            
-        }
-        /// <summary>
-        /// Camera prespective is changing.
-        /// </summary>
-        private bool stateChange = false;
-        /// <summary>
-        /// The camera prespective.
-        /// </summary>
-        private bool front = false;        
-        /// <summary>
-        /// Change the camera prespective(if needed)
-        /// </summary>
-        private void ChangeStateOfCamara()
-        {
-            if (!front)
-            {
-                if (stateChange)
-                {                    
-                    gameCam.Rotation = Quaternion.Slerp(Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.PiOver2), gameCam.Rotation, (float)Time.DeltaTime * 5.0f);
-                    gameCam.Position.X += 0.2f;
-                    gameCam.Position.Z -= 0.15f;
-                    
-                    if (gameCam.Position.X >= 5 && gameCam.Position.Z <= flappyflappy.Position.Z) //&& gameCam.Rotation.Y == (float)(Math.PI / 2))
-                    {                        
-                        gameCam.Position.X = 5;
-                        
-                        gameCam.Position.Z = flappyflappy.Position.Z;
-                        stateChange = !stateChange;
-                    }
-                    else
-                    {                       
-                        if (gameCam.Position.X >= 5)
-                        {
-                            gameCam.Position.X = 5;
-                        }
-                        if (gameCam.Position.Z <= flappyflappy.Position.Z)
-                        {
-                            gameCam.Position.Z = flappyflappy.Position.Z;
-                        }
-                    }
-
-                }
-            }
-            else
-            {
-                if (stateChange)
-                {
-
-                    gameCam.Rotation = Quaternion.Slerp(gameCam.Rotation, Quaternion.FromAxisAngle(Vector3.UnitY, 0), (float)Time.DeltaTime * 5.0f);
-                    gameCam.Position.X -= 0.15f;
-                    gameCam.Position.Z += 0.15f;
-                    if (gameCam.Position.X <= 0 && gameCam.Position.Z >= flappyflappy.Position.Z + 2)
-                    {
-                        
-                        gameCam.Position.X = 0;
-                        gameCam.Position.Z = flappyflappy.Position.Z + 2;
-                        stateChange = !stateChange;
-                    }
-                    else
-                    {                        
-                        if (gameCam.Position.X <= 0)
-                        {
-                            gameCam.Position.X = 0;
-                        }
-                        if ( gameCam.Position.Z >= flappyflappy.Position.Z + 2)
-                        {
-                            gameCam.Position.Z = flappyflappy.Position.Z + 2;
-                        }
-                    }
-                }
-            }
-        } //change from front to side and the opposite
-
+            pipesManager.RenderPipes(Screen);      
+        }         
         /// <summary>
         /// Returns the Pipes objects if the game.
         /// </summary>
@@ -304,6 +214,7 @@ namespace DanielFlappyGame
         /// </summary>
         public void GameOver()
         {
+            if(this.points > 0)
             AddScore(this.points, Gal3DEngine.Utils.InputBox.Show("Name:" , "New Score" , "FlappyNewbie"));
             Init();            
         }        
